@@ -45,7 +45,7 @@ namespace SurveyMonkeyApi
 
         private List<Survey> GetSurveyListPage(SettingsGetSurveyList settings, int page, int pageSize, bool limitPageSize )
         {
-            RequestSettings parameters = settings.Serialized;
+            RequestSettings parameters = settings.Serialize();
             parameters.Add("page", page);
             if (limitPageSize)
             {
@@ -57,10 +57,9 @@ namespace SurveyMonkeyApi
         private List<Survey> GetSurveyList(RequestSettings parameters)
         {
             const string endPoint = "/surveys/get_survey_list";
-            parameters.Add("fields", new List<string> { "title", "analysis_url", "preview_url", "date_created", "date_modified", "language_id", "question_count", "num_responses" });
             var o = MakeApiRequest(endPoint, parameters);
-
-            var surveys = JsonConvert.DeserializeObject<List<Survey>>(o.SelectToken("surveys").ToString());
+            var surveysJson = o.SelectToken("surveys").ToString();
+            var surveys = JsonConvert.DeserializeObject<List<Survey>>(surveysJson);
 
             return surveys;
         }
