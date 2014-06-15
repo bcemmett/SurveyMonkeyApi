@@ -22,6 +22,8 @@ namespace SurveyMonkeyApi
         private int m_RequestDelay = 600;
         #endregion
 
+        #region GetSurveyList endpoint
+
         //Auto-paging
         public List<Survey> GetSurveyListAll(GetSurveyListSettings settings)
         {
@@ -82,10 +84,28 @@ namespace SurveyMonkeyApi
             const string endPoint = "/surveys/get_survey_list";
             var o = MakeApiRequest(endPoint, parameters);
             var surveysJson = o.SelectToken("surveys").ToString();
-            var surveys = JsonConvert.DeserializeObject<List<Survey>>(surveysJson);
-
+            var surveysProcessedJson = JsonConvert.DeserializeObject<List<JsonSerializeGetSurveyList>>(surveysJson);
+            List<Survey> surveys = surveysProcessedJson.Select(x => x.ToSurvey()).ToList();
             return surveys;
         }
+
+        #endregion
+
+        #region GetSurveyDetails endpoint
+
+        public Survey GetSurveyDetails(long surveyId)
+        {
+            const string endPoint = "/surveys/get_survey_details";
+            var parameters = new RequestSettings();
+            parameters.Add("survey_id", surveyId.ToString());
+            var o = MakeApiRequest(endPoint, parameters);
+            var surveyJson = o.ToString();
+            var surveysProcessedJson = JsonConvert.DeserializeObject<JsonSerializeGetSurveyDetails>(surveyJson);
+            Survey survey = surveysProcessedJson.ToSurvey();
+            return survey;
+        }
+
+        #endregion
 
         #region API communication guts
 
