@@ -23,7 +23,7 @@ namespace SurveyMonkeyApi
         #endregion
 
         //Auto-paging
-        public List<Survey> GetSurveyListAll(SettingsGetSurveyList settings)
+        public List<Survey> GetSurveyListAll(GetSurveyListSettings settings)
         {
             var surveys = new List<Survey>();
             bool cont = true;
@@ -47,7 +47,7 @@ namespace SurveyMonkeyApi
         }
 
         ///No limit on page size
-        public List<Survey> GetSurveyListPage(SettingsGetSurveyList settings, int page)
+        public List<Survey> GetSurveyListPage(GetSurveyListSettings settings, int page)
         {
             if (page < 1)
             {
@@ -57,7 +57,7 @@ namespace SurveyMonkeyApi
         }
 
         //Limit the page size returned
-        public List<Survey> GetSurveyListPage(SettingsGetSurveyList settings, int page, int pageSize)
+        public List<Survey> GetSurveyListPage(GetSurveyListSettings settings, int page, int pageSize)
         {
             if (pageSize < 1 || pageSize > 1000)
             {
@@ -66,7 +66,7 @@ namespace SurveyMonkeyApi
             return GetSurveyListPage(settings, page, pageSize, true);
         }
 
-        private List<Survey> GetSurveyListPage(SettingsGetSurveyList settings, int page, int pageSize, bool limitPageSize )
+        private List<Survey> GetSurveyListPage(GetSurveyListSettings settings, int page, int pageSize, bool limitPageSize)
         {
             RequestSettings parameters = settings.Serialize();
             parameters.Add("page", page);

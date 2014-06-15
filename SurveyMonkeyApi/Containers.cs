@@ -12,7 +12,7 @@ namespace SurveyMonkeyApi
     public class Survey
     {
         public long survey_id;
-        public DateTime date_created; //can json.net serialize these?
+        public DateTime date_created;
         public DateTime date_modified;
         public string title;
         public int language_id;
@@ -33,16 +33,16 @@ namespace SurveyMonkeyApi
         //fields from [get_respondent_list]
     }
 
-    public class SettingsGetSurveyList
+    public class GetSurveyListSettings
     {
         public int page;
         public int page_size;
-        public DateTime start_date = DateTime.MaxValue; //TODO change these to datetimes?
+        public DateTime start_date = DateTime.MaxValue;
         public DateTime end_date = DateTime.MinValue;
         public string title;
         public string recipient_email;
         public bool order_asc;
-        public SettingsGetSurveyListOptionalData OptionalData = new SettingsGetSurveyListOptionalData();
+        public GetSurveyListSettingsOptionalData OptionalData = new GetSurveyListSettingsOptionalData();
 
         internal RequestSettings Serialize()
         {
@@ -69,7 +69,7 @@ namespace SurveyMonkeyApi
                 parameters.Add("order_asc", "True");
             }
 
-            var fields = typeof(SettingsGetSurveyListOptionalData).GetFields();
+            var fields = typeof(GetSurveyListSettingsOptionalData).GetFields();
             List<string> optionalFields = (from field in fields where (bool) field.GetValue(OptionalData) select field.Name).ToList();
             if (optionalFields.Count > 0)
             {
@@ -78,13 +78,9 @@ namespace SurveyMonkeyApi
 
             return parameters;
         }
-
-        public SettingsGetSurveyList()
-        {
-        }
     }
 
-    public class SettingsGetSurveyListOptionalData
+    public class GetSurveyListSettingsOptionalData
     {
         public bool title = true;
         public bool analysis_url = true;
