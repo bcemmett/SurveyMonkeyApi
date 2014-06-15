@@ -22,6 +22,29 @@ namespace SurveyMonkeyApi
         private int m_RequestDelay = 600;
         #endregion
 
+        //Auto-paging
+        public List<Survey> GetSurveyListAll(SettingsGetSurveyList settings)
+        {
+            var surveys = new List<Survey>();
+            bool cont = true;
+            int page = 1;
+            while (cont)
+            {
+                RequestSettings parameters = settings.Serialize();
+                parameters.Add("page", page);
+                var newSurveys = GetSurveyList(parameters);
+                if (newSurveys.Count > 0)
+                {
+                    surveys.AddRange(newSurveys);
+                }
+                if (newSurveys.Count < 1000)
+                {
+                    cont = false;
+                }
+                page++;
+            }
+            return surveys;
+        }
 
         ///No limit on page size
         public List<Survey> GetSurveyListPage(SettingsGetSurveyList settings, int page)
