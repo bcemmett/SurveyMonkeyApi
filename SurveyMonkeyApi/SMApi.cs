@@ -18,8 +18,46 @@ namespace SurveyMonkeyApi
         private string m_ApiKey;
         private string m_OAuthSecret;
         private string m_BaseUrl = "https://api.surveymonkey.net/v2";
-        private long m_LastRequestTime = 0;
         private int m_RequestDelay = 600;
+        private long m_LastRequestTime = 0;
+        #endregion
+
+        #region Constructors
+
+        public SMApi(string apiKey, string oAuthSecret)
+        {
+            SetSecretKeys(apiKey, oAuthSecret);
+        }
+
+        public SMApi(string apiKey, string oAuthSecret, string customUrl)
+        {
+            m_BaseUrl = customUrl;
+            SetSecretKeys(apiKey, oAuthSecret);
+        }
+
+        public SMApi(string apiKey, string oAuthSecret, int customDelay)
+        {
+            m_RequestDelay = customDelay;
+            SetSecretKeys(apiKey, oAuthSecret);
+        }
+
+        public SMApi(string apiKey, string oAuthSecret, string customUrl, int customDelay)
+        {
+            m_BaseUrl = customUrl;
+            m_RequestDelay = customDelay;
+            SetSecretKeys(apiKey, oAuthSecret);
+        }
+
+        private void SetSecretKeys(string apiKey, string oAuthSecret)
+        {
+            if (apiKey == null || oAuthSecret == null)
+            {
+                throw new ArgumentNullException();
+            }
+            m_ApiKey = apiKey;
+            m_OAuthSecret = oAuthSecret;
+        }
+
         #endregion
 
         #region GetSurveyList endpoint
@@ -107,20 +145,9 @@ namespace SurveyMonkeyApi
 
         #endregion
 
-        #region API communication guts
+        #region API communication
 
-        //TODO: Allow custom delay and custom base urls here
-        public SMApi(string apiKey, string oAuthSecret)
-        {
-            if (apiKey == null || oAuthSecret == null)
-            {
-                throw new ArgumentNullException();
-            }
-            m_ApiKey = apiKey;
-            m_OAuthSecret = oAuthSecret;
-        }
-
-        private JToken MakeApiRequest(string endPoint, Dictionary<string, object> data)
+        private JToken MakeApiRequest(string endPoint, RequestSettings data)
         {
             RateLimit();
 
