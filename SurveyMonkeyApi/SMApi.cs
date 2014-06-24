@@ -88,27 +88,45 @@ namespace SurveyMonkeyApi
             return surveys;
         }
 
+        public List<Survey> GetSurveyListAll()
+        {
+            return GetSurveyListAll(new GetSurveyListSettings());
+        }
+
+
         ///No limit on page size
-        public List<Survey> GetSurveyListPage(GetSurveyListSettings settings, int page)
+        public List<Survey> GetSurveyListPage(int page, GetSurveyListSettings settings)
         {
             if (page < 1)
             {
                 throw new ArgumentException("Page must be greater than 0.");
             }
-            return GetSurveyListPage(settings, page, 0, false);            
+            return GetSurveyListPage(page, 0, false, settings);            
         }
 
+        public List<Survey> GetSurveyListPage(int page)
+        {
+            return GetSurveyListPage(page, new GetSurveyListSettings());
+        }
+
+
         //Limit the page size returned
-        public List<Survey> GetSurveyListPage(GetSurveyListSettings settings, int page, int pageSize)
+        public List<Survey> GetSurveyListPage(int page, int pageSize, GetSurveyListSettings settings)
         {
             if (pageSize < 1 || pageSize > 1000)
             {
                 throw new ArgumentException("Page size must be between 1 and 1000.");
             }
-            return GetSurveyListPage(settings, page, pageSize, true);
+            return GetSurveyListPage(page, pageSize, true, settings);
         }
 
-        private List<Survey> GetSurveyListPage(GetSurveyListSettings settings, int page, int pageSize, bool limitPageSize)
+        public List<Survey> GetSurveyListPage(int page, int pageSize)
+        {
+            return GetSurveyListPage(page, pageSize, new GetSurveyListSettings());
+        }
+
+
+        private List<Survey> GetSurveyListPage(int page, int pageSize, bool limitPageSize, GetSurveyListSettings settings)
         {
             RequestSettings parameters = settings.Serialize();
             parameters.Add("page", page);
@@ -174,27 +192,44 @@ namespace SurveyMonkeyApi
             return collectors;
         }
 
+        public List<Collector> GetCollectorListAll(long surveyId)
+        {
+            return GetCollectorListAll(surveyId, new GetCollectorListSettings());
+        }
+
         ///No limit on page size
-        public List<Collector> GetCollectorListPage(long surveyId, GetCollectorListSettings settings, int page)
+        public List<Collector> GetCollectorListPage(long surveyId, int page, GetCollectorListSettings settings)
         {
             if (page < 1)
             {
                 throw new ArgumentException("Page must be greater than 0.");
             }
-            return GetCollectorListPage(surveyId, settings, page, 0, false);
+            return GetCollectorListPage(surveyId, page, 0, false, settings);
         }
 
+        public List<Collector> GetCollectorListPage(long surveyId, int page)
+        {
+            return GetCollectorListPage(surveyId, page, new GetCollectorListSettings());
+        }
+
+
         //Limit the page size returned
-        public List<Collector> GetCollectorListPage(long surveyId, GetCollectorListSettings settings, int page, int pageSize)
+        public List<Collector> GetCollectorListPage(long surveyId, int page, int pageSize, GetCollectorListSettings settings)
         {
             if (pageSize < 1 || pageSize > 1000)
             {
                 throw new ArgumentException("Page size must be between 1 and 1000.");
             }
-            return GetCollectorListPage(surveyId, settings, page, pageSize, true);
+            return GetCollectorListPage(surveyId, page, pageSize, true, settings);
         }
 
-        private List<Collector> GetCollectorListPage(long surveyId, GetCollectorListSettings settings, int page, int pageSize, bool limitPageSize)
+        public List<Collector> GetCollectorListPage(long surveyId, int page, int pageSize)
+        {
+            return GetCollectorListPage(surveyId, page, pageSize, new GetCollectorListSettings());
+        }
+
+
+        private List<Collector> GetCollectorListPage(long surveyId, int page, int pageSize, bool limitPageSize, GetCollectorListSettings settings)
         {
             RequestSettings parameters = settings.Serialize();
             parameters.Add("survey_id", surveyId.ToString());
