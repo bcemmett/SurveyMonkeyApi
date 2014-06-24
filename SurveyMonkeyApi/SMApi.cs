@@ -145,6 +145,76 @@ namespace SurveyMonkeyApi
 
         #endregion
 
+        #region GetCollectorList endpoint
+
+        //Auto-paging
+        public List<Collector> GetCollectorListAll(long surveyId, GetCollectorListSettings settings)
+        {
+            var collectors = new List<Collector>();
+            bool cont = true;
+            int page = 1;
+            while (cont)
+            {
+                RequestSettings parameters = settings.Serialize();
+                parameters.Add("survey_id", surveyId.ToString());
+                parameters.Add("page", page);
+                var newCollectors = GetCollectorList(parameters);
+                if (newCollectors.Count > 0)
+                {
+                    collectors.AddRange(newCollectors);
+                }
+                if (newCollectors.Count < 1000)
+                {
+                    cont = false;
+                }
+                page++;
+            }
+            return collectors;
+        }
+
+        ///No limit on page size
+        public List<Collector> GetCollectorListPage(long surveyId, GetCollectorListSettings settings, int page)
+        {
+            if (page < 1)
+            {
+                throw new ArgumentException("Page must be greater than 0.");
+            }
+            return GetCollectorListPage(surveyId, settings, page, 0, false);
+        }
+
+        //Limit the page size returned
+        public List<Collector> GetCollectorListPage(long surveyId, GetCollectorListSettings settings, int page, int pageSize)
+        {
+            if (pageSize < 1 || pageSize > 1000)
+            {
+                throw new ArgumentException("Page size must be between 1 and 1000.");
+            }
+            return GetCollectorListPage(surveyId, settings, page, pageSize, true);
+        }
+
+        private List<Collector> GetCollectorListPage(long surveyId, GetCollectorListSettings settings, int page, int pageSize, bool limitPageSize)
+        {
+            RequestSettings parameters = settings.Serialize();
+            parameters.Add("survey_id", surveyId.ToString());
+            parameters.Add("page", page);
+            if (limitPageSize)
+            {
+                parameters.Add("page_size", pageSize);
+            }
+            return GetCollectorList(parameters);
+        }
+
+        private List<Collector> GetCollectorList(RequestSettings parameters)
+        {
+            const string endPoint = "/surveys/get_collector_list";
+            var o = MakeApiRequest(endPoint, parameters);
+            var collectorsJson = o.SelectToken("collectors").ToString();
+            List<Collector> collectors = JsonConvert.DeserializeObject<List<Collector>>(collectorsJson);
+            return collectors;
+        }
+
+        #endregion
+
         #region API communication
 
         private JToken MakeApiRequest(string endPoint, RequestSettings data)

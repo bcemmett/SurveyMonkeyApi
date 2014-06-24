@@ -154,6 +154,17 @@ namespace SurveyMonkeyApi
         public string text;
     }
 
+    public class Collector
+    {
+        public long collector_id;
+        public DateTime date_created;
+        public DateTime date_modified;
+        public string name;
+        public bool open;
+        public string type; //TODO: make enum
+        public string url;
+    }
+
     public class Response
     {
         //fields from [get_responses]
@@ -223,6 +234,56 @@ namespace SurveyMonkeyApi
         public bool language_id = true;
         public bool question_count = true;
         public bool num_responses = true;
+    }
+
+    public class GetCollectorListSettings
+    {
+        public DateTime start_date = DateTime.MaxValue;
+        public DateTime end_date = DateTime.MinValue;
+        public string name;
+        public bool order_asc;
+        public GetCollectorListSettingsOptionalData OptionalData = new GetCollectorListSettingsOptionalData();
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+
+            if (start_date != DateTime.MaxValue)
+            {
+                parameters.Add("start_date", start_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+            }
+            if (end_date != DateTime.MinValue)
+            {
+                parameters.Add("end_date", end_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+            }
+            if (!String.IsNullOrEmpty(name))
+            {
+                parameters.Add("name", name);
+            }
+            if (order_asc)
+            {
+                parameters.Add("order_asc", "True");
+            }
+
+            var fields = typeof(GetCollectorListSettingsOptionalData).GetFields();
+            List<string> optionalFields = (from field in fields where (bool)field.GetValue(OptionalData) select field.Name).ToList();
+            if (optionalFields.Count > 0)
+            {
+                parameters.Add("fields", optionalFields);
+            }
+
+            return parameters;
+        }
+    }
+
+    public class GetCollectorListSettingsOptionalData
+    {
+        public bool url = true;
+        public bool open = true;
+        public bool type = true;
+        public bool name = true;
+        public bool date_created = true;
+        public bool date_modified = true;
     }
 
     public class RequestSettings : Dictionary<string, object>
