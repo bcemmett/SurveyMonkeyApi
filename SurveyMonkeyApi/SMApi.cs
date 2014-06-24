@@ -20,6 +20,8 @@ namespace SurveyMonkeyApi
         private string m_BaseUrl = "https://api.surveymonkey.net/v2";
         private int m_RequestDelay = 600;
         private long m_LastRequestTime = 0;
+        private int m_RequestsMade = 0;
+        public int RequestsMade {get { return m_RequestsMade; }}
         #endregion
 
         #region Constructors
@@ -234,6 +236,8 @@ namespace SurveyMonkeyApi
                 result = webClient.UploadString(url, "POST", serializedParameters);
             }
 
+            m_RequestsMade++;
+            
             var o = JObject.Parse(result);
             CheckSurveyMonkeyResponseIsValid(o);
             return o.SelectToken(("data"));
