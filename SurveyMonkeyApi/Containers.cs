@@ -179,8 +179,6 @@ namespace SurveyMonkeyApi
 
     public class GetSurveyListSettings
     {
-        public int page;
-        public int page_size;
         public DateTime start_date = DateTime.MaxValue;
         public DateTime end_date = DateTime.MinValue;
         public string title;
