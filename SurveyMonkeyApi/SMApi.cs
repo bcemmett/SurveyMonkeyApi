@@ -254,6 +254,8 @@ namespace SurveyMonkeyApi
 
         #region GetRespondentList endpoint
 
+        //TODO: deal with account upgrade notifications
+
         //Auto-paging
         public List<Respondent> GetRespondentList(long surveyId, GetRespondentListSettings settings)
         {
@@ -386,6 +388,5 @@ namespace SurveyMonkeyApi
             }
         }
         #endregion
-
     }
 }
