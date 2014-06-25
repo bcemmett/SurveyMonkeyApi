@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RequestSettings.cs" />
     <Compile Include="SMApi.cs" />
     <Compile Include="Containers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
