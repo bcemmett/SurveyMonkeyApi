@@ -252,6 +252,93 @@ namespace SurveyMonkeyApi
 
         #endregion
 
+        #region GetRespondentList endpoint
+
+        //Auto-paging
+        public List<Respondent> GetRespondentListAll(long surveyId, GetRespondentListSettings settings)
+        {
+            var respondents = new List<Respondent>();
+            bool cont = true;
+            int page = 1;
+            while (cont)
+            {
+                RequestSettings parameters = settings.Serialize();
+                parameters.Add("survey_id", surveyId.ToString());
+                parameters.Add("page", page);
+                var newRespondents = GetRespondentList(parameters);
+                if (newRespondents.Count > 0)
+                {
+                    respondents.AddRange(newRespondents);
+                }
+                if (newRespondents.Count < 1000)
+                {
+                    cont = false;
+                }
+                page++;
+            }
+            return respondents;
+        }
+
+        public List<Respondent> GetRespondentListAll(long surveyId)
+        {
+            return GetRespondentListAll(surveyId, new GetRespondentListSettings());
+        }
+
+        ///No limit on page size
+        public List<Respondent> GetRespondentListPage(long surveyId, int page, GetRespondentListSettings settings)
+        {
+            if (page < 1)
+            {
+                throw new ArgumentException("Page must be greater than 0.");
+            }
+            return GetRespondentListPage(surveyId, page, 0, false, settings);
+        }
+
+        public List<Respondent> GetRespondentListPage(long surveyId, int page)
+        {
+            return GetRespondentListPage(surveyId, page, new GetRespondentListSettings());
+        }
+
+
+        //Limit the page size returned
+        public List<Respondent> GetRespondentListPage(long surveyId, int page, int pageSize, GetRespondentListSettings settings)
+        {
+            if (pageSize < 1 || pageSize > 1000)
+            {
+                throw new ArgumentException("Page size must be between 1 and 1000.");
+            }
+            return GetRespondentListPage(surveyId, page, pageSize, true, settings);
+        }
+
+        public List<Respondent> GetRespondentListPage(long surveyId, int page, int pageSize)
+        {
+            return GetRespondentListPage(surveyId, page, pageSize, new GetRespondentListSettings());
+        }
+
+
+        private List<Respondent> GetRespondentListPage(long surveyId, int page, int pageSize, bool limitPageSize, GetRespondentListSettings settings)
+        {
+            RequestSettings parameters = settings.Serialize();
+            parameters.Add("survey_id", surveyId.ToString());
+            parameters.Add("page", page);
+            if (limitPageSize)
+            {
+                parameters.Add("page_size", pageSize);
+            }
+            return GetRespondentList(parameters);
+        }
+
+        private List<Respondent> GetRespondentList(RequestSettings parameters)
+        {
+            const string endPoint = "/surveys/get_respondent_list";
+            var o = MakeApiRequest(endPoint, parameters);
+            var respondentsJson = o.SelectToken("respondents").ToString();
+            List<Respondent> respondents = JsonConvert.DeserializeObject<List<Respondent>>(respondentsJson);
+            return respondents;
+        }
+
+        #endregion
+
         #region API communication
 
         private JToken MakeApiRequest(string endPoint, RequestSettings data)
