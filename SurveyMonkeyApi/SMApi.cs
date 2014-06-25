@@ -65,7 +65,7 @@ namespace SurveyMonkeyApi
         #region GetSurveyList endpoint
 
         //Auto-paging
-        public List<Survey> GetSurveyListAll(GetSurveyListSettings settings)
+        public List<Survey> GetSurveyList(GetSurveyListSettings settings)
         {
             var surveys = new List<Survey>();
             bool cont = true;
@@ -74,7 +74,7 @@ namespace SurveyMonkeyApi
             {
                 RequestSettings parameters = settings.Serialize();
                 parameters.Add("page", page);
-                var newSurveys = GetSurveyList(parameters);
+                var newSurveys = GetSurveyListRequest(parameters);
                 if (newSurveys.Count > 0)
                 {
                     surveys.AddRange(newSurveys);
@@ -88,14 +88,14 @@ namespace SurveyMonkeyApi
             return surveys;
         }
 
-        public List<Survey> GetSurveyListAll()
+        public List<Survey> GetSurveyList()
         {
-            return GetSurveyListAll(new GetSurveyListSettings());
+            return GetSurveyList(new GetSurveyListSettings());
         }
 
 
         ///No limit on page size
-        public List<Survey> GetSurveyListPage(int page, GetSurveyListSettings settings)
+        public List<Survey> GetSurveyList(int page, GetSurveyListSettings settings)
         {
             if (page < 1)
             {
@@ -104,14 +104,14 @@ namespace SurveyMonkeyApi
             return GetSurveyListPage(page, 0, false, settings);            
         }
 
-        public List<Survey> GetSurveyListPage(int page)
+        public List<Survey> GetSurveyList(int page)
         {
-            return GetSurveyListPage(page, new GetSurveyListSettings());
+            return GetSurveyList(page, new GetSurveyListSettings());
         }
 
 
         //Limit the page size returned
-        public List<Survey> GetSurveyListPage(int page, int pageSize, GetSurveyListSettings settings)
+        public List<Survey> GetSurveyList(int page, int pageSize, GetSurveyListSettings settings)
         {
             if (pageSize < 1 || pageSize > 1000)
             {
@@ -120,9 +120,9 @@ namespace SurveyMonkeyApi
             return GetSurveyListPage(page, pageSize, true, settings);
         }
 
-        public List<Survey> GetSurveyListPage(int page, int pageSize)
+        public List<Survey> GetSurveyList(int page, int pageSize)
         {
-            return GetSurveyListPage(page, pageSize, new GetSurveyListSettings());
+            return GetSurveyList(page, pageSize, new GetSurveyListSettings());
         }
 
 
@@ -134,10 +134,10 @@ namespace SurveyMonkeyApi
             {
                 parameters.Add("page_size", pageSize);
             }
-            return GetSurveyList(parameters);
+            return GetSurveyListRequest(parameters);
         }
 
-        private List<Survey> GetSurveyList(RequestSettings parameters)
+        private List<Survey> GetSurveyListRequest(RequestSettings parameters)
         {
             const string endPoint = "/surveys/get_survey_list";
             var o = MakeApiRequest(endPoint, parameters);
@@ -168,7 +168,7 @@ namespace SurveyMonkeyApi
         #region GetCollectorList endpoint
 
         //Auto-paging
-        public List<Collector> GetCollectorListAll(long surveyId, GetCollectorListSettings settings)
+        public List<Collector> GetCollectorList(long surveyId, GetCollectorListSettings settings)
         {
             var collectors = new List<Collector>();
             bool cont = true;
@@ -178,7 +178,7 @@ namespace SurveyMonkeyApi
                 RequestSettings parameters = settings.Serialize();
                 parameters.Add("survey_id", surveyId.ToString());
                 parameters.Add("page", page);
-                var newCollectors = GetCollectorList(parameters);
+                var newCollectors = GetCollectorListRequest(parameters);
                 if (newCollectors.Count > 0)
                 {
                     collectors.AddRange(newCollectors);
@@ -192,13 +192,13 @@ namespace SurveyMonkeyApi
             return collectors;
         }
 
-        public List<Collector> GetCollectorListAll(long surveyId)
+        public List<Collector> GetCollectorList(long surveyId)
         {
-            return GetCollectorListAll(surveyId, new GetCollectorListSettings());
+            return GetCollectorList(surveyId, new GetCollectorListSettings());
         }
 
         ///No limit on page size
-        public List<Collector> GetCollectorListPage(long surveyId, int page, GetCollectorListSettings settings)
+        public List<Collector> GetCollectorList(long surveyId, int page, GetCollectorListSettings settings)
         {
             if (page < 1)
             {
@@ -207,14 +207,14 @@ namespace SurveyMonkeyApi
             return GetCollectorListPage(surveyId, page, 0, false, settings);
         }
 
-        public List<Collector> GetCollectorListPage(long surveyId, int page)
+        public List<Collector> GetCollectorList(long surveyId, int page)
         {
-            return GetCollectorListPage(surveyId, page, new GetCollectorListSettings());
+            return GetCollectorList(surveyId, page, new GetCollectorListSettings());
         }
 
 
         //Limit the page size returned
-        public List<Collector> GetCollectorListPage(long surveyId, int page, int pageSize, GetCollectorListSettings settings)
+        public List<Collector> GetCollectorList(long surveyId, int page, int pageSize, GetCollectorListSettings settings)
         {
             if (pageSize < 1 || pageSize > 1000)
             {
@@ -223,9 +223,9 @@ namespace SurveyMonkeyApi
             return GetCollectorListPage(surveyId, page, pageSize, true, settings);
         }
 
-        public List<Collector> GetCollectorListPage(long surveyId, int page, int pageSize)
+        public List<Collector> GetCollectorList(long surveyId, int page, int pageSize)
         {
-            return GetCollectorListPage(surveyId, page, pageSize, new GetCollectorListSettings());
+            return GetCollectorList(surveyId, page, pageSize, new GetCollectorListSettings());
         }
 
 
@@ -238,10 +238,10 @@ namespace SurveyMonkeyApi
             {
                 parameters.Add("page_size", pageSize);
             }
-            return GetCollectorList(parameters);
+            return GetCollectorListRequest(parameters);
         }
 
-        private List<Collector> GetCollectorList(RequestSettings parameters)
+        private List<Collector> GetCollectorListRequest(RequestSettings parameters)
         {
             const string endPoint = "/surveys/get_collector_list";
             var o = MakeApiRequest(endPoint, parameters);
@@ -255,7 +255,7 @@ namespace SurveyMonkeyApi
         #region GetRespondentList endpoint
 
         //Auto-paging
-        public List<Respondent> GetRespondentListAll(long surveyId, GetRespondentListSettings settings)
+        public List<Respondent> GetRespondentList(long surveyId, GetRespondentListSettings settings)
         {
             var respondents = new List<Respondent>();
             bool cont = true;
@@ -265,7 +265,7 @@ namespace SurveyMonkeyApi
                 RequestSettings parameters = settings.Serialize();
                 parameters.Add("survey_id", surveyId.ToString());
                 parameters.Add("page", page);
-                var newRespondents = GetRespondentList(parameters);
+                var newRespondents = GetRespondentListRequest(parameters);
                 if (newRespondents.Count > 0)
                 {
                     respondents.AddRange(newRespondents);
@@ -279,13 +279,13 @@ namespace SurveyMonkeyApi
             return respondents;
         }
 
-        public List<Respondent> GetRespondentListAll(long surveyId)
+        public List<Respondent> GetRespondentList(long surveyId)
         {
-            return GetRespondentListAll(surveyId, new GetRespondentListSettings());
+            return GetRespondentList(surveyId, new GetRespondentListSettings());
         }
 
         ///No limit on page size
-        public List<Respondent> GetRespondentListPage(long surveyId, int page, GetRespondentListSettings settings)
+        public List<Respondent> GetRespondentList(long surveyId, int page, GetRespondentListSettings settings)
         {
             if (page < 1)
             {
@@ -294,14 +294,14 @@ namespace SurveyMonkeyApi
             return GetRespondentListPage(surveyId, page, 0, false, settings);
         }
 
-        public List<Respondent> GetRespondentListPage(long surveyId, int page)
+        public List<Respondent> GetRespondentList(long surveyId, int page)
         {
-            return GetRespondentListPage(surveyId, page, new GetRespondentListSettings());
+            return GetRespondentList(surveyId, page, new GetRespondentListSettings());
         }
 
 
         //Limit the page size returned
-        public List<Respondent> GetRespondentListPage(long surveyId, int page, int pageSize, GetRespondentListSettings settings)
+        public List<Respondent> GetRespondentList(long surveyId, int page, int pageSize, GetRespondentListSettings settings)
         {
             if (pageSize < 1 || pageSize > 1000)
             {
@@ -310,9 +310,9 @@ namespace SurveyMonkeyApi
             return GetRespondentListPage(surveyId, page, pageSize, true, settings);
         }
 
-        public List<Respondent> GetRespondentListPage(long surveyId, int page, int pageSize)
+        public List<Respondent> GetRespondentList(long surveyId, int page, int pageSize)
         {
-            return GetRespondentListPage(surveyId, page, pageSize, new GetRespondentListSettings());
+            return GetRespondentList(surveyId, page, pageSize, new GetRespondentListSettings());
         }
 
 
@@ -325,10 +325,10 @@ namespace SurveyMonkeyApi
             {
                 parameters.Add("page_size", pageSize);
             }
-            return GetRespondentList(parameters);
+            return GetRespondentListRequest(parameters);
         }
 
-        private List<Respondent> GetRespondentList(RequestSettings parameters)
+        private List<Respondent> GetRespondentListRequest(RequestSettings parameters)
         {
             const string endPoint = "/surveys/get_respondent_list";
             var o = MakeApiRequest(endPoint, parameters);
