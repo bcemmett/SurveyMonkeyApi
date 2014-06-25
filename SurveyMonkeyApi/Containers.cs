@@ -172,7 +172,18 @@ namespace SurveyMonkeyApi
 
     public class Respondent
     {
-        //fields from [get_respondent_list]
+        public long respondent_id;
+        public DateTime date_start;
+        public DateTime date_modified;
+        public long collector_id;
+        public string collection_mode; //TODO: make enum
+        public string custom_id;
+        public string email;
+        public string first_name;
+        public string last_name;
+        public string ip_address;
+        public string status; //TODO: make enum
+        public string analysis_url;
     }
 
     #region Settings for processing requests
