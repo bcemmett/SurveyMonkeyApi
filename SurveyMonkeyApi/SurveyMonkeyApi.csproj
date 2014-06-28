@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Endpoints.cs" />
     <Compile Include="RequestSettings.cs" />
     <Compile Include="SMApi.cs" />
     <Compile Include="Containers.cs" />
