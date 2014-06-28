@@ -86,20 +86,11 @@ namespace SurveyMonkeyApi
         public string preview_url { get; set; }
         public string nickname { get; set; }
         public List<Page> pages { get; set; }
-
         public List<Question> questions
         {
             get
             {
-                List<Question> qs = new List<Question>();
-                foreach (var page in pages)
-                {
-                    foreach (var question in page.questions)
-                    {
-                        qs.Add(question);
-                    }
-                }
-                return qs;
+                return pages.SelectMany(page => page.questions).ToList();
             }
         }
     }
