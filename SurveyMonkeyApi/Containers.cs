@@ -8,17 +8,17 @@ using System.Reflection.Emit;
 
 namespace SurveyMonkeyApi
 {
-    public class JsonSerializeGetSurveyList
+    internal class JsonSerializeGetSurveyList
     {
-        public long survey_id;
-        public DateTime date_created;
-        public DateTime date_modified;
-        public string title;
-        public int language_id;
-        public int question_count;
-        public int num_responses;
-        public string analysis_url;
-        public string preview_url;
+        public long survey_id { get; set; }
+        public DateTime date_created { get; set; }
+        public DateTime date_modified { get; set; }
+        public string title { get; set; }
+        public int language_id { get; set; }
+        public int question_count { get; set; }
+        public int num_responses { get; set; }
+        public string analysis_url { get; set; }
+        public string preview_url { get; set; }
 
         public Survey ToSurvey()
         {
@@ -38,19 +38,19 @@ namespace SurveyMonkeyApi
         }
     }
 
-    public class JsonSerializeGetSurveyDetails
+    internal class JsonSerializeGetSurveyDetails
     {
-        public long survey_id;
-        public DateTime date_created;
-        public DateTime date_modified;
-        public int language_id;
-        public int num_responses;
-        public int question_count;
-        public string nickname;
-        public Title title;
-        public string analysis_url;
-        public string preview_url;
-        public List<Page> pages;
+        public long survey_id { get; set; }
+        public DateTime date_created { get; set; }
+        public DateTime date_modified { get; set; }
+        public int language_id { get; set; }
+        public int num_responses { get; set; }
+        public int question_count { get; set; }
+        public string nickname { get; set; }
+        public Title title { get; set; }
+        public string analysis_url { get; set; }
+        public string preview_url { get; set; }
+        public List<Page> pages { get; set; }
 
         public Survey ToSurvey()
         {
@@ -74,18 +74,18 @@ namespace SurveyMonkeyApi
 
     public class Survey
     {
-        public long survey_id;
-        public DateTime date_created;
-        public DateTime date_modified;
-        public string title_text;
-        public bool title_enabled;
-        public int language_id;
-        public int question_count;
-        public int num_responses;
-        public string analysis_url;
-        public string preview_url;
-        public string nickname;
-        public List<Page> pages;
+        public long survey_id { get; set; }
+        public DateTime date_created { get; set; }
+        public DateTime date_modified { get; set; }
+        public string title_text { get; set; }
+        public bool title_enabled { get; set; }
+        public int language_id { get; set; }
+        public int question_count { get; set; }
+        public int num_responses { get; set; }
+        public string analysis_url { get; set; }
+        public string preview_url { get; set; }
+        public string nickname { get; set; }
+        public List<Page> pages { get; set; }
 
         public List<Question> questions
         {
@@ -106,100 +106,100 @@ namespace SurveyMonkeyApi
 
     public class Title
     {
-        public bool enabled;
-        public string text;
+        public bool enabled { get; set; }
+        public string text { get; set; }
     }
 
     public class Page
     {
-        public long page_id;
-        public string heading;
-        public string sub_heading;
-        public List<Question> questions;
+        public long page_id { get; set; }
+        public string heading { get; set; }
+        public string sub_heading { get; set; }
+        public List<Question> questions { get; set; }
     }
 
     public class Question
     {
-        public long question_id;
-        public string heading;
-        public int position;
-        public Type  type;
-        public List<QuestionAnswer> answers;
+        public long question_id { get; set; }
+        public string heading { get; set; }
+        public int position { get; set; }
+        public Type type { get; set; }
+        public List<QuestionAnswer> answers { get; set; }
     }
 
     public class Type
     {
-        public string family;
-        public string subtype;
+        public string family { get; set; }
+        public string subtype { get; set; }
     }
 
     public class QuestionAnswer
     {
-        public long answer_id;
-        public int position;
-        public string text;
-        public string type;
-        public bool visible;
-        public int weight;
-        public bool apply_all_rows;
-        public bool is_answer;
-        public List<Item> items;
+        public long answer_id { get; set; }
+        public int position { get; set; }
+        public string text { get; set; }
+        public string type { get; set; }
+        public bool visible { get; set; }
+        public int weight { get; set; }
+        public bool apply_all_rows { get; set; }
+        public bool is_answer { get; set; }
+        public List<Item> items { get; set; }
     }
 
     public class Item
     {
-        public long answer_id;
-        public int position;
-        public string type;
-        public string text;
+        public long answer_id { get; set; }
+        public int position { get; set; }
+        public string type { get; set; }
+        public string text { get; set; }
     }
 
     public class Collector
     {
-        public long collector_id;
-        public DateTime date_created;
-        public DateTime date_modified;
-        public string name;
-        public bool open;
-        public string type; //TODO: make enum
-        public string url;
-        public int completed;
-        public int started;
+        public long collector_id { get; set; }
+        public DateTime date_created { get; set; }
+        public DateTime date_modified { get; set; }
+        public string name { get; set; }
+        public bool open { get; set; }
+        public string type { get; set; } //TODO: make enum
+        public string url { get; set; }
+        public int completed { get; set; }
+        public int started { get; set; }
     }
 
     public class Response
     {
-        public long respondent_id;
-        public List<QuestionResponse> questions;
+        public long respondent_id { get; set; }
+        public List<QuestionResponse> questions { get; set; }
     }
 
     public class QuestionResponse
     {
-        public long question_id;
-        public List<AnswerResponse> answers;
+        public long question_id { get; set; }
+        public List<AnswerResponse> answers { get; set; }
     }
 
     public class AnswerResponse
     {
-        public long row;
-        public long col;
-        public long col_choice;
-        public string text;
+        public long row { get; set; }
+        public long col { get; set; }
+        public long col_choice { get; set; }
+        public string text { get; set; }
     }
 
     public class Respondent
     {
-        public long respondent_id;
-        public DateTime date_start;
-        public DateTime date_modified;
-        public long collector_id;
-        public string collection_mode; //TODO: make enum
-        public string custom_id;
-        public string email;
-        public string first_name;
-        public string last_name;
-        public string ip_address;
-        public string status; //TODO: make enum
-        public string analysis_url;
+        public long respondent_id { get; set; }
+        public DateTime date_start { get; set; }
+        public DateTime date_modified { get; set; }
+        public long collector_id { get; set; }
+        public string collection_mode { get; set; } //TODO: make enum
+        public string custom_id { get; set; }
+        public string email { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public string ip_address { get; set; }
+        public string status { get; set; } //TODO: make enum
+        public string analysis_url { get; set; }
     }
 }
