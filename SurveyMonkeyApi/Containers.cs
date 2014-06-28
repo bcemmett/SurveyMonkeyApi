@@ -27,7 +27,7 @@ namespace SurveyMonkeyApi
                 survey_id = survey_id,
                 date_created = date_created,
                 date_modified = date_modified,
-                title_text = title,
+                nickname = title,
                 language_id = language_id,
                 question_count = question_count,
                 num_responses = num_responses,
@@ -48,8 +48,6 @@ namespace SurveyMonkeyApi
         public int question_count { get; set; }
         public string nickname { get; set; }
         public Title title { get; set; }
-        public string analysis_url { get; set; }
-        public string preview_url { get; set; }
         public List<Page> pages { get; set; }
 
         public Survey ToSurvey()
@@ -64,7 +62,6 @@ namespace SurveyMonkeyApi
                 language_id = language_id,
                 question_count = question_count,
                 num_responses = num_responses,
-                preview_url = preview_url,
                 nickname = nickname,
                 pages = pages
             };
