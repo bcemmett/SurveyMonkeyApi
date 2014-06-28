@@ -124,7 +124,7 @@ namespace SurveyMonkeyApi
         public string heading;
         public int position;
         public Type  type;
-        public List<Answer> answers;
+        public List<QuestionAnswer> answers;
     }
 
     public class Type
@@ -133,7 +133,7 @@ namespace SurveyMonkeyApi
         public string subtype;
     }
 
-    public class Answer
+    public class QuestionAnswer
     {
         public long answer_id;
         public int position;
