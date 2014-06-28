@@ -163,6 +163,8 @@ namespace SurveyMonkeyApi
         public bool open;
         public string type; //TODO: make enum
         public string url;
+        public int completed;
+        public int started;
     }
 
     public class Response

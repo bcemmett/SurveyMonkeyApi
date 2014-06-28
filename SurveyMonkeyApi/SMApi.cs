@@ -341,6 +341,21 @@ namespace SurveyMonkeyApi
 
         #endregion
 
+        #region GetResponseCounts endpoint
+
+        public Collector GetResponseCounts(long collectorId)
+        {
+            const string endPoint = "/surveys/get_response_counts";
+            var parameters = new RequestSettings();
+            parameters.Add("collector_id", collectorId.ToString());
+            var o = MakeApiRequest(endPoint, parameters);
+            var collectorJson = o.ToString();
+            Collector collector = JsonConvert.DeserializeObject<Collector>(collectorJson);
+            return collector;
+        }
+
+        #endregion
+
         #region API communication
 
         private JToken MakeApiRequest(string endPoint, RequestSettings data)
