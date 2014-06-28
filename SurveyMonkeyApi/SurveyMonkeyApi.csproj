@@ -43,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Endpoints.cs" />
+    <Compile Include="ApiEndpoints.cs" />
     <Compile Include="RequestSettings.cs" />
-    <Compile Include="SMApi.cs" />
+    <Compile Include="ApiStructure.cs" />
     <Compile Include="Containers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
