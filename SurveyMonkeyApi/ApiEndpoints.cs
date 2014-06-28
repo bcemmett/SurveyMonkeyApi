@@ -318,5 +318,20 @@ namespace SurveyMonkeyApi
         }
 
         #endregion
+
+        #region GetUserDetails endpoint
+
+        public UserDetails GetUserDetails()
+        {
+            const string endPoint = "/user/get_user_details";
+            var parameters = new RequestSettings();
+            var o = MakeApiRequest(endPoint, parameters);
+            var userDetailsJson = o["user_details"].ToString();
+            UserDetails userDetails = JsonConvert.DeserializeObject<UserDetails>(userDetailsJson);
+            return userDetails;
+        }
+
+        #endregion
+
     }
 }

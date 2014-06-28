@@ -202,4 +202,18 @@ namespace SurveyMonkeyApi
         public string status { get; set; } //TODO: make enum
         public string analysis_url { get; set; }
     }
+
+    public class UserDetails
+    {
+        public bool is_paid_account { get; set; }
+        public bool is_enterprise_user { get; set; }
+        public string username { get; set; }
+        public EnterpriseDetails enterprise_details { get; set; }
+    }
+
+    public class EnterpriseDetails
+    {
+        public int total_seats_invoices { get; set; }
+        public int total_seats_active { get; set; }
+    }
 }
