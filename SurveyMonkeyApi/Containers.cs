@@ -169,7 +169,22 @@ namespace SurveyMonkeyApi
 
     public class Response
     {
-        //fields from [get_responses]
+        public long respondent_id;
+        public List<QuestionResponse> questions;
+    }
+
+    public class QuestionResponse
+    {
+        public long question_id;
+        public List<AnswerResponse> answers;
+    }
+
+    public class AnswerResponse
+    {
+        public long row;
+        public long col;
+        public long col_choice;
+        public string text;
     }
 
     public class Respondent
