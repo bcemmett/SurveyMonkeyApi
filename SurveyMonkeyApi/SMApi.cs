@@ -414,6 +414,8 @@ namespace SurveyMonkeyApi
             {
                 string msg = "Problem querying the Survey Monkey API, error code "
                              + (int) o["status"]
+                             + ": "
+                             + (string) o["errmsg"]
                              + " (https://developer.surveymonkey.com/mashery/requests_responses)";
                 throw new WebException(msg);
             }
