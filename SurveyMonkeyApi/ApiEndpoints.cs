@@ -19,7 +19,7 @@ namespace SurveyMonkeyApi
             int page = 1;
             while (cont)
             {
-                RequestSettings parameters = settings.Serialize();
+                RequestSettings parameters = settings.Serialized;
                 parameters.Add("page", page);
                 var newSurveys = GetSurveyListRequest(parameters);
                 if (newSurveys.Count > 0)
@@ -75,7 +75,7 @@ namespace SurveyMonkeyApi
 
         private List<Survey> GetSurveyListPage(int page, int pageSize, bool limitPageSize, GetSurveyListSettings settings)
         {
-            RequestSettings parameters = settings.Serialize();
+            RequestSettings parameters = settings.Serialized;
             parameters.Add("page", page);
             if (limitPageSize)
             {
@@ -122,7 +122,7 @@ namespace SurveyMonkeyApi
             int page = 1;
             while (cont)
             {
-                RequestSettings parameters = settings.Serialize();
+                RequestSettings parameters = settings.Serialized;
                 parameters.Add("survey_id", surveyId.ToString());
                 parameters.Add("page", page);
                 var newCollectors = GetCollectorListRequest(parameters);
@@ -178,7 +178,7 @@ namespace SurveyMonkeyApi
 
         private List<Collector> GetCollectorListPage(long surveyId, int page, int pageSize, bool limitPageSize, GetCollectorListSettings settings)
         {
-            RequestSettings parameters = settings.Serialize();
+            RequestSettings parameters = settings.Serialized;
             parameters.Add("survey_id", surveyId.ToString());
             parameters.Add("page", page);
             if (limitPageSize)
@@ -211,7 +211,7 @@ namespace SurveyMonkeyApi
             int page = 1;
             while (cont)
             {
-                RequestSettings parameters = settings.Serialize();
+                RequestSettings parameters = settings.Serialized;
                 parameters.Add("survey_id", surveyId.ToString());
                 parameters.Add("page", page);
                 var newRespondents = GetRespondentListRequest(parameters);
@@ -267,7 +267,7 @@ namespace SurveyMonkeyApi
 
         private List<Respondent> GetRespondentListPage(long surveyId, int page, int pageSize, bool limitPageSize, GetRespondentListSettings settings)
         {
-            RequestSettings parameters = settings.Serialize();
+            RequestSettings parameters = settings.Serialized;
             parameters.Add("survey_id", surveyId.ToString());
             parameters.Add("page", page);
             if (limitPageSize)
