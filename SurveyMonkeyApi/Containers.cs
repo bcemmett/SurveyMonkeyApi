@@ -104,7 +104,7 @@ namespace SurveyMonkeyApi
         }
     }
 
-    public class Title
+    internal class Title
     {
         public bool enabled { get; set; }
         public string text { get; set; }
