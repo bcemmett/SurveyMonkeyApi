@@ -190,6 +190,7 @@ namespace SurveyMonkeyApi
         public string ip_address { get; set; }
         public string status { get; set; } //TODO: make enum
         public string analysis_url { get; set; }
+        public long recipient_id;
     }
 
     public class UserDetails

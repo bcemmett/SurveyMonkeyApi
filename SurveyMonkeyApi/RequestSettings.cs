@@ -261,6 +261,7 @@ namespace SurveyMonkeyApi
         public bool ip_address {get; set;}
         public bool status {get; set;}
         public bool analysis_url {get; set;}
+        public bool recipient_id { get; set; }
 
         public GetRespondentListSettingsOptionalData()
         {
@@ -275,6 +276,7 @@ namespace SurveyMonkeyApi
             ip_address = true;
             status = true;
             analysis_url = true;
+            recipient_id = true;
         }
     }
 
