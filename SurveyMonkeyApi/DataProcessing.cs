@@ -46,11 +46,33 @@ namespace SurveyMonkeyApi
 
         public void FillMissingResponseDetails(Survey survey)
         {
+            List<Response> responses = GetAllSurveyResponses(survey);
+
+            //This will fail if you create your own collector for a survey without using GetCollectorList (eg finding CollectorIds through GetRespondentList then populating with GetResponseCounts)
+            List<Collector> collectors = survey.collectors ?? GetCollectorList(survey.survey_id);
+
+            //Need to initialise responses before adding to them
+            foreach (var collector in collectors)
+            {
+                collector.responses = new List<Response>();
+            }
+            
+            Dictionary<long, Collector> collectorLookup = collectors.ToDictionary(c => c.collector_id, c => c);
+            foreach (var response in responses)
+            {
+                collectorLookup[response.respondent.collector_id].responses.Add(response);
+            }
+
+            survey.collectors = collectorLookup.Values.ToList();
+        }
+
+        private List<Response> GetAllSurveyResponses(Survey survey)
+        {
             const int maxRespondentsPerPage = 100;
             List<Respondent> respondents = GetRespondentList(survey.survey_id);
             Dictionary<long, Respondent> respondentLookup = respondents.ToDictionary(r => r.respondent_id, r => r);
             var responses = new List<Response>();
-            
+
             //page through the respondents
             bool moreRespondents = true;
             int page = 0;
@@ -60,37 +82,21 @@ namespace SurveyMonkeyApi
                 if (respondentIds.Count > 0)
                 {
                     List<Response> newResponses = GetResponses(survey.survey_id, respondentIds);
-                    
+
                     foreach (var newResponse in newResponses)
                     {
                         newResponse.respondent = respondentLookup[newResponse.respondent_id];
                     }
                     responses.AddRange(newResponses);
                 }
-                if (respondentIds.Count <100)
+                if (respondentIds.Count < 100)
                 {
                     moreRespondents = false;
                 }
 
                 page++;
             }
-
-            //This will fail if you create your own collector for a survey without using GetCollectorList (eg finding CollectorIds through GetRespondentList then populating with GetResponseCounts)
-            if (survey.collectors == null)
-            {
-                survey.collectors = GetCollectorList(survey.survey_id);
-            }
-            foreach (var collector in survey.collectors)
-            {
-                collector.responses = new List<Response>();
-            }
-            Dictionary<long, Collector> collectorLookup = survey.collectors.ToDictionary(c => c.collector_id, c => c);
-            foreach (var response in responses)
-            {
-                collectorLookup[response.respondent.collector_id].responses.Add(response);
-            }
-
-            survey.collectors = collectorLookup.Values.ToList();
+            return responses;
         }
 
         public void FillMissingResponseDetails(List<Survey> surveys)
