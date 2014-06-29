@@ -43,5 +43,32 @@ namespace SurveyMonkeyApi
                 FillMissingCollectorDetails(survey);
             }
         }
+
+        public void FillMissingResponseDetails(Survey survey)
+        {
+            const int maxRespondentsPerPage = 100;
+            List<Respondent> respondents = GetRespondentList(survey.survey_id);
+            var responses = new List<Response>();
+            
+            //page through the respondents
+            bool moreRespondents = true;
+            int page = 0;
+            while (moreRespondents)
+            {
+                List<long> respondentIds = respondents.Skip(page * maxRespondentsPerPage).Take(maxRespondentsPerPage).Select(rp => rp.respondent_id).ToList();
+                if (respondentIds.Count > 0)
+                {
+                    responses.AddRange(GetResponses(survey.survey_id, respondentIds));
+                }
+                if (respondentIds.Count <100)
+                {
+                    moreRespondents = false;
+                }
+
+                page++;
+            }
+
+            survey.responses = responses;
+        }
     }
 }

@@ -84,6 +84,7 @@ namespace SurveyMonkeyApi
         public string nickname { get; set; }
         public List<Page> pages { get; set; }
         public List<Collector> collectors { get; set; }
+        public List<Response> responses { get; set; }
         public List<Question> questions
         {
             get
@@ -190,7 +191,7 @@ namespace SurveyMonkeyApi
         public string ip_address { get; set; }
         public string status { get; set; } //TODO: make enum
         public string analysis_url { get; set; }
-        public long recipient_id;
+        public string recipient_id { get; set; }
     }
 
     public class UserDetails
