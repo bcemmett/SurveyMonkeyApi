@@ -161,6 +161,7 @@ namespace SurveyMonkeyApi
     {
         public long respondent_id { get; set; }
         public List<QuestionResponse> questions { get; set; }
+        public Respondent respondent { get; set; } 
     }
 
     public class QuestionResponse

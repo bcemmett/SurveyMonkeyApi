@@ -48,6 +48,7 @@ namespace SurveyMonkeyApi
         {
             const int maxRespondentsPerPage = 100;
             List<Respondent> respondents = GetRespondentList(survey.survey_id);
+            Dictionary<long, Respondent> respondentLookup = respondents.ToDictionary(r => r.respondent_id, r => r);
             var responses = new List<Response>();
             
             //page through the respondents
@@ -58,7 +59,13 @@ namespace SurveyMonkeyApi
                 List<long> respondentIds = respondents.Skip(page * maxRespondentsPerPage).Take(maxRespondentsPerPage).Select(rp => rp.respondent_id).ToList();
                 if (respondentIds.Count > 0)
                 {
-                    responses.AddRange(GetResponses(survey.survey_id, respondentIds));
+                    List<Response> newResponses = GetResponses(survey.survey_id, respondentIds);
+                    
+                    foreach (var newResponse in newResponses)
+                    {
+                        newResponse.respondent = respondentLookup[newResponse.respondent_id];
+                    }
+                    responses.AddRange(newResponses);
                 }
                 if (respondentIds.Count <100)
                 {
