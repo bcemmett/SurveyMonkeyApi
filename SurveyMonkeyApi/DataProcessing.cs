@@ -70,5 +70,13 @@ namespace SurveyMonkeyApi
 
             survey.responses = responses;
         }
+
+        public void FillMissingResponseDetails(List<Survey> surveys)
+        {
+            foreach (var survey in surveys)
+            {
+                FillMissingSurveyDetails(survey);
+            }
+        }
     }
 }
