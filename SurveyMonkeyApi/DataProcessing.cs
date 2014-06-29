@@ -75,7 +75,22 @@ namespace SurveyMonkeyApi
                 page++;
             }
 
-            survey.responses = responses;
+            //This will fail if you create your own collector for a survey without using GetCollectorList (eg finding CollectorIds through GetRespondentList then populating with GetResponseCounts)
+            if (survey.collectors == null)
+            {
+                survey.collectors = GetCollectorList(survey.survey_id);
+            }
+            foreach (var collector in survey.collectors)
+            {
+                collector.responses = new List<Response>();
+            }
+            Dictionary<long, Collector> collectorLookup = survey.collectors.ToDictionary(c => c.collector_id, c => c);
+            foreach (var response in responses)
+            {
+                collectorLookup[response.respondent.collector_id].responses.Add(response);
+            }
+
+            survey.collectors = collectorLookup.Values.ToList();
         }
 
         public void FillMissingResponseDetails(List<Survey> surveys)

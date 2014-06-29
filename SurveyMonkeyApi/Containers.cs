@@ -84,7 +84,13 @@ namespace SurveyMonkeyApi
         public string nickname { get; set; }
         public List<Page> pages { get; set; }
         public List<Collector> collectors { get; set; }
-        public List<Response> responses { get; set; }
+        public List<Response> responses
+        {
+            get
+            {
+                return collectors.SelectMany(collector => collector.responses).ToList();
+            }
+        }
         public List<Question> questions
         {
             get
@@ -155,6 +161,7 @@ namespace SurveyMonkeyApi
         public string url { get; set; }
         public int completed { get; set; }
         public int started { get; set; }
+        public List<Response> responses { get; set; } 
     }
 
     public class Response
