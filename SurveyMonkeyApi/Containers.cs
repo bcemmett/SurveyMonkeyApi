@@ -83,6 +83,7 @@ namespace SurveyMonkeyApi
         public string preview_url { get; set; }
         public string nickname { get; set; }
         public List<Page> pages { get; set; }
+        public List<Collector> collectors { get; set; }
         public List<Question> questions
         {
             get

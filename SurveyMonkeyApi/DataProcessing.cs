@@ -30,5 +30,18 @@ namespace SurveyMonkeyApi
                 FillMissingSurveyDetails(survey);
             }
         }
+
+        public void FillMissingCollectorDetails(Survey survey)
+        {
+            survey.collectors = GetCollectorList(survey.survey_id);
+        }
+
+        public void FillMissingCollectorDetails(List<Survey> surveys)
+        {
+            foreach (var survey in surveys)
+            {
+                FillMissingCollectorDetails(survey);
+            }
+        }
     }
 }
