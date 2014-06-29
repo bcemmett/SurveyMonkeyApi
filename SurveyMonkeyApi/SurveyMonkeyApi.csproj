@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiEndpoints.cs" />
+    <Compile Include="DataProcessing.cs" />
     <Compile Include="RequestSettings.cs" />
     <Compile Include="ApiStructure.cs" />
     <Compile Include="Containers.cs" />
