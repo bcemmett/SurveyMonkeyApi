@@ -43,10 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiEndpoints.cs" />
-    <Compile Include="DataProcessing.cs" />
+    <Compile Include="SMApi.Endpoints.cs">
+	<DependentUpon>SMApi.cs</DependentUpon>
+	</Compile>
+    <Compile Include="SMApi.DataProcessing.cs">
+	<DependentUpon>SMApi.cs</DependentUpon>
+	</Compile>
     <Compile Include="RequestSettings.cs" />
-    <Compile Include="ApiStructure.cs" />
+    <Compile Include="SMApi.cs" />
     <Compile Include="Containers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
