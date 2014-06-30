@@ -9,6 +9,8 @@ namespace SurveyMonkeyApi
 {
     public partial class SMApi
     {
+        #region Fill missing survey details
+
         public void FillMissingSurveyDetails(Survey survey)
         {
             Survey surveyDetails = GetSurveyDetails(survey.survey_id);
@@ -31,6 +33,10 @@ namespace SurveyMonkeyApi
             }
         }
 
+        #endregion
+
+        #region Fill missing collector details
+
         public void FillMissingCollectorDetails(Survey survey)
         {
             survey.collectors = GetCollectorList(survey.survey_id);
@@ -43,6 +49,10 @@ namespace SurveyMonkeyApi
                 FillMissingCollectorDetails(survey);
             }
         }
+
+        #endregion
+
+        #region Fill missing response details
 
         public void FillMissingResponseDetails(Survey survey)
         {
@@ -107,6 +117,10 @@ namespace SurveyMonkeyApi
             }
         }
 
+        #endregion
+
+        #region Fill missing response counts
+
         public void FillMissingResponseCounts(Survey survey)
         {
             survey.collectors = survey.collectors ?? GetCollectorList(survey.survey_id);
@@ -125,5 +139,7 @@ namespace SurveyMonkeyApi
                 FillMissingResponseCounts(survey);
             }
         }
+
+        #endregion
     }
 }

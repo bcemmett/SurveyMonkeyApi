@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace SurveyMonkeyApi
 {
+    #region GetSurveyList
+
     public class GetSurveyListSettings
     {
         public DateTime start_date { get; set; }
@@ -88,6 +90,10 @@ namespace SurveyMonkeyApi
         }
     }
 
+    #endregion
+
+    #region GetCollectorList
+
     public class GetCollectorListSettings
     {
         public DateTime start_date { get; set; }
@@ -159,6 +165,10 @@ namespace SurveyMonkeyApi
             date_modified = true;
         }
     }
+
+    #endregion
+
+    #region GetRespondentList
 
     public class GetRespondentListSettings
     {
@@ -279,6 +289,8 @@ namespace SurveyMonkeyApi
             recipient_id = true;
         }
     }
+
+    #endregion
 
     internal class RequestSettings : Dictionary<string, object>
     {
