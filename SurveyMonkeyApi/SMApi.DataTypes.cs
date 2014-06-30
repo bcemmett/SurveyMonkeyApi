@@ -8,6 +8,80 @@ namespace SurveyMonkeyApi
 {
     public partial class SMApi
     {
+        public enum QuestionFamilies
+        {
+            single_choice,
+            multiple_choice,
+            matrix,
+            open_ended,
+            Demographic,
+            datetime,
+            presentation
+        }
+
+        public enum QuestionSubtypes
+        {
+            menu,
+            vertical,
+            vertical_two_col,
+            vertical_three_col,
+            horiz,
+            ranking,
+            rating,
+            single,
+            multi,
+            essay,
+            international,
+            us,
+            both,
+            date_only,
+            time_only,
+            descriptive_text,
+            image
+        }
+
+        public enum AnswerTypes
+        {
+            row,
+            col,
+            other,
+            img,
+            label,
+            name,
+            company,
+            address,
+            address2,
+            city,
+            state,
+            zip,
+            country,
+            email
+        }
+
+        public enum CollectorTypes
+        {
+            url,
+            embedded,
+            email,
+            facebook,
+            audience
+        }
+
+        public enum RespondentCollectionModes
+        {
+            normal,
+            manual,
+            survey_preview,
+            edited
+        }
+
+        public enum RespondentStatuses
+        {
+            completed,
+            partial,
+            disqualified
+        }
+
         public enum LanguageIds
         {
             English = 1,

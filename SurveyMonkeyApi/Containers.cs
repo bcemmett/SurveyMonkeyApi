@@ -125,8 +125,8 @@ namespace SurveyMonkeyApi
 
     public class Type
     {
-        public string family { get; set; }
-        public string subtype { get; set; }
+        public SMApi.QuestionFamilies family { get; set; }
+        public SMApi.QuestionSubtypes subtype { get; set; }
     }
 
     public class QuestionAnswer
@@ -134,7 +134,7 @@ namespace SurveyMonkeyApi
         public long answer_id { get; set; }
         public int position { get; set; }
         public string text { get; set; }
-        public string type { get; set; }
+        public SMApi.AnswerTypes type { get; set; }
         public bool visible { get; set; }
         public int weight { get; set; }
         public bool apply_all_rows { get; set; }
@@ -157,7 +157,7 @@ namespace SurveyMonkeyApi
         public DateTime date_modified { get; set; }
         public string name { get; set; }
         public bool open { get; set; }
-        public string type { get; set; } //TODO: make enum
+        public SMApi.CollectorTypes type { get; set; }
         public string url { get; set; }
         public int completed { get; set; }
         public int started { get; set; }
@@ -191,13 +191,13 @@ namespace SurveyMonkeyApi
         public DateTime date_start { get; set; }
         public DateTime date_modified { get; set; }
         public long collector_id { get; set; }
-        public string collection_mode { get; set; } //TODO: make enum
+        public SMApi.RespondentCollectionModes collection_mode { get; set; }
         public string custom_id { get; set; }
         public string email { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string ip_address { get; set; }
-        public string status { get; set; } //TODO: make enum
+        public SMApi.RespondentStatuses status { get; set; }
         public string analysis_url { get; set; }
         public string recipient_id { get; set; }
     }
