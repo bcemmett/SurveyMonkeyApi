@@ -14,7 +14,7 @@ namespace SurveyMonkeyApi
         public DateTime date_created { get; set; }
         public DateTime date_modified { get; set; }
         public string title { get; set; }
-        public int language_id { get; set; }
+        public SMApi.LanguageIds language_id { get; set; }
         public int question_count { get; set; }
         public int num_responses { get; set; }
         public string analysis_url { get; set; }
@@ -43,7 +43,7 @@ namespace SurveyMonkeyApi
         public long survey_id { get; set; }
         public DateTime date_created { get; set; }
         public DateTime date_modified { get; set; }
-        public int language_id { get; set; }
+        public SMApi.LanguageIds language_id { get; set; }
         public int num_responses { get; set; }
         public int question_count { get; set; }
         public string nickname { get; set; }
@@ -76,7 +76,7 @@ namespace SurveyMonkeyApi
         public DateTime date_modified { get; set; }
         public string title_text { get; set; }
         public bool title_enabled { get; set; }
-        public int language_id { get; set; }
+        public SMApi.LanguageIds language_id { get; set; }
         public int question_count { get; set; }
         public int num_responses { get; set; }
         public string analysis_url { get; set; }
