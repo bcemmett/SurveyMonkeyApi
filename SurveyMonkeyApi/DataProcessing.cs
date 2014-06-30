@@ -106,5 +106,24 @@ namespace SurveyMonkeyApi
                 FillMissingSurveyDetails(survey);
             }
         }
+
+        public void FillMissingResponseCounts(Survey survey)
+        {
+            survey.collectors = survey.collectors ?? GetCollectorList(survey.survey_id);
+            foreach (var collector in survey.collectors)
+            {
+                Collector countDetails = GetResponseCounts(collector.collector_id);
+                collector.completed = countDetails.completed;
+                collector.started = countDetails.started;
+            }
+        }
+
+        public void FillMissingResponseCounts(List<Survey> surveys)
+        {
+            foreach (var survey in surveys)
+            {
+                FillMissingResponseCounts(survey);
+            }
+        }
     }
 }
