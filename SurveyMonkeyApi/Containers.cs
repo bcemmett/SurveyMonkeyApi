@@ -88,14 +88,14 @@ namespace SurveyMonkeyApi
         {
             get
             {
-                return collectors.SelectMany(collector => collector.responses).ToList();
+                return collectors == null ? null : collectors.SelectMany(collector => collector.responses).ToList();
             }
         }
         public List<Question> questions
         {
             get
             {
-                return pages.SelectMany(page => page.questions).ToList();
+                return pages == null ? null : pages.SelectMany(page => page.questions).ToList();
             }
         }
     }
