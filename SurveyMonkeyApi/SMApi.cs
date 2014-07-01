@@ -15,13 +15,15 @@ namespace SurveyMonkeyApi
     public partial class SMApi
     {
         #region Members
+
         private string m_ApiKey;
         private string m_OAuthSecret;
         private string m_BaseUrl = "https://api.surveymonkey.net/v2";
         private int m_RequestDelay = 600;
-        private long m_LastRequestTime = 0;
+        private DateTime m_LastRequestTime = DateTime.MinValue;
         private int m_RequestsMade = 0;
         public int RequestsMade {get { return m_RequestsMade; }}
+
         #endregion
 
         #region Constructors
@@ -74,7 +76,7 @@ namespace SurveyMonkeyApi
 
             using (var webClient = new WebClient())
             {
-                webClient.Encoding = System.Text.Encoding.UTF8;
+                webClient.Encoding = Encoding.UTF8;
                 webClient.Headers.Add("Content-Type", "application/json");
                 webClient.Headers.Add("Authorization", "Bearer " + m_OAuthSecret);
                 webClient.QueryString.Add("api_key", m_ApiKey);
@@ -90,12 +92,14 @@ namespace SurveyMonkeyApi
 
         private void RateLimit()
         {
-            //TODO: don't be as wasteful if <500ms but not 0ms of stuff happened since last request
-            if (m_LastRequestTime != 0 && (DateTime.Now.Millisecond - m_LastRequestTime < m_RequestDelay))
+            TimeSpan timeSpan = DateTime.Now - m_LastRequestTime;
+            int remainingTime = (int)timeSpan.TotalMilliseconds;
+            if (m_LastRequestTime != DateTime.MinValue && remainingTime < m_RequestDelay)
             {
-                Thread.Sleep(m_RequestDelay);
+                Thread.Sleep(remainingTime);
             }
-            m_LastRequestTime = DateTime.Now.Millisecond;
+            m_LastRequestTime = DateTime.Now;
+            Console.WriteLine(DateTime.Now.Second + "." + DateTime.Now.Millisecond + ", ");
         }
 
         private void CheckSurveyMonkeyResponseIsValid(JObject o)
@@ -110,6 +114,7 @@ namespace SurveyMonkeyApi
                 throw new WebException(msg);
             }
         }
+
         #endregion
     }
 }
