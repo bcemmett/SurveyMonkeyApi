@@ -37,7 +37,8 @@ namespace SurveyMonkeyApi
             date_only,
             time_only,
             descriptive_text,
-            image
+            image,
+            numerical
         }
 
         public enum AnswerTypes
@@ -55,7 +56,8 @@ namespace SurveyMonkeyApi
             state,
             zip,
             country,
-            email
+            email,
+            phone
         }
 
         public enum CollectorTypes
