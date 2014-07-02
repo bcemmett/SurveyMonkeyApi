@@ -93,13 +93,13 @@ namespace SurveyMonkeyApi
         private void RateLimit()
         {
             TimeSpan timeSpan = DateTime.Now - m_LastRequestTime;
-            int remainingTime = (int)timeSpan.TotalMilliseconds;
-            if (m_LastRequestTime != DateTime.MinValue && remainingTime < m_RequestDelay)
+            int elapsedTime = (int)timeSpan.TotalMilliseconds;
+            int remainingTime = m_RequestDelay - elapsedTime;
+            if ((m_LastRequestTime != DateTime.MinValue) && (remainingTime > 0))
             {
                 Thread.Sleep(remainingTime);
             }
             m_LastRequestTime = DateTime.Now;
-            Console.WriteLine(DateTime.Now.Second + "." + DateTime.Now.Millisecond + ", ");
         }
 
         private void CheckSurveyMonkeyResponseIsValid(JObject o)
