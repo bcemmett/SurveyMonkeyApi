@@ -43,9 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Responses.cs" />
     <Compile Include="SMApi.DataTypes.cs">
-	  <DependentUpon>SMApi.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>SMApi.cs</DependentUpon>
+    </Compile>
     <Compile Include="SMApi.Endpoints.cs">
       <DependentUpon>SMApi.cs</DependentUpon>
     </Compile>

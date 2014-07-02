@@ -141,5 +141,68 @@ namespace SurveyMonkeyApi
         }
 
         #endregion
+
+        #region Match answers to questions
+
+        public void MatchResponsesToQuestions(Survey survey, List<Response> responses)
+        {
+            survey.ProcessedResponses = new List<ProcessedResponse>();
+            foreach (var response in responses)
+            {
+                var processedResponse = new ProcessedResponse();
+                processedResponse.ProcessedQuestions = MatchSingleResponseToQuestion(survey, response);
+                survey.ProcessedResponses.Add(processedResponse);
+            }
+        }
+
+        private List<ProcessedQuestion> MatchSingleResponseToQuestion(Survey survey, Response response)
+        {
+            var questionReplies = new List<ProcessedQuestion>();
+         
+            Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
+
+            foreach (var responseQuestion in response.questions)
+            {
+                QuestionFamilies responseQuestionFamily = questionsLookup[responseQuestion.question_id].type.family;
+                QuestionSubtypes responseQuestionSubtype = questionsLookup[responseQuestion.question_id].type.subtype;
+
+                var processedResponse = new ProcessedQuestion();
+                processedResponse.QuestionId = responseQuestion.question_id;
+
+                if (responseQuestionFamily == QuestionFamilies.single_choice)
+                {
+                    processedResponse.QuestionType = typeof (SingleChoiceAnswer);
+                    processedResponse.Response = MatchSingleChoiceQuestion(questionsLookup[responseQuestion.question_id], responseQuestion.answers);
+                }
+                questionReplies.Add(processedResponse);
+            }
+            return questionReplies;
+        }
+
+        private SingleChoiceAnswer MatchSingleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)
+        {
+            var reply = new SingleChoiceAnswer();
+
+            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+            
+            foreach (var answerResponse in answerResponses)
+            {
+                if (answersLookup[answerResponse.row].type == AnswerTypes.row)
+                {
+                    reply.Choice = answersLookup[answerResponse.row].text;
+                }
+                if (answersLookup[answerResponse.row].type == AnswerTypes.other)
+                {
+                    reply.OtherComment = answerResponse.text;
+                    if (reply.Choice == null)
+                    {
+                        reply.Choice = answersLookup[answerResponse.row].text;
+                    }
+                }
+            }
+            return reply;
+        }
+
+        #endregion
     }
 }
