@@ -113,7 +113,7 @@ namespace SurveyMonkeyApi
         {
             foreach (var survey in surveys)
             {
-                FillMissingSurveyDetails(survey);
+                FillMissingResponseDetails(survey);
             }
         }
 
