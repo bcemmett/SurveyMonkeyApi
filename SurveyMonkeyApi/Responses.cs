@@ -12,6 +12,12 @@ namespace SurveyMonkeyApi
         public string OtherComment { get; set; }
     }
 
+    public class MultipleChoiceAnswer
+    {
+        public List<string> Choices { get; set; }
+        public string OtherComment { get; set; } 
+    }
+
     public class ProcessedAnswer
     {
         public object Response { get; set; }

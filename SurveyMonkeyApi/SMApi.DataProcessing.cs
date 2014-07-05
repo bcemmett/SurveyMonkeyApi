@@ -206,6 +206,11 @@ namespace SurveyMonkeyApi
                 question.ProcessedAnswer.QuestionType = typeof (SingleChoiceAnswer);
                 question.ProcessedAnswer.Response = MatchSingleChoiceQuestion(questionsLookup[question.question_id], question.answers);
             }
+            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.multiple_choice)
+            {
+                question.ProcessedAnswer.QuestionType = typeof(MultipleChoiceAnswer);
+                question.ProcessedAnswer.Response = MatchMultipleChoiceQuestion(questionsLookup[question.question_id], question.answers);
+            }
         }
 
         private SingleChoiceAnswer MatchSingleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)
@@ -227,6 +232,30 @@ namespace SurveyMonkeyApi
                     {
                         reply.Choice = answersLookup[answerResponse.row].text;
                     }
+                }
+            }
+            return reply;
+        }
+
+        private MultipleChoiceAnswer MatchMultipleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)
+        {
+            var reply = new MultipleChoiceAnswer
+            {
+                Choices = new List<string>()
+            };
+
+            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+
+            foreach (var answerResponse in answerResponses)
+            {
+                if (answersLookup[answerResponse.row].type == AnswerTypes.row)
+                {
+                    reply.Choices.Add(answersLookup[answerResponse.row].text);
+                }
+                if (answersLookup[answerResponse.row].type == AnswerTypes.other)
+                {
+                    reply.Choices.Add(answersLookup[answerResponse.row].text);
+                    reply.OtherComment = answerResponse.text;
                 }
             }
             return reply;
