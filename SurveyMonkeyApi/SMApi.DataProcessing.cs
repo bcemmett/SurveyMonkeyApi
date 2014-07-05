@@ -56,18 +56,17 @@ namespace SurveyMonkeyApi
 
         public void FillMissingResponseDetails(Survey survey)
         {
+            if (survey.collectors == null) return; //need to fill missing collector details first
+
             List<Response> responses = GetAllSurveyResponses(survey);
 
-            //This will fail if you create your own collector for a survey without using GetCollectorList (eg finding CollectorIds through GetRespondentList then populating with GetResponseCounts)
-            List<Collector> collectors = survey.collectors ?? GetCollectorList(survey.survey_id);
-
             //Need to initialise responses before adding to them
-            foreach (var collector in collectors)
+            foreach (var collector in survey.collectors)
             {
                 collector.responses = new List<Response>();
             }
             
-            Dictionary<long, Collector> collectorLookup = collectors.ToDictionary(c => c.collector_id, c => c);
+            Dictionary<long, Collector> collectorLookup = survey.collectors.ToDictionary(c => c.collector_id, c => c);
             foreach (var response in responses)
             {
                 collectorLookup[response.respondent.collector_id].responses.Add(response);
@@ -123,7 +122,7 @@ namespace SurveyMonkeyApi
 
         public void FillMissingResponseCounts(Survey survey)
         {
-            survey.collectors = survey.collectors ?? GetCollectorList(survey.survey_id);
+            if (survey.collectors == null) return; //need to fill missing collector details first
             foreach (var collector in survey.collectors)
             {
                 Collector countDetails = GetResponseCounts(collector.collector_id);
