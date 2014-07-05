@@ -12,16 +12,11 @@ namespace SurveyMonkeyApi
         public string OtherComment { get; set; }
     }
 
-    public class ProcessedQuestion
+    public class ProcessedAnswer
     {
         public object Response { get; set; }
-        public long QuestionId { get; set; }
         public System.Type QuestionType { get; set; }
-    }
-
-    public class ProcessedResponse
-    {
-        public List<ProcessedQuestion> ProcessedQuestions { get; set; }
-        //and presumably some recipient info
+        public SMApi.QuestionFamilies QuestionFamily { get; set; }
+        public SMApi.QuestionSubtypes QuestionSubtype { get; set; }
     }
 }

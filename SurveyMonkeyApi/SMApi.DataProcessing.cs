@@ -144,39 +144,40 @@ namespace SurveyMonkeyApi
 
         #region Match answers to questions
 
-        public void MatchResponsesToQuestions(Survey survey, List<Response> responses)
+        public void MatchResponsesToSurveyStructure(Survey survey)
         {
-            survey.ProcessedResponses = new List<ProcessedResponse>();
-            foreach (var response in responses)
+            if (survey.responses == null || survey.collectors == null) return;
+
+            foreach (var collector in survey.collectors)
             {
-                var processedResponse = new ProcessedResponse();
-                processedResponse.ProcessedQuestions = MatchSingleResponseToQuestion(survey, response);
-                survey.ProcessedResponses.Add(processedResponse);
+                foreach (var response in collector.responses)
+                {
+                    MatchResponseToSurveyStructure(survey, response);
+                }
             }
         }
 
-        private List<ProcessedQuestion> MatchSingleResponseToQuestion(Survey survey, Response response)
+        private void MatchResponseToSurveyStructure(Survey survey, Response response)
         {
-            var questionReplies = new List<ProcessedQuestion>();
-         
+            foreach (var question in response.questions)
+            {
+                MatchAnswerToSurveyStructure(survey, question);
+            }
+        }
+
+        private void MatchAnswerToSurveyStructure(Survey survey, QuestionResponse question)
+        {         
             Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
 
-            foreach (var responseQuestion in response.questions)
+            question.ProcessedAnswer = new ProcessedAnswer();
+            question.ProcessedAnswer.QuestionFamily = questionsLookup[question.question_id].type.family;
+            question.ProcessedAnswer.QuestionSubtype = questionsLookup[question.question_id].type.subtype;
+
+            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.single_choice)
             {
-                QuestionFamilies responseQuestionFamily = questionsLookup[responseQuestion.question_id].type.family;
-                QuestionSubtypes responseQuestionSubtype = questionsLookup[responseQuestion.question_id].type.subtype;
-
-                var processedResponse = new ProcessedQuestion();
-                processedResponse.QuestionId = responseQuestion.question_id;
-
-                if (responseQuestionFamily == QuestionFamilies.single_choice)
-                {
-                    processedResponse.QuestionType = typeof (SingleChoiceAnswer);
-                    processedResponse.Response = MatchSingleChoiceQuestion(questionsLookup[responseQuestion.question_id], responseQuestion.answers);
-                }
-                questionReplies.Add(processedResponse);
+                question.ProcessedAnswer.QuestionType = typeof (SingleChoiceAnswer);
+                question.ProcessedAnswer.Response = MatchSingleChoiceQuestion(questionsLookup[question.question_id], question.answers);
             }
-            return questionReplies;
         }
 
         private SingleChoiceAnswer MatchSingleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)

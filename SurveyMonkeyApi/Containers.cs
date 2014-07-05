@@ -84,7 +84,6 @@ namespace SurveyMonkeyApi
         public string nickname { get; set; }
         public List<Page> pages { get; set; }
         public List<Collector> collectors { get; set; }
-        public List<ProcessedResponse> ProcessedResponses { get; set; }
         public List<Response> responses
         {
             get
@@ -176,6 +175,7 @@ namespace SurveyMonkeyApi
     {
         public long question_id { get; set; }
         public List<AnswerResponse> answers { get; set; }
+        public ProcessedAnswer ProcessedAnswer { get; set; }
     }
 
     public class AnswerResponse
