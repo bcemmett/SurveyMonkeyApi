@@ -9,6 +9,27 @@ namespace SurveyMonkeyApi
 {
     public partial class SMApi
     {
+        #region Fill all missing survey information
+
+        public void FillAllMissingSurveyInformation(List<Survey> surveys)
+        {
+            foreach (var survey in surveys)
+            {
+                FillAllMissingSurveyInformation(survey);
+            }
+        }
+
+        public void FillAllMissingSurveyInformation(Survey survey)
+        {
+            FillMissingCollectorDetails(survey);
+            FillMissingResponseCounts(survey);
+            FillMissingSurveyDetails(survey);
+            FillMissingResponseDetails(survey);
+            MatchResponsesToSurveyStructure(survey);
+        }
+
+        #endregion
+
         #region Fill missing survey details
 
         public void FillMissingSurveyDetails(List<Survey> surveys)
