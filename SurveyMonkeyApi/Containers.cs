@@ -119,11 +119,11 @@ namespace SurveyMonkeyApi
         public long question_id { get; set; }
         public string heading { get; set; }
         public int position { get; set; }
-        public Type type { get; set; }
+        public QuestionType type { get; set; }
         public List<QuestionAnswer> answers { get; set; }
     }
 
-    public class Type
+    public class QuestionType
     {
         public SMApi.QuestionFamilies family { get; set; }
         public SMApi.QuestionSubtypes subtype { get; set; }
