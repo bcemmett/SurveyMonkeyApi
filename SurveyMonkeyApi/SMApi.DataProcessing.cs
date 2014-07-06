@@ -211,6 +211,19 @@ namespace SurveyMonkeyApi
                 question.ProcessedAnswer.QuestionType = typeof(MultipleChoiceAnswer);
                 question.ProcessedAnswer.Response = MatchMultipleChoiceQuestion(questionsLookup[question.question_id], question.answers);
             }
+            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.open_ended)
+            {
+                if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.essay || question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.single)
+                {
+                    question.ProcessedAnswer.QuestionType = typeof(OpenEndedSingleAnswer);
+                    question.ProcessedAnswer.Response = MatchOpenEndedSingleAnswer(questionsLookup[question.question_id], question.answers);
+                }
+                if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.multi || question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.numerical)
+                {
+                    question.ProcessedAnswer.QuestionType = typeof(OpenEndedMultipleAnswer);
+                    question.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionsLookup[question.question_id], question.answers);
+                }
+            }
         }
 
         private SingleChoiceAnswer MatchSingleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)
@@ -258,6 +271,36 @@ namespace SurveyMonkeyApi
                     reply.OtherComment = answerResponse.text;
                 }
             }
+            return reply;
+        }
+
+        private OpenEndedSingleAnswer MatchOpenEndedSingleAnswer(Question question, List<AnswerResponse> answerResponses)
+        {
+            var reply = new OpenEndedSingleAnswer();
+
+            reply.Text = answerResponses.First().text;
+
+            return reply;
+        }
+
+        private OpenEndedMultipleAnswer MatchOpenEndedMultipleAnswer(Question question, List<AnswerResponse> answerResponses)
+        {
+            var reply = new OpenEndedMultipleAnswer
+            {
+                Replies = new List<OpenEndedMultipleAnswerReply>()
+            };
+
+            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+
+            foreach (var answerResponse in answerResponses)
+            {
+                var openEndedMultipleAnswerReply = new OpenEndedMultipleAnswerReply();
+                openEndedMultipleAnswerReply.AnswerId = answersLookup[answerResponse.row].answer_id;
+                openEndedMultipleAnswerReply.AnswerLabel = answersLookup[answerResponse.row].text;
+                openEndedMultipleAnswerReply.Text = answerResponse.text;
+                reply.Replies.Add(openEndedMultipleAnswerReply);
+            }
+
             return reply;
         }
 
