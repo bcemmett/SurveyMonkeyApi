@@ -49,6 +49,18 @@ namespace SurveyMonkeyApi
         public string phone { get; set; }
     }
 
+    public class DateTimeAnswer
+    {
+        public List<DateTimeAnswerReply> Replies { get; set; }
+    }
+
+    public class DateTimeAnswerReply
+    {
+        public DateTime TimeStamp { get; set; }
+        public long AnswerId { get; set; }
+        public string AnswerLabel { get; set; }
+    }
+
     public class ProcessedAnswer
     {
         public object Response { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -229,6 +230,11 @@ namespace SurveyMonkeyApi
                 question.ProcessedAnswer.QuestionType = typeof(DemographicAnswer);
                 question.ProcessedAnswer.Response = MatchDemographicAnswer(questionsLookup[question.question_id], question.answers);
             }
+            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.datetime)
+            {
+                question.ProcessedAnswer.QuestionType = typeof(DateTimeAnswer);
+                question.ProcessedAnswer.Response = MatchDateTimeAnswer(questionsLookup[question.question_id], question.answers);
+            }
         }
 
         private SingleChoiceAnswer MatchSingleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)
@@ -319,6 +325,38 @@ namespace SurveyMonkeyApi
             {
                 var propertyName = answersLookup[answerResponse.row].type.ToString();
                 typeof(DemographicAnswer).GetProperty(propertyName).SetValue(reply, answerResponse.text);
+            }
+            return reply;
+        }
+
+        private DateTimeAnswer MatchDateTimeAnswer(Question question, List<AnswerResponse> answerResponses)
+        {
+            var reply = new DateTimeAnswer
+            {
+                Replies = new List<DateTimeAnswerReply>()
+            };
+
+            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+
+            foreach (var answerResponse in answerResponses)
+            {
+                var dateTimeAnswerReply = new DateTimeAnswerReply();
+                dateTimeAnswerReply.AnswerId = answersLookup[answerResponse.row].answer_id;
+                dateTimeAnswerReply.AnswerLabel = answersLookup[answerResponse.row].text;
+                dateTimeAnswerReply.TimeStamp = DateTime.MinValue;
+
+                DateTime timeStamp = DateTime.Parse(answerResponse.text, CultureInfo.CreateSpecificCulture("en-US"));
+                if (question.type.subtype == QuestionSubtypes.time_only) //Where only a time is given, use date component from DateTime.MinValue
+                {
+                    dateTimeAnswerReply.TimeStamp = dateTimeAnswerReply.TimeStamp.AddHours(timeStamp.Hour);
+                    dateTimeAnswerReply.TimeStamp = dateTimeAnswerReply.TimeStamp.AddMinutes(timeStamp.Minute);
+                }
+                else
+                {
+                    dateTimeAnswerReply.TimeStamp = timeStamp;
+                }
+
+                reply.Replies.Add(dateTimeAnswerReply);
             }
             return reply;
         }
