@@ -35,6 +35,20 @@ namespace SurveyMonkeyApi
         public string AnswerLabel { get; set; }
     }
 
+    public class DemographicAnswer
+    {
+        public string name { get; set; }
+        public string company { get; set; }
+        public string address { get; set; }
+        public string address2 { get; set; }
+        public string city { get; set; }
+        public string state { get; set; }
+        public string zip { get; set; }
+        public string country { get; set; }
+        public string email { get; set; }
+        public string phone { get; set; }
+    }
+
     public class ProcessedAnswer
     {
         public object Response { get; set; }

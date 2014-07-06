@@ -224,6 +224,11 @@ namespace SurveyMonkeyApi
                     question.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionsLookup[question.question_id], question.answers);
                 }
             }
+            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.Demographic)
+            {    
+                question.ProcessedAnswer.QuestionType = typeof(DemographicAnswer);
+                question.ProcessedAnswer.Response = MatchDemographicAnswer(questionsLookup[question.question_id], question.answers);
+            }
         }
 
         private SingleChoiceAnswer MatchSingleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)
@@ -301,6 +306,20 @@ namespace SurveyMonkeyApi
                 reply.Replies.Add(openEndedMultipleAnswerReply);
             }
 
+            return reply;
+        }
+
+        private DemographicAnswer MatchDemographicAnswer(Question question, List<AnswerResponse> answerResponses)
+        {
+            var reply = new DemographicAnswer();
+
+            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+
+            foreach (var answerResponse in answerResponses)
+            {
+                var propertyName = answersLookup[answerResponse.row].type.ToString();
+                typeof(DemographicAnswer).GetProperty(propertyName).SetValue(reply, answerResponse.text);
+            }
             return reply;
         }
 
