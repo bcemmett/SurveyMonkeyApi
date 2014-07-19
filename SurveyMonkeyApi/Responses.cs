@@ -61,6 +61,26 @@ namespace SurveyMonkeyApi
         public string AnswerLabel { get; set; }
     }
 
+    public class MatrixMenuAnswer
+    {
+        public Dictionary<long, MatrixMenuRowAnswer> Rows { get; set; }
+        public string Other { get; set; }
+    }
+
+    public class MatrixMenuRowAnswer
+    {
+        public string Name { get; set; }
+        public long RowId { get; set; }
+        public Dictionary<long, MatrixMenuColumnAnswer> Columns { get; set; }
+    }
+
+    public class MatrixMenuColumnAnswer
+    {
+        public string Name { get; set; }
+        public long ColumnId { get; set; }
+        public string Choice {get; set; }
+    }
+
     public class ProcessedAnswer
     {
         public object Response { get; set; }

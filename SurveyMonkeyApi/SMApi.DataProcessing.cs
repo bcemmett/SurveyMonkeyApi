@@ -207,11 +207,13 @@ namespace SurveyMonkeyApi
                 question.ProcessedAnswer.QuestionType = typeof (SingleChoiceAnswer);
                 question.ProcessedAnswer.Response = MatchSingleChoiceQuestion(questionsLookup[question.question_id], question.answers);
             }
+
             if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.multiple_choice)
             {
                 question.ProcessedAnswer.QuestionType = typeof(MultipleChoiceAnswer);
                 question.ProcessedAnswer.Response = MatchMultipleChoiceQuestion(questionsLookup[question.question_id], question.answers);
             }
+
             if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.open_ended)
             {
                 if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.essay || question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.single)
@@ -225,15 +227,26 @@ namespace SurveyMonkeyApi
                     question.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionsLookup[question.question_id], question.answers);
                 }
             }
+
             if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.Demographic)
             {    
                 question.ProcessedAnswer.QuestionType = typeof(DemographicAnswer);
                 question.ProcessedAnswer.Response = MatchDemographicAnswer(questionsLookup[question.question_id], question.answers);
             }
+
             if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.datetime)
             {
                 question.ProcessedAnswer.QuestionType = typeof(DateTimeAnswer);
                 question.ProcessedAnswer.Response = MatchDateTimeAnswer(questionsLookup[question.question_id], question.answers);
+            }
+
+            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.matrix)
+            {
+                if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.menu)
+                {
+                    question.ProcessedAnswer.QuestionType = typeof(MatrixMenuAnswer);
+                    question.ProcessedAnswer.Response = MatchMatrixMenuAnswer(questionsLookup[question.question_id], question.answers);
+                }
             }
         }
 
@@ -358,6 +371,47 @@ namespace SurveyMonkeyApi
 
                 reply.Replies.Add(dateTimeAnswerReply);
             }
+            return reply;
+        }
+
+        private MatrixMenuAnswer MatchMatrixMenuAnswer(Question question, List<AnswerResponse> answerResponses)
+        {
+            var reply = new MatrixMenuAnswer
+            {
+                Rows = new Dictionary<long, MatrixMenuRowAnswer>()
+            };
+
+            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+            Dictionary<long, string> choicesLookup = (from answerItem in answersLookup where answerItem.Value.items != null from item in answerItem.Value.items select item).ToDictionary(item => item.answer_id, item => item.text);
+
+            foreach (var answerResponse in answerResponses)
+            {
+                if (answerResponse.row == 0)
+                {
+                    reply.Other = answerResponse.text;
+                }
+                else
+                {
+                    if (!reply.Rows.ContainsKey(answerResponse.row))
+                    {
+                        reply.Rows.Add(answerResponse.row, new MatrixMenuRowAnswer
+                        {
+                            Columns = new Dictionary<long, MatrixMenuColumnAnswer>()
+                        });
+                    }
+                    if (!reply.Rows[answerResponse.row].Columns.ContainsKey(answerResponse.col))
+                    {
+                        reply.Rows[answerResponse.row].Columns.Add(answerResponse.col, new MatrixMenuColumnAnswer());
+                    }
+
+                    reply.Rows[answerResponse.row].RowId = answerResponse.row;
+                    reply.Rows[answerResponse.row].Name = answersLookup[answerResponse.row].text;
+                    reply.Rows[answerResponse.row].Columns[answerResponse.col].ColumnId = answerResponse.col;
+                    reply.Rows[answerResponse.row].Columns[answerResponse.col].Name = answersLookup[answerResponse.col].text;
+                    reply.Rows[answerResponse.row].Columns[answerResponse.col].Choice = choicesLookup[answerResponse.col_choice];
+                }   
+            }
+
             return reply;
         }
 
