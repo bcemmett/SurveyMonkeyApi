@@ -9,15 +9,15 @@ namespace SurveyMonkeyApi
     {
         #region Fill all missing survey information
 
-        public void FillAllMissingSurveyInformation(List<Survey> surveys)
+        public void FillMissingSurveyInformation(List<Survey> surveys)
         {
             foreach (var survey in surveys)
             {
-                FillAllMissingSurveyInformation(survey);
+                FillMissingSurveyInformation(survey);
             }
         }
 
-        public void FillAllMissingSurveyInformation(Survey survey)
+        public void FillMissingSurveyInformation(Survey survey)
         {
             FillMissingCollectorDetails(survey);
             FillMissingResponseCounts(survey);
@@ -30,15 +30,7 @@ namespace SurveyMonkeyApi
 
         #region Fill missing survey details
 
-        public void FillMissingSurveyDetails(List<Survey> surveys)
-        {
-            foreach (var survey in surveys)
-            {
-                FillMissingSurveyDetails(survey);
-            }
-        }
-
-        public void FillMissingSurveyDetails(Survey survey)
+        private void FillMissingSurveyDetails(Survey survey)
         {
             Survey surveyDetails = GetSurveyDetails(survey.survey_id);
             survey.date_created = surveyDetails.date_created;
@@ -56,15 +48,7 @@ namespace SurveyMonkeyApi
 
         #region Fill missing collector details
 
-        public void FillMissingCollectorDetails(List<Survey> surveys)
-        {
-            foreach (var survey in surveys)
-            {
-                FillMissingCollectorDetails(survey);
-            }
-        }
-
-        public void FillMissingCollectorDetails(Survey survey)
+        private void FillMissingCollectorDetails(Survey survey)
         {
             survey.collectors = GetCollectorList(survey.survey_id);
         }
@@ -73,15 +57,7 @@ namespace SurveyMonkeyApi
 
         #region Fill missing response details
 
-        public void FillMissingResponseDetails(List<Survey> surveys)
-        {
-            foreach (var survey in surveys)
-            {
-                FillMissingResponseDetails(survey);
-            }
-        }
-
-        public void FillMissingResponseDetails(Survey survey)
+        private void FillMissingResponseDetails(Survey survey)
         {
             if (survey.collectors == null) return; //need to fill missing collector details first
 
@@ -139,15 +115,7 @@ namespace SurveyMonkeyApi
 
         #region Fill missing response counts
 
-        public void FillMissingResponseCounts(List<Survey> surveys)
-        {
-            foreach (var survey in surveys)
-            {
-                FillMissingResponseCounts(survey);
-            }
-        }
-
-        public void FillMissingResponseCounts(Survey survey)
+        private void FillMissingResponseCounts(Survey survey)
         {
             if (survey.collectors == null) return; //need to fill missing collector details first
             foreach (var collector in survey.collectors)
@@ -162,15 +130,7 @@ namespace SurveyMonkeyApi
 
         #region Match answers to questions
 
-        public void MatchResponsesToSurveyStructure(List<Survey> surveys)
-        {
-            foreach (var survey in surveys)
-            {
-                MatchResponsesToSurveyStructure(survey);
-            }
-        }
-
-        public void MatchResponsesToSurveyStructure(Survey survey)
+        private void MatchResponsesToSurveyStructure(Survey survey)
         {
             if (survey.responses == null || survey.collectors == null) return;
 
