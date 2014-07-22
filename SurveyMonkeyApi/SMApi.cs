@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
-using System.Security.Policy;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -87,7 +82,7 @@ namespace SurveyMonkeyApi
             
             var o = JObject.Parse(result);
             CheckSurveyMonkeyResponseIsValid(o);
-            return o.SelectToken(("data"));
+            return o["data"];
         }
 
         private void RateLimit()

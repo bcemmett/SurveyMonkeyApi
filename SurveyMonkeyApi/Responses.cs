@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SurveyMonkeyApi
 {
@@ -84,7 +81,7 @@ namespace SurveyMonkeyApi
     public class ProcessedAnswer
     {
         public object Response { get; set; }
-        public System.Type QuestionType { get; set; }
+        public Type QuestionType { get; set; }
         public SMApi.QuestionFamilies QuestionFamily { get; set; }
         public SMApi.QuestionSubtypes QuestionSubtype { get; set; }
     }

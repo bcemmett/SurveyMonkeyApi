@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace SurveyMonkeyApi
@@ -88,7 +86,7 @@ namespace SurveyMonkeyApi
         {
             const string endPoint = "/surveys/get_survey_list";
             var o = MakeApiRequest(endPoint, parameters);
-            var surveysJson = o.SelectToken("surveys").ToString();
+            var surveysJson = o["surveys"].ToString();
             var surveysProcessedJson = JsonConvert.DeserializeObject<List<JsonSerializeGetSurveyList>>(surveysJson);
             List<Survey> surveys = surveysProcessedJson.Select(x => x.ToSurvey()).ToList();
             return surveys;
@@ -192,7 +190,7 @@ namespace SurveyMonkeyApi
         {
             const string endPoint = "/surveys/get_collector_list";
             var o = MakeApiRequest(endPoint, parameters);
-            var collectorsJson = o.SelectToken("collectors").ToString();
+            var collectorsJson = o["collectors"].ToString();
             List<Collector> collectors = JsonConvert.DeserializeObject<List<Collector>>(collectorsJson);
             return collectors;
         }
@@ -281,7 +279,7 @@ namespace SurveyMonkeyApi
         {
             const string endPoint = "/surveys/get_respondent_list";
             var o = MakeApiRequest(endPoint, parameters);
-            var respondentsJson = o.SelectToken("respondents").ToString();
+            var respondentsJson = o["respondents"].ToString();
             List<Respondent> respondents = JsonConvert.DeserializeObject<List<Respondent>>(respondentsJson);
             return respondents;
         }
