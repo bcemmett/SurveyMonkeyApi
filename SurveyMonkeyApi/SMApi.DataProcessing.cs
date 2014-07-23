@@ -145,65 +145,66 @@ namespace SurveyMonkeyApi
 
         private void MatchIndividualResponseToSurveyStructure(Survey survey, Response response)
         {
-            foreach (var question in response.questions)
+            foreach (var questionResponse in response.questions)
             {
-                MatchAnswerToSurveyStructure(survey, question);
+                Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
+                MatchAnswerToSurveyStructure(questionsLookup[questionResponse.question_id], questionResponse);
             }
         }
 
-        private void MatchAnswerToSurveyStructure(Survey survey, QuestionResponse question)
+        private void MatchAnswerToSurveyStructure(Question questionStructure, QuestionResponse questionResponse)
         {         
-            Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
+            questionResponse.ProcessedAnswer = new ProcessedAnswer
+            {
+                QuestionFamily = questionStructure.type.family,
+                QuestionSubtype = questionStructure.type.subtype
+            };
 
-            question.ProcessedAnswer = new ProcessedAnswer();
-            question.ProcessedAnswer.QuestionFamily = questionsLookup[question.question_id].type.family;
-            question.ProcessedAnswer.QuestionSubtype = questionsLookup[question.question_id].type.subtype;
-
-            switch (question.ProcessedAnswer.QuestionFamily)
+            switch (questionResponse.ProcessedAnswer.QuestionFamily)
             {
                 case QuestionFamilies.single_choice:
-                    question.ProcessedAnswer.Response = MatchSingleChoiceQuestion(questionsLookup[question.question_id], question.answers);
+                    questionResponse.ProcessedAnswer.Response = MatchSingleChoiceAnswer(questionStructure, questionResponse.answers);
                     break;
 
                 case QuestionFamilies.multiple_choice:
-                    question.ProcessedAnswer.Response = MatchMultipleChoiceQuestion(questionsLookup[question.question_id], question.answers);
+                    questionResponse.ProcessedAnswer.Response = MatchMultipleChoiceAnswer(questionStructure, questionResponse.answers);
                     break;
 
                 case QuestionFamilies.open_ended:
-                    switch (question.ProcessedAnswer.QuestionSubtype)
+                    switch (questionResponse.ProcessedAnswer.QuestionSubtype)
                     {
                         case QuestionSubtypes.essay:
                         case QuestionSubtypes.single:
-                            question.ProcessedAnswer.Response = MatchOpenEndedSingleAnswer(questionsLookup[question.question_id], question.answers);
+                            questionResponse.ProcessedAnswer.Response = MatchOpenEndedSingleAnswer(questionStructure, questionResponse.answers);
                             break;
 
                         case QuestionSubtypes.multi:
                         case QuestionSubtypes.numerical:
-                            question.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionsLookup[question.question_id], question.answers);
+                            questionResponse.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionStructure, questionResponse.answers);
                             break;
                     }
                     break;
 
                 case QuestionFamilies.Demographic:
-                    question.ProcessedAnswer.Response = MatchDemographicAnswer(questionsLookup[question.question_id], question.answers);
+                    questionResponse.ProcessedAnswer.Response = MatchDemographicAnswer(questionStructure, questionResponse.answers);
                     break;
 
                 case QuestionFamilies.datetime:
-                    question.ProcessedAnswer.Response = MatchDateTimeAnswer(questionsLookup[question.question_id], question.answers);
+                    questionResponse.ProcessedAnswer.Response = MatchDateTimeAnswer(questionStructure, questionResponse.answers);
                     break;
 
                 case QuestionFamilies.matrix:
-                    switch (question.ProcessedAnswer.QuestionSubtype)
+                    switch (questionResponse.ProcessedAnswer.QuestionSubtype)
                     {
                         case QuestionSubtypes.menu:
-                            question.ProcessedAnswer.Response = MatchMatrixMenuAnswer(questionsLookup[question.question_id], question.answers);
+                            questionResponse.ProcessedAnswer.Response = MatchMatrixMenuAnswer(questionStructure, questionResponse.answers);
                             break;
                     }
                     break;
             }
         }
 
-        private SingleChoiceAnswer MatchSingleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)
+        private SingleChoiceAnswer MatchSingleChoiceAnswer(Question question, List<AnswerResponse> answerResponses)
         {
             var reply = new SingleChoiceAnswer();
 
@@ -227,7 +228,7 @@ namespace SurveyMonkeyApi
             return reply;
         }
 
-        private MultipleChoiceAnswer MatchMultipleChoiceQuestion(Question question, List<AnswerResponse> answerResponses)
+        private MultipleChoiceAnswer MatchMultipleChoiceAnswer(Question question, List<AnswerResponse> answerResponses)
         {
             var reply = new MultipleChoiceAnswer
             {
