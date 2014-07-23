@@ -159,44 +159,47 @@ namespace SurveyMonkeyApi
             question.ProcessedAnswer.QuestionFamily = questionsLookup[question.question_id].type.family;
             question.ProcessedAnswer.QuestionSubtype = questionsLookup[question.question_id].type.subtype;
 
-            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.single_choice)
+            switch (question.ProcessedAnswer.QuestionFamily)
             {
-                question.ProcessedAnswer.Response = MatchSingleChoiceQuestion(questionsLookup[question.question_id], question.answers);
-            }
+                case QuestionFamilies.single_choice:
+                    question.ProcessedAnswer.Response = MatchSingleChoiceQuestion(questionsLookup[question.question_id], question.answers);
+                    break;
 
-            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.multiple_choice)
-            {
-                question.ProcessedAnswer.Response = MatchMultipleChoiceQuestion(questionsLookup[question.question_id], question.answers);
-            }
+                case QuestionFamilies.multiple_choice:
+                    question.ProcessedAnswer.Response = MatchMultipleChoiceQuestion(questionsLookup[question.question_id], question.answers);
+                    break;
 
-            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.open_ended)
-            {
-                if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.essay || question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.single)
-                {
-                    question.ProcessedAnswer.Response = MatchOpenEndedSingleAnswer(questionsLookup[question.question_id], question.answers);
-                }
-                if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.multi || question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.numerical)
-                {
-                    question.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionsLookup[question.question_id], question.answers);
-                }
-            }
+                case QuestionFamilies.open_ended:
+                    switch (question.ProcessedAnswer.QuestionSubtype)
+                    {
+                        case QuestionSubtypes.essay:
+                        case QuestionSubtypes.single:
+                            question.ProcessedAnswer.Response = MatchOpenEndedSingleAnswer(questionsLookup[question.question_id], question.answers);
+                            break;
 
-            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.Demographic)
-            {    
-                question.ProcessedAnswer.Response = MatchDemographicAnswer(questionsLookup[question.question_id], question.answers);
-            }
+                        case QuestionSubtypes.multi:
+                        case QuestionSubtypes.numerical:
+                            question.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionsLookup[question.question_id], question.answers);
+                            break;
+                    }
+                    break;
 
-            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.datetime)
-            {
-                question.ProcessedAnswer.Response = MatchDateTimeAnswer(questionsLookup[question.question_id], question.answers);
-            }
+                case QuestionFamilies.Demographic:
+                    question.ProcessedAnswer.Response = MatchDemographicAnswer(questionsLookup[question.question_id], question.answers);
+                    break;
 
-            if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.matrix)
-            {
-                if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.menu)
-                {
-                    question.ProcessedAnswer.Response = MatchMatrixMenuAnswer(questionsLookup[question.question_id], question.answers);
-                }
+                case QuestionFamilies.datetime:
+                    question.ProcessedAnswer.Response = MatchDateTimeAnswer(questionsLookup[question.question_id], question.answers);
+                    break;
+
+                case QuestionFamilies.matrix:
+                    switch (question.ProcessedAnswer.QuestionSubtype)
+                    {
+                        case QuestionSubtypes.menu:
+                            question.ProcessedAnswer.Response = MatchMatrixMenuAnswer(questionsLookup[question.question_id], question.answers);
+                            break;
+                    }
+                    break;
             }
         }
 
