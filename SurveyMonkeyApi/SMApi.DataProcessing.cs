@@ -161,13 +161,11 @@ namespace SurveyMonkeyApi
 
             if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.single_choice)
             {
-                question.ProcessedAnswer.QuestionType = typeof (SingleChoiceAnswer);
                 question.ProcessedAnswer.Response = MatchSingleChoiceQuestion(questionsLookup[question.question_id], question.answers);
             }
 
             if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.multiple_choice)
             {
-                question.ProcessedAnswer.QuestionType = typeof(MultipleChoiceAnswer);
                 question.ProcessedAnswer.Response = MatchMultipleChoiceQuestion(questionsLookup[question.question_id], question.answers);
             }
 
@@ -175,25 +173,21 @@ namespace SurveyMonkeyApi
             {
                 if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.essay || question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.single)
                 {
-                    question.ProcessedAnswer.QuestionType = typeof(OpenEndedSingleAnswer);
                     question.ProcessedAnswer.Response = MatchOpenEndedSingleAnswer(questionsLookup[question.question_id], question.answers);
                 }
                 if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.multi || question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.numerical)
                 {
-                    question.ProcessedAnswer.QuestionType = typeof(OpenEndedMultipleAnswer);
                     question.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionsLookup[question.question_id], question.answers);
                 }
             }
 
             if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.Demographic)
             {    
-                question.ProcessedAnswer.QuestionType = typeof(DemographicAnswer);
                 question.ProcessedAnswer.Response = MatchDemographicAnswer(questionsLookup[question.question_id], question.answers);
             }
 
             if (question.ProcessedAnswer.QuestionFamily == QuestionFamilies.datetime)
             {
-                question.ProcessedAnswer.QuestionType = typeof(DateTimeAnswer);
                 question.ProcessedAnswer.Response = MatchDateTimeAnswer(questionsLookup[question.question_id], question.answers);
             }
 
@@ -201,7 +195,6 @@ namespace SurveyMonkeyApi
             {
                 if (question.ProcessedAnswer.QuestionSubtype == QuestionSubtypes.menu)
                 {
-                    question.ProcessedAnswer.QuestionType = typeof(MatrixMenuAnswer);
                     question.ProcessedAnswer.Response = MatchMatrixMenuAnswer(questionsLookup[question.question_id], question.answers);
                 }
             }
