@@ -145,9 +145,9 @@ namespace SurveyMonkeyApi
 
         private void MatchIndividualResponseToSurveyStructure(Survey survey, Response response)
         {
+            Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
             foreach (var questionResponse in response.questions)
             {
-                Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
                 MatchAnswerToSurveyStructure(questionsLookup[questionResponse.question_id], questionResponse);
             }
         }
