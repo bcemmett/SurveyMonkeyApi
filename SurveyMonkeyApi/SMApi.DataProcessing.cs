@@ -134,21 +134,21 @@ namespace SurveyMonkeyApi
         {
             if (survey.responses == null || survey.collectors == null) return;
 
+            Dictionary<long, Question> surveyStructureLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
             foreach (var collector in survey.collectors)
             {
                 foreach (var response in collector.responses)
                 {
-                    MatchIndividualResponseToSurveyStructure(survey, response);
+                    MatchIndividualResponseToSurveyStructure(surveyStructureLookup, response);
                 }
             }
         }
 
-        private void MatchIndividualResponseToSurveyStructure(Survey survey, Response response)
+        private void MatchIndividualResponseToSurveyStructure(Dictionary<long, Question> surveyStructureLookup, Response response)
         {
-            Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
             foreach (var questionResponse in response.questions)
             {
-                MatchAnswerToSurveyStructure(questionsLookup[questionResponse.question_id], questionResponse);
+                MatchAnswerToSurveyStructure(surveyStructureLookup[questionResponse.question_id], questionResponse);
             }
         }
 
