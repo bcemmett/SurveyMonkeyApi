@@ -148,60 +148,53 @@ namespace SurveyMonkeyApi
         {
             foreach (var questionResponse in response.questions)
             {
-                MatchAnswerToSurveyStructure(surveyStructureLookup[questionResponse.question_id], questionResponse);
+                questionResponse.ProcessedAnswer = new ProcessedAnswer
+                {
+                    QuestionFamily = surveyStructureLookup[questionResponse.question_id].type.family,
+                    QuestionSubtype = surveyStructureLookup[questionResponse.question_id].type.subtype,
+                    Response = MatchAnswerToSurveyStructure(surveyStructureLookup[questionResponse.question_id], questionResponse)
+                };                
             }
         }
 
-        private void MatchAnswerToSurveyStructure(Question questionStructure, QuestionResponse questionResponse)
-        {         
-            questionResponse.ProcessedAnswer = new ProcessedAnswer
-            {
-                QuestionFamily = questionStructure.type.family,
-                QuestionSubtype = questionStructure.type.subtype
-            };
-
-            switch (questionResponse.ProcessedAnswer.QuestionFamily)
+        private object MatchAnswerToSurveyStructure(Question questionStructure, QuestionResponse questionResponse)
+        {
+            switch (questionStructure.type.family)
             {
                 case QuestionFamilies.single_choice:
-                    questionResponse.ProcessedAnswer.Response = MatchSingleChoiceAnswer(questionStructure, questionResponse.answers);
-                    break;
+                    return MatchSingleChoiceAnswer(questionStructure, questionResponse.answers);
 
                 case QuestionFamilies.multiple_choice:
-                    questionResponse.ProcessedAnswer.Response = MatchMultipleChoiceAnswer(questionStructure, questionResponse.answers);
-                    break;
+                    return MatchMultipleChoiceAnswer(questionStructure, questionResponse.answers);
 
                 case QuestionFamilies.open_ended:
-                    switch (questionResponse.ProcessedAnswer.QuestionSubtype)
+                    switch (questionStructure.type.subtype)
                     {
                         case QuestionSubtypes.essay:
                         case QuestionSubtypes.single:
-                            questionResponse.ProcessedAnswer.Response = MatchOpenEndedSingleAnswer(questionStructure, questionResponse.answers);
-                            break;
+                            return MatchOpenEndedSingleAnswer(questionStructure, questionResponse.answers);
 
                         case QuestionSubtypes.multi:
                         case QuestionSubtypes.numerical:
-                            questionResponse.ProcessedAnswer.Response = MatchOpenEndedMultipleAnswer(questionStructure, questionResponse.answers);
-                            break;
+                            return MatchOpenEndedMultipleAnswer(questionStructure, questionResponse.answers);
                     }
                     break;
 
                 case QuestionFamilies.Demographic:
-                    questionResponse.ProcessedAnswer.Response = MatchDemographicAnswer(questionStructure, questionResponse.answers);
-                    break;
+                    return MatchDemographicAnswer(questionStructure, questionResponse.answers);
 
                 case QuestionFamilies.datetime:
-                    questionResponse.ProcessedAnswer.Response = MatchDateTimeAnswer(questionStructure, questionResponse.answers);
-                    break;
+                    return MatchDateTimeAnswer(questionStructure, questionResponse.answers);
 
                 case QuestionFamilies.matrix:
-                    switch (questionResponse.ProcessedAnswer.QuestionSubtype)
+                    switch (questionStructure.type.subtype)
                     {
                         case QuestionSubtypes.menu:
-                            questionResponse.ProcessedAnswer.Response = MatchMatrixMenuAnswer(questionStructure, questionResponse.answers);
-                            break;
+                            return MatchMatrixMenuAnswer(questionStructure, questionResponse.answers);
                     }
                     break;
             }
+            return "No match";
         }
 
         private SingleChoiceAnswer MatchSingleChoiceAnswer(Question question, List<AnswerResponse> answerResponses)
