@@ -59,8 +59,6 @@ namespace SurveyMonkeyApi
 
         private void FillMissingResponseDetails(Survey survey)
         {
-            if (survey.collectors == null) return; //need to fill missing collector details first
-
             List<Response> responses = GetAllSurveyResponses(survey);
 
             //Need to initialise responses before adding to them
@@ -117,7 +115,6 @@ namespace SurveyMonkeyApi
 
         private void FillMissingResponseCounts(Survey survey)
         {
-            if (survey.collectors == null) return; //need to fill missing collector details first
             foreach (var collector in survey.collectors)
             {
                 Collector countDetails = GetResponseCounts(collector.collector_id);
