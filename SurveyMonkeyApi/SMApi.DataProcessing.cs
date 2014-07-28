@@ -137,10 +137,15 @@ namespace SurveyMonkeyApi
             Dictionary<long, Question> surveyStructureLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
             foreach (var collector in survey.collectors)
             {
-                foreach (var response in collector.responses)
-                {
-                    MatchIndividualResponseToSurveyStructure(surveyStructureLookup, response);
-                }
+                MatchCollectorsToSurveyStructure(surveyStructureLookup, collector);
+            }
+        }
+
+        private void MatchCollectorsToSurveyStructure(Dictionary<long, Question> surveyStructureLookup, Collector collector)
+        {
+            foreach (var response in collector.responses)
+            {
+                MatchIndividualResponseToSurveyStructure(surveyStructureLookup, response);
             }
         }
 
