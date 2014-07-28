@@ -129,8 +129,6 @@ namespace SurveyMonkeyApi
 
         private void MatchResponsesToSurveyStructure(Survey survey)
         {
-            if (survey.responses == null || survey.collectors == null) return;
-
             Dictionary<long, Question> surveyStructureLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
             foreach (var collector in survey.collectors)
             {
