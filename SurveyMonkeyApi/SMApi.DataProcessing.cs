@@ -129,68 +129,68 @@ namespace SurveyMonkeyApi
 
         private void MatchResponsesToSurveyStructure(Survey survey)
         {
-            Dictionary<long, Question> surveyStructureLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
+            Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
             foreach (var collector in survey.collectors)
             {
-                MatchCollectorsToSurveyStructure(surveyStructureLookup, collector);
+                MatchCollectorsToSurveyStructure(questionsLookup, collector);
             }
         }
 
-        private void MatchCollectorsToSurveyStructure(Dictionary<long, Question> surveyStructureLookup, Collector collector)
+        private void MatchCollectorsToSurveyStructure(Dictionary<long, Question> questionsLookup, Collector collector)
         {
             foreach (var response in collector.responses)
             {
-                MatchIndividualResponseToSurveyStructure(surveyStructureLookup, response);
+                MatchIndividualResponseToSurveyStructure(questionsLookup, response);
             }
         }
 
-        private void MatchIndividualResponseToSurveyStructure(Dictionary<long, Question> surveyStructureLookup, Response response)
+        private void MatchIndividualResponseToSurveyStructure(Dictionary<long, Question> questionsLookup, Response response)
         {
             foreach (var responseQuestion in response.questions)
             {
                 responseQuestion.ProcessedAnswer = new ProcessedAnswer
                 {
-                    QuestionFamily = surveyStructureLookup[responseQuestion.question_id].type.family,
-                    QuestionSubtype = surveyStructureLookup[responseQuestion.question_id].type.subtype,
-                    Response = MatchAnswerToSurveyStructure(surveyStructureLookup[responseQuestion.question_id], responseQuestion.answers)
+                    QuestionFamily = questionsLookup[responseQuestion.question_id].type.family,
+                    QuestionSubtype = questionsLookup[responseQuestion.question_id].type.subtype,
+                    Response = MatchResponseQuestionToSurveyStructure(questionsLookup[responseQuestion.question_id], responseQuestion.answers)
                 };                
             }
         }
 
-        private object MatchAnswerToSurveyStructure(Question questionStructure, List<ResponseAnswer> responseAnswers)
+        private object MatchResponseQuestionToSurveyStructure(Question question, List<ResponseAnswer> responseAnswers)
         {
-            switch (questionStructure.type.family)
+            switch (question.type.family)
             {
                 case QuestionFamily.single_choice:
-                    return MatchSingleChoiceAnswer(questionStructure, responseAnswers);
+                    return MatchSingleChoiceAnswer(question, responseAnswers);
 
                 case QuestionFamily.multiple_choice:
-                    return MatchMultipleChoiceAnswer(questionStructure, responseAnswers);
+                    return MatchMultipleChoiceAnswer(question, responseAnswers);
 
                 case QuestionFamily.open_ended:
-                    switch (questionStructure.type.subtype)
+                    switch (question.type.subtype)
                     {
                         case QuestionSubtype.essay:
                         case QuestionSubtype.single:
-                            return MatchOpenEndedSingleAnswer(questionStructure, responseAnswers);
+                            return MatchOpenEndedSingleAnswer(question, responseAnswers);
 
                         case QuestionSubtype.multi:
                         case QuestionSubtype.numerical:
-                            return MatchOpenEndedMultipleAnswer(questionStructure, responseAnswers);
+                            return MatchOpenEndedMultipleAnswer(question, responseAnswers);
                     }
                     break;
 
                 case QuestionFamily.Demographic:
-                    return MatchDemographicAnswer(questionStructure, responseAnswers);
+                    return MatchDemographicAnswer(question, responseAnswers);
 
                 case QuestionFamily.datetime:
-                    return MatchDateTimeAnswer(questionStructure, responseAnswers);
+                    return MatchDateTimeAnswer(question, responseAnswers);
 
                 case QuestionFamily.matrix:
-                    switch (questionStructure.type.subtype)
+                    switch (question.type.subtype)
                     {
                         case QuestionSubtype.menu:
-                            return MatchMatrixMenuAnswer(questionStructure, responseAnswers);
+                            return MatchMatrixMenuAnswer(question, responseAnswers);
                     }
                     break;
             }
