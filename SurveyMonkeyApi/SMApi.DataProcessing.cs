@@ -152,45 +152,45 @@ namespace SurveyMonkeyApi
                 {
                     QuestionFamily = surveyStructureLookup[questionResponse.question_id].type.family,
                     QuestionSubtype = surveyStructureLookup[questionResponse.question_id].type.subtype,
-                    Response = MatchAnswerToSurveyStructure(surveyStructureLookup[questionResponse.question_id], questionResponse)
+                    Response = MatchAnswerToSurveyStructure(surveyStructureLookup[questionResponse.question_id], questionResponse.answers)
                 };                
             }
         }
 
-        private object MatchAnswerToSurveyStructure(Question questionStructure, QuestionResponse questionResponse)
+        private object MatchAnswerToSurveyStructure(Question questionStructure, List<AnswerResponse> answers)
         {
             switch (questionStructure.type.family)
             {
                 case QuestionFamilies.single_choice:
-                    return MatchSingleChoiceAnswer(questionStructure, questionResponse.answers);
+                    return MatchSingleChoiceAnswer(questionStructure, answers);
 
                 case QuestionFamilies.multiple_choice:
-                    return MatchMultipleChoiceAnswer(questionStructure, questionResponse.answers);
+                    return MatchMultipleChoiceAnswer(questionStructure, answers);
 
                 case QuestionFamilies.open_ended:
                     switch (questionStructure.type.subtype)
                     {
                         case QuestionSubtypes.essay:
                         case QuestionSubtypes.single:
-                            return MatchOpenEndedSingleAnswer(questionStructure, questionResponse.answers);
+                            return MatchOpenEndedSingleAnswer(questionStructure, answers);
 
                         case QuestionSubtypes.multi:
                         case QuestionSubtypes.numerical:
-                            return MatchOpenEndedMultipleAnswer(questionStructure, questionResponse.answers);
+                            return MatchOpenEndedMultipleAnswer(questionStructure, answers);
                     }
                     break;
 
                 case QuestionFamilies.Demographic:
-                    return MatchDemographicAnswer(questionStructure, questionResponse.answers);
+                    return MatchDemographicAnswer(questionStructure, answers);
 
                 case QuestionFamilies.datetime:
-                    return MatchDateTimeAnswer(questionStructure, questionResponse.answers);
+                    return MatchDateTimeAnswer(questionStructure, answers);
 
                 case QuestionFamilies.matrix:
                     switch (questionStructure.type.subtype)
                     {
                         case QuestionSubtypes.menu:
-                            return MatchMatrixMenuAnswer(questionStructure, questionResponse.answers);
+                            return MatchMatrixMenuAnswer(questionStructure, answers);
                     }
                     break;
             }
