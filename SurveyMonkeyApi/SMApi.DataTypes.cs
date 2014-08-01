@@ -2,7 +2,7 @@
 {
     public partial class SMApi
     {
-        public enum QuestionFamilies
+        public enum QuestionFamily
         {
             single_choice,
             multiple_choice,
@@ -13,7 +13,7 @@
             presentation
         }
 
-        public enum QuestionSubtypes
+        public enum QuestionSubtype
         {
             menu,
             vertical,
@@ -35,7 +35,7 @@
             numerical
         }
 
-        public enum AnswerTypes
+        public enum AnswerType
         {
             row,
             col,
@@ -54,7 +54,7 @@
             phone
         }
 
-        public enum CollectorTypes
+        public enum CollectorType
         {
             url,
             embedded,
@@ -63,7 +63,7 @@
             audience
         }
 
-        public enum RespondentCollectionModes
+        public enum RespondentCollectionMode
         {
             normal,
             manual,
@@ -71,14 +71,14 @@
             edited
         }
 
-        public enum RespondentStatuses
+        public enum RespondentStatus
         {
             completed,
             partial,
             disqualified
         }
 
-        public enum LanguageIds
+        public enum Language
         {
             English = 1,
             Chinese_Simplified = 2,

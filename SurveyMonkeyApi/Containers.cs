@@ -10,7 +10,7 @@ namespace SurveyMonkeyApi
         public DateTime date_created { get; set; }
         public DateTime date_modified { get; set; }
         public string title { get; set; }
-        public SMApi.LanguageIds language_id { get; set; }
+        public SMApi.Language language_id { get; set; }
         public int question_count { get; set; }
         public int num_responses { get; set; }
         public string analysis_url { get; set; }
@@ -39,7 +39,7 @@ namespace SurveyMonkeyApi
         public long survey_id { get; set; }
         public DateTime date_created { get; set; }
         public DateTime date_modified { get; set; }
-        public SMApi.LanguageIds language_id { get; set; }
+        public SMApi.Language language_id { get; set; }
         public int num_responses { get; set; }
         public int question_count { get; set; }
         public string nickname { get; set; }
@@ -72,7 +72,7 @@ namespace SurveyMonkeyApi
         public DateTime date_modified { get; set; }
         public string title_text { get; set; }
         public bool title_enabled { get; set; }
-        public SMApi.LanguageIds language_id { get; set; }
+        public SMApi.Language language_id { get; set; }
         public int question_count { get; set; }
         public int num_responses { get; set; }
         public string analysis_url { get; set; }
@@ -116,29 +116,29 @@ namespace SurveyMonkeyApi
         public string heading { get; set; }
         public int position { get; set; }
         public QuestionType type { get; set; }
-        public List<QuestionAnswer> answers { get; set; }
+        public List<Answer> answers { get; set; }
     }
 
     public class QuestionType
     {
-        public SMApi.QuestionFamilies family { get; set; }
-        public SMApi.QuestionSubtypes subtype { get; set; }
+        public SMApi.QuestionFamily family { get; set; }
+        public SMApi.QuestionSubtype subtype { get; set; }
     }
 
-    public class QuestionAnswer
+    public class Answer
     {
         public long answer_id { get; set; }
         public int position { get; set; }
         public string text { get; set; }
-        public SMApi.AnswerTypes type { get; set; }
+        public SMApi.AnswerType type { get; set; }
         public bool visible { get; set; }
         public int weight { get; set; }
         public bool apply_all_rows { get; set; }
         public bool is_answer { get; set; }
-        public List<Item> items { get; set; }
+        public List<AnswerItem> items { get; set; }
     }
 
-    public class Item
+    public class AnswerItem
     {
         public long answer_id { get; set; }
         public int position { get; set; }
@@ -153,7 +153,7 @@ namespace SurveyMonkeyApi
         public DateTime date_modified { get; set; }
         public string name { get; set; }
         public bool open { get; set; }
-        public SMApi.CollectorTypes type { get; set; }
+        public SMApi.CollectorType type { get; set; }
         public string url { get; set; }
         public int completed { get; set; }
         public int started { get; set; }
@@ -163,18 +163,18 @@ namespace SurveyMonkeyApi
     public class Response
     {
         public long respondent_id { get; set; }
-        public List<QuestionResponse> questions { get; set; }
+        public List<ResponseQuestion> questions { get; set; }
         public Respondent respondent { get; set; } 
     }
 
-    public class QuestionResponse
+    public class ResponseQuestion
     {
         public long question_id { get; set; }
-        public List<AnswerResponse> answers { get; set; }
+        public List<ResponseAnswer> answers { get; set; }
         public ProcessedAnswer ProcessedAnswer { get; set; }
     }
 
-    public class AnswerResponse
+    public class ResponseAnswer
     {
         public long row { get; set; }
         public long col { get; set; }
@@ -188,13 +188,13 @@ namespace SurveyMonkeyApi
         public DateTime date_start { get; set; }
         public DateTime date_modified { get; set; }
         public long collector_id { get; set; }
-        public SMApi.RespondentCollectionModes collection_mode { get; set; }
+        public SMApi.RespondentCollectionMode collection_mode { get; set; }
         public string custom_id { get; set; }
         public string email { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string ip_address { get; set; }
-        public SMApi.RespondentStatuses status { get; set; }
+        public SMApi.RespondentStatus status { get; set; }
         public string analysis_url { get; set; }
         public string recipient_id { get; set; }
     }

@@ -146,167 +146,167 @@ namespace SurveyMonkeyApi
 
         private void MatchIndividualResponseToSurveyStructure(Dictionary<long, Question> surveyStructureLookup, Response response)
         {
-            foreach (var questionResponse in response.questions)
+            foreach (var responseQuestion in response.questions)
             {
-                questionResponse.ProcessedAnswer = new ProcessedAnswer
+                responseQuestion.ProcessedAnswer = new ProcessedAnswer
                 {
-                    QuestionFamily = surveyStructureLookup[questionResponse.question_id].type.family,
-                    QuestionSubtype = surveyStructureLookup[questionResponse.question_id].type.subtype,
-                    Response = MatchAnswerToSurveyStructure(surveyStructureLookup[questionResponse.question_id], questionResponse.answers)
+                    QuestionFamily = surveyStructureLookup[responseQuestion.question_id].type.family,
+                    QuestionSubtype = surveyStructureLookup[responseQuestion.question_id].type.subtype,
+                    Response = MatchAnswerToSurveyStructure(surveyStructureLookup[responseQuestion.question_id], responseQuestion.answers)
                 };                
             }
         }
 
-        private object MatchAnswerToSurveyStructure(Question questionStructure, List<AnswerResponse> answers)
+        private object MatchAnswerToSurveyStructure(Question questionStructure, List<ResponseAnswer> responseAnswers)
         {
             switch (questionStructure.type.family)
             {
-                case QuestionFamilies.single_choice:
-                    return MatchSingleChoiceAnswer(questionStructure, answers);
+                case QuestionFamily.single_choice:
+                    return MatchSingleChoiceAnswer(questionStructure, responseAnswers);
 
-                case QuestionFamilies.multiple_choice:
-                    return MatchMultipleChoiceAnswer(questionStructure, answers);
+                case QuestionFamily.multiple_choice:
+                    return MatchMultipleChoiceAnswer(questionStructure, responseAnswers);
 
-                case QuestionFamilies.open_ended:
+                case QuestionFamily.open_ended:
                     switch (questionStructure.type.subtype)
                     {
-                        case QuestionSubtypes.essay:
-                        case QuestionSubtypes.single:
-                            return MatchOpenEndedSingleAnswer(questionStructure, answers);
+                        case QuestionSubtype.essay:
+                        case QuestionSubtype.single:
+                            return MatchOpenEndedSingleAnswer(questionStructure, responseAnswers);
 
-                        case QuestionSubtypes.multi:
-                        case QuestionSubtypes.numerical:
-                            return MatchOpenEndedMultipleAnswer(questionStructure, answers);
+                        case QuestionSubtype.multi:
+                        case QuestionSubtype.numerical:
+                            return MatchOpenEndedMultipleAnswer(questionStructure, responseAnswers);
                     }
                     break;
 
-                case QuestionFamilies.Demographic:
-                    return MatchDemographicAnswer(questionStructure, answers);
+                case QuestionFamily.Demographic:
+                    return MatchDemographicAnswer(questionStructure, responseAnswers);
 
-                case QuestionFamilies.datetime:
-                    return MatchDateTimeAnswer(questionStructure, answers);
+                case QuestionFamily.datetime:
+                    return MatchDateTimeAnswer(questionStructure, responseAnswers);
 
-                case QuestionFamilies.matrix:
+                case QuestionFamily.matrix:
                     switch (questionStructure.type.subtype)
                     {
-                        case QuestionSubtypes.menu:
-                            return MatchMatrixMenuAnswer(questionStructure, answers);
+                        case QuestionSubtype.menu:
+                            return MatchMatrixMenuAnswer(questionStructure, responseAnswers);
                     }
                     break;
             }
             return "No match";
         }
 
-        private SingleChoiceAnswer MatchSingleChoiceAnswer(Question question, List<AnswerResponse> answerResponses)
+        private SingleChoiceAnswer MatchSingleChoiceAnswer(Question question, List<ResponseAnswer> responseAnswers)
         {
             var reply = new SingleChoiceAnswer();
 
-            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
             
-            foreach (var answerResponse in answerResponses)
+            foreach (var responseAnswer in responseAnswers)
             {
-                if (answersLookup[answerResponse.row].type == AnswerTypes.row)
+                if (answersLookup[responseAnswer.row].type == AnswerType.row)
                 {
-                    reply.Choice = answersLookup[answerResponse.row].text;
+                    reply.Choice = answersLookup[responseAnswer.row].text;
                 }
-                if (answersLookup[answerResponse.row].type == AnswerTypes.other)
+                if (answersLookup[responseAnswer.row].type == AnswerType.other)
                 {
-                    reply.OtherComment = answerResponse.text;
+                    reply.OtherComment = responseAnswer.text;
                     if (reply.Choice == null)
                     {
-                        reply.Choice = answersLookup[answerResponse.row].text;
+                        reply.Choice = answersLookup[responseAnswer.row].text;
                     }
                 }
             }
             return reply;
         }
 
-        private MultipleChoiceAnswer MatchMultipleChoiceAnswer(Question question, List<AnswerResponse> answerResponses)
+        private MultipleChoiceAnswer MatchMultipleChoiceAnswer(Question question, List<ResponseAnswer> responseAnswers)
         {
             var reply = new MultipleChoiceAnswer
             {
                 Choices = new List<string>()
             };
 
-            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
 
-            foreach (var answerResponse in answerResponses)
+            foreach (var responseAnswer in responseAnswers)
             {
-                if (answersLookup[answerResponse.row].type == AnswerTypes.row)
+                if (answersLookup[responseAnswer.row].type == AnswerType.row)
                 {
-                    reply.Choices.Add(answersLookup[answerResponse.row].text);
+                    reply.Choices.Add(answersLookup[responseAnswer.row].text);
                 }
-                if (answersLookup[answerResponse.row].type == AnswerTypes.other)
+                if (answersLookup[responseAnswer.row].type == AnswerType.other)
                 {
-                    reply.Choices.Add(answersLookup[answerResponse.row].text);
-                    reply.OtherComment = answerResponse.text;
+                    reply.Choices.Add(answersLookup[responseAnswer.row].text);
+                    reply.OtherComment = responseAnswer.text;
                 }
             }
             return reply;
         }
 
-        private OpenEndedSingleAnswer MatchOpenEndedSingleAnswer(Question question, List<AnswerResponse> answerResponses)
+        private OpenEndedSingleAnswer MatchOpenEndedSingleAnswer(Question question, List<ResponseAnswer> responseAnswers)
         {
             var reply = new OpenEndedSingleAnswer();
 
-            reply.Text = answerResponses.First().text;
+            reply.Text = responseAnswers.First().text;
 
             return reply;
         }
 
-        private OpenEndedMultipleAnswer MatchOpenEndedMultipleAnswer(Question question, List<AnswerResponse> answerResponses)
+        private OpenEndedMultipleAnswer MatchOpenEndedMultipleAnswer(Question question, List<ResponseAnswer> responseAnswers)
         {
             var reply = new OpenEndedMultipleAnswer
             {
                 Replies = new List<OpenEndedMultipleAnswerReply>()
             };
 
-            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
 
-            foreach (var answerResponse in answerResponses)
+            foreach (var responseAnswer in responseAnswers)
             {
                 var openEndedMultipleAnswerReply = new OpenEndedMultipleAnswerReply();
-                openEndedMultipleAnswerReply.AnswerId = answersLookup[answerResponse.row].answer_id;
-                openEndedMultipleAnswerReply.AnswerLabel = answersLookup[answerResponse.row].text;
-                openEndedMultipleAnswerReply.Text = answerResponse.text;
+                openEndedMultipleAnswerReply.AnswerId = answersLookup[responseAnswer.row].answer_id;
+                openEndedMultipleAnswerReply.AnswerLabel = answersLookup[responseAnswer.row].text;
+                openEndedMultipleAnswerReply.Text = responseAnswer.text;
                 reply.Replies.Add(openEndedMultipleAnswerReply);
             }
 
             return reply;
         }
 
-        private DemographicAnswer MatchDemographicAnswer(Question question, List<AnswerResponse> answerResponses)
+        private DemographicAnswer MatchDemographicAnswer(Question question, List<ResponseAnswer> responseAnswers)
         {
             var reply = new DemographicAnswer();
 
-            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
 
-            foreach (var answerResponse in answerResponses)
+            foreach (var responseAnswer in responseAnswers)
             {
-                var propertyName = answersLookup[answerResponse.row].type.ToString();
-                typeof(DemographicAnswer).GetProperty(propertyName).SetValue(reply, answerResponse.text);
+                var propertyName = answersLookup[responseAnswer.row].type.ToString();
+                typeof(DemographicAnswer).GetProperty(propertyName).SetValue(reply, responseAnswer.text);
             }
             return reply;
         }
 
-        private DateTimeAnswer MatchDateTimeAnswer(Question question, List<AnswerResponse> answerResponses)
+        private DateTimeAnswer MatchDateTimeAnswer(Question question, List<ResponseAnswer> responseAnswers)
         {
             var reply = new DateTimeAnswer
             {
                 Replies = new List<DateTimeAnswerReply>()
             };
 
-            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
 
-            foreach (var answerResponse in answerResponses)
+            foreach (var responseAnswer in responseAnswers)
             {
                 var dateTimeAnswerReply = new DateTimeAnswerReply();
-                dateTimeAnswerReply.AnswerId = answersLookup[answerResponse.row].answer_id;
-                dateTimeAnswerReply.AnswerLabel = answersLookup[answerResponse.row].text;
+                dateTimeAnswerReply.AnswerId = answersLookup[responseAnswer.row].answer_id;
+                dateTimeAnswerReply.AnswerLabel = answersLookup[responseAnswer.row].text;
                 dateTimeAnswerReply.TimeStamp = DateTime.MinValue;
 
-                DateTime timeStamp = DateTime.Parse(answerResponse.text, CultureInfo.CreateSpecificCulture("en-US"));
-                if (question.type.subtype == QuestionSubtypes.time_only) //Where only a time is given, use date component from DateTime.MinValue
+                DateTime timeStamp = DateTime.Parse(responseAnswer.text, CultureInfo.CreateSpecificCulture("en-US"));
+                if (question.type.subtype == QuestionSubtype.time_only) //Where only a time is given, use date component from DateTime.MinValue
                 {
                     dateTimeAnswerReply.TimeStamp = dateTimeAnswerReply.TimeStamp.AddHours(timeStamp.Hour);
                     dateTimeAnswerReply.TimeStamp = dateTimeAnswerReply.TimeStamp.AddMinutes(timeStamp.Minute);
@@ -321,41 +321,41 @@ namespace SurveyMonkeyApi
             return reply;
         }
 
-        private MatrixMenuAnswer MatchMatrixMenuAnswer(Question question, List<AnswerResponse> answerResponses)
+        private MatrixMenuAnswer MatchMatrixMenuAnswer(Question question, List<ResponseAnswer> responseAnswers)
         {
             var reply = new MatrixMenuAnswer
             {
                 Rows = new Dictionary<long, MatrixMenuRowAnswer>()
             };
 
-            Dictionary<long, QuestionAnswer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
             Dictionary<long, string> choicesLookup = (from answerItem in answersLookup where answerItem.Value.items != null from item in answerItem.Value.items select item).ToDictionary(item => item.answer_id, item => item.text);
 
-            foreach (var answerResponse in answerResponses)
+            foreach (var responseAnswer in responseAnswers)
             {
-                if (answerResponse.row == 0)
+                if (responseAnswer.row == 0)
                 {
-                    reply.Other = answerResponse.text;
+                    reply.Other = responseAnswer.text;
                 }
                 else
                 {
-                    if (!reply.Rows.ContainsKey(answerResponse.row))
+                    if (!reply.Rows.ContainsKey(responseAnswer.row))
                     {
-                        reply.Rows.Add(answerResponse.row, new MatrixMenuRowAnswer
+                        reply.Rows.Add(responseAnswer.row, new MatrixMenuRowAnswer
                         {
                             Columns = new Dictionary<long, MatrixMenuColumnAnswer>()
                         });
                     }
-                    if (!reply.Rows[answerResponse.row].Columns.ContainsKey(answerResponse.col))
+                    if (!reply.Rows[responseAnswer.row].Columns.ContainsKey(responseAnswer.col))
                     {
-                        reply.Rows[answerResponse.row].Columns.Add(answerResponse.col, new MatrixMenuColumnAnswer());
+                        reply.Rows[responseAnswer.row].Columns.Add(responseAnswer.col, new MatrixMenuColumnAnswer());
                     }
 
-                    reply.Rows[answerResponse.row].RowId = answerResponse.row;
-                    reply.Rows[answerResponse.row].Name = answersLookup[answerResponse.row].text;
-                    reply.Rows[answerResponse.row].Columns[answerResponse.col].ColumnId = answerResponse.col;
-                    reply.Rows[answerResponse.row].Columns[answerResponse.col].Name = answersLookup[answerResponse.col].text;
-                    reply.Rows[answerResponse.row].Columns[answerResponse.col].Choice = choicesLookup[answerResponse.col_choice];
+                    reply.Rows[responseAnswer.row].RowId = responseAnswer.row;
+                    reply.Rows[responseAnswer.row].Name = answersLookup[responseAnswer.row].text;
+                    reply.Rows[responseAnswer.row].Columns[responseAnswer.col].ColumnId = responseAnswer.col;
+                    reply.Rows[responseAnswer.row].Columns[responseAnswer.col].Name = answersLookup[responseAnswer.col].text;
+                    reply.Rows[responseAnswer.row].Columns[responseAnswer.col].Choice = choicesLookup[responseAnswer.col_choice];
                 }   
             }
 

@@ -81,7 +81,7 @@ namespace SurveyMonkeyApi
     public class ProcessedAnswer
     {
         public object Response { get; set; }
-        public SMApi.QuestionFamilies QuestionFamily { get; set; }
-        public SMApi.QuestionSubtypes QuestionSubtype { get; set; }
+        public SMApi.QuestionFamily QuestionFamily { get; set; }
+        public SMApi.QuestionSubtype QuestionSubtype { get; set; }
     }
 }
