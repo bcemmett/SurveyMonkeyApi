@@ -193,6 +193,8 @@ namespace SurveyMonkeyApi
                             return MatchMatrixMenuAnswer(question, responseAnswers);
                         case QuestionSubtype.ranking:
                             return MatchMatrixRankingAnswer(question, responseAnswers);
+                        case QuestionSubtype.rating:
+                            return MatchMatrixRatingAnswer(question, responseAnswers);
                     }
                     break;
             }
@@ -385,6 +387,42 @@ namespace SurveyMonkeyApi
                     reply.Ranking.Add(answersLookup[responseAnswer.col].weight, answersLookup[responseAnswer.row].text);
                 }
             }
+            return reply;
+        }
+
+        private MatrixRatingAnswer MatchMatrixRatingAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        {
+            var reply = new MatrixRatingAnswer
+            {
+                Rows = new List<MatrixRatingRowAnswer>()
+            };
+
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+
+            foreach (var responseAnswer in responseAnswers)
+            {
+                if (responseAnswer.row == 0)
+                {
+                    reply.Other = responseAnswer.text;
+                }
+                else
+                {
+                    var row = new MatrixRatingRowAnswer();
+                    row.Name = answersLookup[responseAnswer.row].text;
+
+                    if (responseAnswer.col != 0)
+                    {
+                        row.Choice = answersLookup[responseAnswer.col].text;
+                    }
+                    
+                    if (!String.IsNullOrEmpty(responseAnswer.text))
+                    {
+                        row.Other = responseAnswer.text;
+                    }
+                    reply.Rows.Add(row);
+                }
+            }
+
             return reply;
         }
 

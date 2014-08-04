@@ -84,6 +84,19 @@ namespace SurveyMonkeyApi
         public List<string> NotApplicable { get; set; }
     }
 
+    public class MatrixRatingAnswer
+    {
+        public List<MatrixRatingRowAnswer> Rows { get; set; }
+        public string Other { get; set; }
+    }
+
+    public class MatrixRatingRowAnswer
+    {
+        public string Name { get; set; }
+        public string Choice { get; set; }
+        public string Other { get; set; }
+    }
+
     public class ProcessedAnswer
     {
         public object Response { get; set; }
