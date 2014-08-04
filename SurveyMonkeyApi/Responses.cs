@@ -78,6 +78,12 @@ namespace SurveyMonkeyApi
         public string Choice {get; set; }
     }
 
+    public class MatrixRankingAnswer
+    {
+        public Dictionary<int, string> Ranking { get; set; }
+        public List<string> NotApplicable { get; set; }
+    }
+
     public class ProcessedAnswer
     {
         public object Response { get; set; }

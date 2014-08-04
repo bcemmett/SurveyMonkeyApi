@@ -191,6 +191,8 @@ namespace SurveyMonkeyApi
                     {
                         case QuestionSubtype.menu:
                             return MatchMatrixMenuAnswer(question, responseAnswers);
+                        case QuestionSubtype.ranking:
+                            return MatchMatrixRankingAnswer(question, responseAnswers);
                     }
                     break;
             }
@@ -359,6 +361,30 @@ namespace SurveyMonkeyApi
                 }   
             }
 
+            return reply;
+        }
+
+        private MatrixRankingAnswer MatchMatrixRankingAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        {
+            var reply = new MatrixRankingAnswer
+            {
+                Ranking = new Dictionary<int, string>(),
+                NotApplicable = new List<string>()
+            };
+            
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+
+            foreach (var responseAnswer in responseAnswers)
+            {
+                if (answersLookup[responseAnswer.col].weight == 0)
+                {
+                    reply.NotApplicable.Add(answersLookup[responseAnswer.row].text);
+                }
+                else
+                {
+                    reply.Ranking.Add(answersLookup[responseAnswer.col].weight, answersLookup[responseAnswer.row].text);
+                }
+            }
             return reply;
         }
 
