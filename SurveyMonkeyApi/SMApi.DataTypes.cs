@@ -6,29 +6,24 @@ namespace SurveyMonkeyApi
 {
     public partial class SMApi
     {
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(LaxEnumMatchingConverter))]
         public enum QuestionFamily
         {
-            [EnumMember(Value = "single_choice")]
             SingleChoice,
-            [EnumMember(Value = "multiple_choice")]
             MultipleChoice,
             Matrix,
-            [EnumMember(Value = "open_ended")]
             OpenEnded,
             Demographic,
             DateTime,
             Presentation
         }
 
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(LaxEnumMatchingConverter))]
         public enum QuestionSubtype
         {
             Menu,
             Vertical,
-            [EnumMember(Value = "vertical_two_col")]
             VerticalTwoCol,
-            [EnumMember(Value = "vertical_three_col")]
             VerticalThreeCol,
             Horiz,
             Ranking,
@@ -39,11 +34,8 @@ namespace SurveyMonkeyApi
             International,
             US,
             Both,
-            [EnumMember(Value = "date_only")]
             DateOnly,
-            [EnumMember(Value = "time_only")]
             TimeOnly,
-            [EnumMember(Value = "descriptive_text")]
             DescriptiveText,
             Image,
             Numerical
@@ -77,12 +69,11 @@ namespace SurveyMonkeyApi
             Audience
         }
 
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(LaxEnumMatchingConverter))]
         public enum RespondentCollectionMode
         {
             Normal,
             Manual,
-            [EnumMember(Value = "survey_preview")]
             SurveyPreview,
             Edited
         }
