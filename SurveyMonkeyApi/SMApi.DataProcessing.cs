@@ -202,7 +202,7 @@ namespace SurveyMonkeyApi
                     }
                     break;
             }
-            return "No match";
+            return null;
         }
 
         private SingleChoiceAnswer MatchSingleChoiceAnswer(Question question, List<ResponseAnswer> responseAnswers)
