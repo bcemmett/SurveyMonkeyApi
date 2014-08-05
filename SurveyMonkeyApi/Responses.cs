@@ -97,6 +97,18 @@ namespace SurveyMonkeyApi
         public string Other { get; set; }
     }
 
+    public class MatrixSingleAnswer
+    {
+        public List<MatrixSingleRowAnswer> Rows { get; set; }
+        public string Other { get; set; }
+    }
+
+    public class MatrixSingleRowAnswer
+    {
+        public string Name { get; set; }
+        public string Choice { get; set; }
+    }
+
     public class ProcessedAnswer
     {
         public object Response { get; set; }
