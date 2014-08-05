@@ -1,65 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace SurveyMonkeyApi
 {
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     internal class JsonSerializeGetSurveyList
     {
-        public long survey_id { get; set; }
-        public DateTime date_created { get; set; }
-        public DateTime date_modified { get; set; }
-        public string title { get; set; }
-        public SMApi.Language language_id { get; set; }
-        public int question_count { get; set; }
-        public int num_responses { get; set; }
-        public string analysis_url { get; set; }
-        public string preview_url { get; set; }
+        public long SurveyId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+        public string Title { get; set; }
+        public SMApi.Language LanguageId { get; set; }
+        public int QuestionCount { get; set; }
+        public int NumResponses { get; set; }
+        public string AnalysisUrl { get; set; }
+        public string PreviewUrl { get; set; }
 
         public Survey ToSurvey()
         {
             var survey = new Survey()
             {
-                survey_id = survey_id,
-                date_created = date_created,
-                date_modified = date_modified,
-                nickname = title,
-                language_id = language_id,
-                question_count = question_count,
-                num_responses = num_responses,
-                analysis_url = analysis_url,
-                preview_url = preview_url
+                SurveyId = SurveyId,
+                DateCreated = DateCreated,
+                DateModified = DateModified,
+                Nickname = Title,
+                LanguageId = LanguageId,
+                QuestionCount = QuestionCount,
+                NumResponses = NumResponses,
+                AnalysisUrl = AnalysisUrl,
+                PreviewUrl = PreviewUrl
             };
             return survey;
         }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     internal class JsonSerializeGetSurveyDetails
     {
-        public long survey_id { get; set; }
-        public DateTime date_created { get; set; }
-        public DateTime date_modified { get; set; }
-        public SMApi.Language language_id { get; set; }
-        public int num_responses { get; set; }
-        public int question_count { get; set; }
-        public string nickname { get; set; }
-        public Title title { get; set; }
-        public List<Page> pages { get; set; }
+        public long SurveyId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+        public SMApi.Language LanguageId { get; set; }
+        public int NumResponses { get; set; }
+        public int QuestionCount { get; set; }
+        public string Nickname { get; set; }
+        public Title Title { get; set; }
+        public List<Page> Pages { get; set; }
 
         public Survey ToSurvey()
         {
             var survey = new Survey()
             {
-                survey_id = survey_id,
-                date_created = date_created,
-                date_modified = date_modified,
-                title_text = title.text,
-                title_enabled = title.enabled,
-                language_id = language_id,
-                question_count = question_count,
-                num_responses = num_responses,
-                nickname = nickname,
-                pages = pages
+                SurveyId = SurveyId,
+                DateCreated = DateCreated,
+                DateModified = DateModified,
+                TitleText = Title.Text,
+                TitleEnabled = Title.Enabled,
+                LanguageId = LanguageId,
+                QuestionCount = QuestionCount,
+                NumResponses = NumResponses,
+                Nickname = Nickname,
+                Pages = Pages
             };
             return survey;
         }
@@ -67,150 +70,163 @@ namespace SurveyMonkeyApi
 
     public class Survey
     {
-        public long survey_id { get; set; }
-        public DateTime date_created { get; set; }
-        public DateTime date_modified { get; set; }
-        public string title_text { get; set; }
-        public bool title_enabled { get; set; }
-        public SMApi.Language language_id { get; set; }
-        public int question_count { get; set; }
-        public int num_responses { get; set; }
-        public string analysis_url { get; set; }
-        public string preview_url { get; set; }
-        public string nickname { get; set; }
-        public List<Page> pages { get; set; }
-        public List<Collector> collectors { get; set; }
-        public List<Response> responses
+        public long SurveyId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+        public string TitleText { get; set; }
+        public bool TitleEnabled { get; set; }
+        public SMApi.Language LanguageId { get; set; }
+        public int QuestionCount { get; set; }
+        public int NumResponses { get; set; }
+        public string AnalysisUrl { get; set; }
+        public string PreviewUrl { get; set; }
+        public string Nickname { get; set; }
+        public List<Page> Pages { get; set; }
+        public List<Collector> Collectors { get; set; }
+        public List<Response> Responses
         {
             get
             {
-                return collectors == null ? null : collectors.SelectMany(collector => collector.responses).ToList();
+                return Collectors == null ? null : Collectors.SelectMany(collector => collector.Responses).ToList();
             }
         }
-        public List<Question> questions
+        public List<Question> Questions
         {
             get
             {
-                return pages == null ? null : pages.SelectMany(page => page.questions).ToList();
+                return Pages == null ? null : Pages.SelectMany(page => page.Questions).ToList();
             }
         }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     internal class Title
     {
-        public bool enabled { get; set; }
-        public string text { get; set; }
+        public bool Enabled { get; set; }
+        public string Text { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class Page
     {
-        public long page_id { get; set; }
-        public string heading { get; set; }
-        public string sub_heading { get; set; }
-        public List<Question> questions { get; set; }
+        public long PageId { get; set; }
+        public string Heading { get; set; }
+        public string SubHeading { get; set; }
+        public List<Question> Questions { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class Question
     {
-        public long question_id { get; set; }
-        public string heading { get; set; }
-        public int position { get; set; }
-        public QuestionType type { get; set; }
-        public List<Answer> answers { get; set; }
+        public long QuestionId { get; set; }
+        public string Heading { get; set; }
+        public int Position { get; set; }
+        public QuestionType Type { get; set; }
+        public List<Answer> Answers { get; set; }
         internal Dictionary<long, Answer> AnswersLookup { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class QuestionType
     {
-        public SMApi.QuestionFamily family { get; set; }
-        public SMApi.QuestionSubtype subtype { get; set; }
+        public SMApi.QuestionFamily Family { get; set; }
+        public SMApi.QuestionSubtype Subtype { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class Answer
     {
-        public long answer_id { get; set; }
-        public int position { get; set; }
-        public string text { get; set; }
-        public SMApi.AnswerType type { get; set; }
-        public bool visible { get; set; }
-        public int weight { get; set; }
-        public bool apply_all_rows { get; set; }
-        public bool is_answer { get; set; }
-        public List<AnswerItem> items { get; set; }
+        public long AnswerId { get; set; }
+        public int Position { get; set; }
+        public string Text { get; set; }
+        public SMApi.AnswerType Type { get; set; }
+        public bool Visible { get; set; }
+        public int Weight { get; set; }
+        public bool ApplyAllRows { get; set; }
+        public bool IsAnswer { get; set; }
+        public List<AnswerItem> Items { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class AnswerItem
     {
-        public long answer_id { get; set; }
-        public int position { get; set; }
-        public string type { get; set; }
-        public string text { get; set; }
+        public long AnswerId { get; set; }
+        public int Position { get; set; }
+        public string Type { get; set; }
+        public string Text { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class Collector
     {
-        public long collector_id { get; set; }
-        public DateTime date_created { get; set; }
-        public DateTime date_modified { get; set; }
-        public string name { get; set; }
-        public bool open { get; set; }
-        public SMApi.CollectorType type { get; set; }
-        public string url { get; set; }
-        public int completed { get; set; }
-        public int started { get; set; }
-        public List<Response> responses { get; set; } 
+        public long CollectorId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+        public string Name { get; set; }
+        public bool Open { get; set; }
+        public SMApi.CollectorType Type { get; set; }
+        public string Url { get; set; }
+        public int Completed { get; set; }
+        public int Started { get; set; }
+        public List<Response> Responses { get; set; } 
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class Response
     {
-        public long respondent_id { get; set; }
-        public List<ResponseQuestion> questions { get; set; }
-        public Respondent respondent { get; set; } 
+        public long RespondentId { get; set; }
+        public List<ResponseQuestion> Questions { get; set; }
+        public Respondent Respondent { get; set; } 
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class ResponseQuestion
     {
-        public long question_id { get; set; }
-        public List<ResponseAnswer> answers { get; set; }
+        public long QuestionId { get; set; }
+        public List<ResponseAnswer> Answers { get; set; }
         public ProcessedAnswer ProcessedAnswer { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class ResponseAnswer
     {
-        public long row { get; set; }
-        public long col { get; set; }
-        public long col_choice { get; set; }
-        public string text { get; set; }
+        public long Row { get; set; }
+        public long Col { get; set; }
+        public long ColChoice { get; set; }
+        public string Text { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class Respondent
     {
-        public long respondent_id { get; set; }
-        public DateTime date_start { get; set; }
-        public DateTime date_modified { get; set; }
-        public long collector_id { get; set; }
-        public SMApi.RespondentCollectionMode collection_mode { get; set; }
-        public string custom_id { get; set; }
-        public string email { get; set; }
-        public string first_name { get; set; }
-        public string last_name { get; set; }
-        public string ip_address { get; set; }
-        public SMApi.RespondentStatus status { get; set; }
-        public string analysis_url { get; set; }
-        public string recipient_id { get; set; }
+        public long RespondentId { get; set; }
+        public DateTime DateStart { get; set; }
+        public DateTime DateModified { get; set; }
+        public long CollectorId { get; set; }
+        public SMApi.RespondentCollectionMode CollectionMode { get; set; }
+        public string CustomId { get; set; }
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string IpAddress { get; set; }
+        public SMApi.RespondentStatus Status { get; set; }
+        public string AnalysisUrl { get; set; }
+        public string RecipientId { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class UserDetails
     {
-        public bool is_paid_account { get; set; }
-        public bool is_enterprise_user { get; set; }
-        public string username { get; set; }
-        public EnterpriseDetails enterprise_details { get; set; }
+        public bool IsPaidAccount { get; set; }
+        public bool IsEnterpriseUser { get; set; }
+        public string Username { get; set; }
+        public EnterpriseDetails EnterpriseDetails { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class EnterpriseDetails
     {
-        public int total_seats_invoices { get; set; }
-        public int total_seats_active { get; set; }
+        public int TotalSeatsInvoices { get; set; }
+        public int TotalSeatsActive { get; set; }
     }
 }

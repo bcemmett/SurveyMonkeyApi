@@ -33,16 +33,16 @@ namespace SurveyMonkeyApi
 
         private void FillMissingSurveyDetails(Survey survey)
         {
-            Survey surveyDetails = GetSurveyDetails(survey.survey_id);
-            survey.date_created = surveyDetails.date_created;
-            survey.date_modified = surveyDetails.date_modified;
-            survey.language_id = surveyDetails.language_id;
-            survey.num_responses = surveyDetails.num_responses;
-            survey.question_count = surveyDetails.question_count;
-            survey.nickname = surveyDetails.nickname;
-            survey.title_text = surveyDetails.title_text;
-            survey.title_enabled = surveyDetails.title_enabled;
-            survey.pages = surveyDetails.pages;
+            Survey surveyDetails = GetSurveyDetails(survey.SurveyId);
+            survey.DateCreated = surveyDetails.DateCreated;
+            survey.DateModified = surveyDetails.DateModified;
+            survey.LanguageId = surveyDetails.LanguageId;
+            survey.NumResponses = surveyDetails.NumResponses;
+            survey.QuestionCount = surveyDetails.QuestionCount;
+            survey.Nickname = surveyDetails.Nickname;
+            survey.TitleText = surveyDetails.TitleText;
+            survey.TitleEnabled = surveyDetails.TitleEnabled;
+            survey.Pages = surveyDetails.Pages;
         }
 
         #endregion
@@ -51,7 +51,7 @@ namespace SurveyMonkeyApi
 
         private void FillMissingCollectorDetails(Survey survey)
         {
-            survey.collectors = GetCollectorList(survey.survey_id);
+            survey.Collectors = GetCollectorList(survey.SurveyId);
         }
 
         #endregion
@@ -63,25 +63,25 @@ namespace SurveyMonkeyApi
             List<Response> responses = GetAllSurveyResponses(survey);
 
             //Need to initialise responses before adding to them
-            foreach (var collector in survey.collectors)
+            foreach (var collector in survey.Collectors)
             {
-                collector.responses = new List<Response>();
+                collector.Responses = new List<Response>();
             }
             
-            Dictionary<long, Collector> collectorLookup = survey.collectors.ToDictionary(c => c.collector_id, c => c);
+            Dictionary<long, Collector> collectorLookup = survey.Collectors.ToDictionary(c => c.CollectorId, c => c);
             foreach (var response in responses)
             {
-                collectorLookup[response.respondent.collector_id].responses.Add(response);
+                collectorLookup[response.Respondent.CollectorId].Responses.Add(response);
             }
 
-            survey.collectors = collectorLookup.Values.ToList();
+            survey.Collectors = collectorLookup.Values.ToList();
         }
 
         private List<Response> GetAllSurveyResponses(Survey survey)
         {
             const int maxRespondentsPerPage = 100;
-            List<Respondent> respondents = GetRespondentList(survey.survey_id);
-            Dictionary<long, Respondent> respondentLookup = respondents.ToDictionary(r => r.respondent_id, r => r);
+            List<Respondent> respondents = GetRespondentList(survey.SurveyId);
+            Dictionary<long, Respondent> respondentLookup = respondents.ToDictionary(r => r.RespondentId, r => r);
             var responses = new List<Response>();
 
             //page through the respondents
@@ -89,14 +89,14 @@ namespace SurveyMonkeyApi
             int page = 0;
             while (moreRespondents)
             {
-                List<long> respondentIds = respondents.Skip(page * maxRespondentsPerPage).Take(maxRespondentsPerPage).Select(rp => rp.respondent_id).ToList();
+                List<long> respondentIds = respondents.Skip(page * maxRespondentsPerPage).Take(maxRespondentsPerPage).Select(rp => rp.RespondentId).ToList();
                 if (respondentIds.Count > 0)
                 {
-                    List<Response> newResponses = GetResponses(survey.survey_id, respondentIds);
+                    List<Response> newResponses = GetResponses(survey.SurveyId, respondentIds);
 
                     foreach (var newResponse in newResponses)
                     {
-                        newResponse.respondent = respondentLookup[newResponse.respondent_id];
+                        newResponse.Respondent = respondentLookup[newResponse.RespondentId];
                     }
                     responses.AddRange(newResponses);
                 }
@@ -116,11 +116,11 @@ namespace SurveyMonkeyApi
 
         private void FillMissingResponseCounts(Survey survey)
         {
-            foreach (var collector in survey.collectors)
+            foreach (var collector in survey.Collectors)
             {
-                Collector countDetails = GetResponseCounts(collector.collector_id);
-                collector.completed = countDetails.completed;
-                collector.started = countDetails.started;
+                Collector countDetails = GetResponseCounts(collector.CollectorId);
+                collector.Completed = countDetails.Completed;
+                collector.Started = countDetails.Started;
             }
         }
 
@@ -130,12 +130,12 @@ namespace SurveyMonkeyApi
 
         private void MatchResponsesToSurveyStructure(Survey survey)
         {
-            foreach (var question in survey.questions)
+            foreach (var question in survey.Questions)
             {
-                question.AnswersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+                question.AnswersLookup = question.Answers.ToDictionary(a => a.AnswerId, a => a);
             }
-            Dictionary<long, Question> questionsLookup = survey.questions.ToDictionary(q => q.question_id, q => q);
-            foreach (var collector in survey.collectors)
+            Dictionary<long, Question> questionsLookup = survey.Questions.ToDictionary(q => q.QuestionId, q => q);
+            foreach (var collector in survey.Collectors)
             {
                 MatchCollectorsToSurveyStructure(questionsLookup, collector);
             }
@@ -143,7 +143,7 @@ namespace SurveyMonkeyApi
 
         private void MatchCollectorsToSurveyStructure(Dictionary<long, Question> questionsLookup, Collector collector)
         {
-            foreach (var response in collector.responses)
+            foreach (var response in collector.Responses)
             {
                 MatchIndividualResponseToSurveyStructure(questionsLookup, response);
             }
@@ -151,20 +151,20 @@ namespace SurveyMonkeyApi
 
         private void MatchIndividualResponseToSurveyStructure(Dictionary<long, Question> questionsLookup, Response response)
         {
-            foreach (var responseQuestion in response.questions)
+            foreach (var responseQuestion in response.Questions)
             {
                 responseQuestion.ProcessedAnswer = new ProcessedAnswer
                 {
-                    QuestionFamily = questionsLookup[responseQuestion.question_id].type.family,
-                    QuestionSubtype = questionsLookup[responseQuestion.question_id].type.subtype,
-                    Response = MatchResponseQuestionToSurveyStructure(questionsLookup[responseQuestion.question_id], responseQuestion.answers)
+                    QuestionFamily = questionsLookup[responseQuestion.QuestionId].Type.Family,
+                    QuestionSubtype = questionsLookup[responseQuestion.QuestionId].Type.Subtype,
+                    Response = MatchResponseQuestionToSurveyStructure(questionsLookup[responseQuestion.QuestionId], responseQuestion.Answers)
                 };                
             }
         }
 
         private object MatchResponseQuestionToSurveyStructure(Question question, List<ResponseAnswer> responseAnswers)
         {
-            switch (question.type.family)
+            switch (question.Type.Family)
             {
                 case QuestionFamily.SingleChoice:
                     return MatchSingleChoiceAnswer(question, responseAnswers);
@@ -173,7 +173,7 @@ namespace SurveyMonkeyApi
                     return MatchMultipleChoiceAnswer(question, responseAnswers);
 
                 case QuestionFamily.OpenEnded:
-                    switch (question.type.subtype)
+                    switch (question.Type.Subtype)
                     {
                         case QuestionSubtype.Essay:
                         case QuestionSubtype.Single:
@@ -192,7 +192,7 @@ namespace SurveyMonkeyApi
                     return MatchDateTimeAnswer(question, responseAnswers);
 
                 case QuestionFamily.Matrix:
-                    switch (question.type.subtype)
+                    switch (question.Type.Subtype)
                     {
                         case QuestionSubtype.Menu:
                             return MatchMatrixMenuAnswer(question, responseAnswers);
@@ -216,16 +216,16 @@ namespace SurveyMonkeyApi
             
             foreach (var responseAnswer in responseAnswers)
             {
-                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.Row)
+                if (question.AnswersLookup[responseAnswer.Row].Type == AnswerType.Row)
                 {
-                    reply.Choice = question.AnswersLookup[responseAnswer.row].text;
+                    reply.Choice = question.AnswersLookup[responseAnswer.Row].Text;
                 }
-                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.Other)
+                if (question.AnswersLookup[responseAnswer.Row].Type == AnswerType.Other)
                 {
-                    reply.OtherText = responseAnswer.text;
+                    reply.OtherText = responseAnswer.Text;
                     if (reply.Choice == null)
                     {
-                        reply.Choice = question.AnswersLookup[responseAnswer.row].text;
+                        reply.Choice = question.AnswersLookup[responseAnswer.Row].Text;
                     }
                 }
             }
@@ -241,14 +241,14 @@ namespace SurveyMonkeyApi
 
             foreach (var responseAnswer in responseAnswers)
             {
-                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.Row)
+                if (question.AnswersLookup[responseAnswer.Row].Type == AnswerType.Row)
                 {
-                    reply.Choices.Add(question.AnswersLookup[responseAnswer.row].text);
+                    reply.Choices.Add(question.AnswersLookup[responseAnswer.Row].Text);
                 }
-                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.Other)
+                if (question.AnswersLookup[responseAnswer.Row].Type == AnswerType.Other)
                 {
-                    reply.Choices.Add(question.AnswersLookup[responseAnswer.row].text);
-                    reply.OtherText = responseAnswer.text;
+                    reply.Choices.Add(question.AnswersLookup[responseAnswer.Row].Text);
+                    reply.OtherText = responseAnswer.Text;
                 }
             }
             return reply;
@@ -258,7 +258,7 @@ namespace SurveyMonkeyApi
         {
             var reply = new OpenEndedSingleAnswer();
 
-            reply.Text = responseAnswers.First().text;
+            reply.Text = responseAnswers.First().Text;
 
             return reply;
         }
@@ -273,8 +273,8 @@ namespace SurveyMonkeyApi
             foreach (var responseAnswer in responseAnswers)
             {
                 var openEndedMultipleAnswerReply = new OpenEndedMultipleAnswerRow();
-                openEndedMultipleAnswerReply.RowName = question.AnswersLookup[responseAnswer.row].text;
-                openEndedMultipleAnswerReply.Text = responseAnswer.text;
+                openEndedMultipleAnswerReply.RowName = question.AnswersLookup[responseAnswer.Row].Text;
+                openEndedMultipleAnswerReply.Text = responseAnswer.Text;
                 reply.Rows.Add(openEndedMultipleAnswerReply);
             }
 
@@ -287,8 +287,8 @@ namespace SurveyMonkeyApi
 
             foreach (var responseAnswer in responseAnswers)
             {
-                var propertyName = question.AnswersLookup[responseAnswer.row].type.ToString();
-                typeof(DemographicAnswer).GetProperty(propertyName, (BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)).SetValue(reply, responseAnswer.text);
+                var propertyName = question.AnswersLookup[responseAnswer.Row].Type.ToString();
+                typeof(DemographicAnswer).GetProperty(propertyName, (BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)).SetValue(reply, responseAnswer.Text);
             }
             return reply;
         }
@@ -303,11 +303,11 @@ namespace SurveyMonkeyApi
             foreach (var responseAnswer in responseAnswers)
             {
                 var dateTimeAnswerReply = new DateTimeAnswerRow();
-                dateTimeAnswerReply.RowName = question.AnswersLookup[responseAnswer.row].text;
+                dateTimeAnswerReply.RowName = question.AnswersLookup[responseAnswer.Row].Text;
                 dateTimeAnswerReply.TimeStamp = DateTime.MinValue;
 
-                DateTime timeStamp = DateTime.Parse(responseAnswer.text, CultureInfo.CreateSpecificCulture("en-US"));
-                if (question.type.subtype == QuestionSubtype.TimeOnly) //Where only a time is given, use date component from DateTime.MinValue
+                DateTime timeStamp = DateTime.Parse(responseAnswer.Text, CultureInfo.CreateSpecificCulture("en-US"));
+                if (question.Type.Subtype == QuestionSubtype.TimeOnly) //Where only a time is given, use date component from DateTime.MinValue
                 {
                     dateTimeAnswerReply.TimeStamp = dateTimeAnswerReply.TimeStamp.AddHours(timeStamp.Hour);
                     dateTimeAnswerReply.TimeStamp = dateTimeAnswerReply.TimeStamp.AddMinutes(timeStamp.Minute);
@@ -329,31 +329,31 @@ namespace SurveyMonkeyApi
                 Rows = new Dictionary<long, MatrixMenuAnswerRow>()
             };
 
-            Dictionary<long, string> choicesLookup = (from answerItem in question.AnswersLookup where answerItem.Value.items != null from item in answerItem.Value.items select item).ToDictionary(item => item.answer_id, item => item.text);
+            Dictionary<long, string> choicesLookup = (from answerItem in question.AnswersLookup where answerItem.Value.Items != null from item in answerItem.Value.Items select item).ToDictionary(item => item.AnswerId, item => item.Text);
 
             foreach (var responseAnswer in responseAnswers)
             {
-                if (responseAnswer.row == 0)
+                if (responseAnswer.Row == 0)
                 {
-                    reply.OtherText = responseAnswer.text;
+                    reply.OtherText = responseAnswer.Text;
                 }
                 else
                 {
-                    if (!reply.Rows.ContainsKey(responseAnswer.row))
+                    if (!reply.Rows.ContainsKey(responseAnswer.Row))
                     {
-                        reply.Rows.Add(responseAnswer.row, new MatrixMenuAnswerRow
+                        reply.Rows.Add(responseAnswer.Row, new MatrixMenuAnswerRow
                         {
                             Columns = new Dictionary<long, MatrixMenuAnswerColumn>()
                         });
                     }
-                    if (!reply.Rows[responseAnswer.row].Columns.ContainsKey(responseAnswer.col))
+                    if (!reply.Rows[responseAnswer.Row].Columns.ContainsKey(responseAnswer.Col))
                     {
-                        reply.Rows[responseAnswer.row].Columns.Add(responseAnswer.col, new MatrixMenuAnswerColumn());
+                        reply.Rows[responseAnswer.Row].Columns.Add(responseAnswer.Col, new MatrixMenuAnswerColumn());
                     }
 
-                    reply.Rows[responseAnswer.row].RowName = question.AnswersLookup[responseAnswer.row].text;
-                    reply.Rows[responseAnswer.row].Columns[responseAnswer.col].ColumnName = question.AnswersLookup[responseAnswer.col].text;
-                    reply.Rows[responseAnswer.row].Columns[responseAnswer.col].Choice = choicesLookup[responseAnswer.col_choice];
+                    reply.Rows[responseAnswer.Row].RowName = question.AnswersLookup[responseAnswer.Row].Text;
+                    reply.Rows[responseAnswer.Row].Columns[responseAnswer.Col].ColumnName = question.AnswersLookup[responseAnswer.Col].Text;
+                    reply.Rows[responseAnswer.Row].Columns[responseAnswer.Col].Choice = choicesLookup[responseAnswer.ColChoice];
                 }   
             }
 
@@ -370,13 +370,13 @@ namespace SurveyMonkeyApi
             
             foreach (var responseAnswer in responseAnswers)
             {
-                if (question.AnswersLookup[responseAnswer.col].weight == 0)
+                if (question.AnswersLookup[responseAnswer.Col].Weight == 0)
                 {
-                    reply.NotApplicable.Add(question.AnswersLookup[responseAnswer.row].text);
+                    reply.NotApplicable.Add(question.AnswersLookup[responseAnswer.Row].Text);
                 }
                 else
                 {
-                    reply.Ranking.Add(question.AnswersLookup[responseAnswer.col].weight, question.AnswersLookup[responseAnswer.row].text);
+                    reply.Ranking.Add(question.AnswersLookup[responseAnswer.Col].Weight, question.AnswersLookup[responseAnswer.Row].Text);
                 }
             }
             return reply;
@@ -391,23 +391,23 @@ namespace SurveyMonkeyApi
 
             foreach (var responseAnswer in responseAnswers)
             {
-                if (responseAnswer.row == 0)
+                if (responseAnswer.Row == 0)
                 {
-                    reply.OtherText = responseAnswer.text;
+                    reply.OtherText = responseAnswer.Text;
                 }
                 else
                 {
                     var row = new MatrixRatingAnswerRow();
-                    row.RowName = question.AnswersLookup[responseAnswer.row].text;
+                    row.RowName = question.AnswersLookup[responseAnswer.Row].Text;
 
-                    if (responseAnswer.col != 0)
+                    if (responseAnswer.Col != 0)
                     {
-                        row.Choice = question.AnswersLookup[responseAnswer.col].text;
+                        row.Choice = question.AnswersLookup[responseAnswer.Col].Text;
                     }
                     
-                    if (!String.IsNullOrEmpty(responseAnswer.text))
+                    if (!String.IsNullOrEmpty(responseAnswer.Text))
                     {
-                        row.OtherText = responseAnswer.text;
+                        row.OtherText = responseAnswer.Text;
                     }
                     reply.Rows.Add(row);
                 }
@@ -425,16 +425,16 @@ namespace SurveyMonkeyApi
 
             foreach (var responseAnswer in responseAnswers)
             {
-                if (responseAnswer.row == 0)
+                if (responseAnswer.Row == 0)
                 {
-                    reply.OtherText = responseAnswer.text;
+                    reply.OtherText = responseAnswer.Text;
                 }
                 else
                 {
                     reply.Rows.Add(new MatrixSingleAnswerRow
                     {
-                        RowName = question.AnswersLookup[responseAnswer.row].text,
-                        Choice = question.AnswersLookup[responseAnswer.col].text
+                        RowName = question.AnswersLookup[responseAnswer.Row].Text,
+                        Choice = question.AnswersLookup[responseAnswer.Col].Text
                     });
                 }
             }
@@ -450,21 +450,21 @@ namespace SurveyMonkeyApi
 
             foreach (var responseAnswer in responseAnswers)
             {
-                if (responseAnswer.row == 0)
+                if (responseAnswer.Row == 0)
                 {
-                    reply.OtherText = responseAnswer.text;
+                    reply.OtherText = responseAnswer.Text;
                 }
                 else
                 {
-                    if (!rows.ContainsKey(responseAnswer.row))
+                    if (!rows.ContainsKey(responseAnswer.Row))
                     {
-                        rows.Add(responseAnswer.row, new MatrixMultiAnswerRow
+                        rows.Add(responseAnswer.Row, new MatrixMultiAnswerRow
                         {
-                            RowName = question.AnswersLookup[responseAnswer.row].text,
+                            RowName = question.AnswersLookup[responseAnswer.Row].Text,
                             Choices = new List<string>()
                         });
                     }
-                    rows[responseAnswer.row].Choices.Add(question.AnswersLookup[responseAnswer.col].text);
+                    rows[responseAnswer.Row].Choices.Add(question.AnswersLookup[responseAnswer.Col].Text);
                 }
             }
 
