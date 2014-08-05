@@ -117,6 +117,7 @@ namespace SurveyMonkeyApi
         public int position { get; set; }
         public QuestionType type { get; set; }
         public List<Answer> answers { get; set; }
+        internal Dictionary<long, Answer> AnswersLookup { get; set; }
     }
 
     public class QuestionType
