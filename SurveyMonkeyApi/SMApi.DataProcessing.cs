@@ -274,7 +274,6 @@ namespace SurveyMonkeyApi
             foreach (var responseAnswer in responseAnswers)
             {
                 var openEndedMultipleAnswerReply = new OpenEndedMultipleAnswerRow();
-                openEndedMultipleAnswerReply.AnswerId = answersLookup[responseAnswer.row].answer_id;
                 openEndedMultipleAnswerReply.RowName = answersLookup[responseAnswer.row].text;
                 openEndedMultipleAnswerReply.Text = responseAnswer.text;
                 reply.Rows.Add(openEndedMultipleAnswerReply);
@@ -309,7 +308,6 @@ namespace SurveyMonkeyApi
             foreach (var responseAnswer in responseAnswers)
             {
                 var dateTimeAnswerReply = new DateTimeAnswerRow();
-                dateTimeAnswerReply.AnswerId = answersLookup[responseAnswer.row].answer_id;
                 dateTimeAnswerReply.RowName = answersLookup[responseAnswer.row].text;
                 dateTimeAnswerReply.TimeStamp = DateTime.MinValue;
 
@@ -359,9 +357,7 @@ namespace SurveyMonkeyApi
                         reply.Rows[responseAnswer.row].Columns.Add(responseAnswer.col, new MatrixMenuAnswerColumn());
                     }
 
-                    reply.Rows[responseAnswer.row].RowId = responseAnswer.row;
                     reply.Rows[responseAnswer.row].RowName = answersLookup[responseAnswer.row].text;
-                    reply.Rows[responseAnswer.row].Columns[responseAnswer.col].ColumnId = responseAnswer.col;
                     reply.Rows[responseAnswer.row].Columns[responseAnswer.col].ColumnName = answersLookup[responseAnswer.col].text;
                     reply.Rows[responseAnswer.row].Columns[responseAnswer.col].Choice = choicesLookup[responseAnswer.col_choice];
                 }   

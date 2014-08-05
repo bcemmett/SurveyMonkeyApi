@@ -28,7 +28,6 @@ namespace SurveyMonkeyApi
     public class OpenEndedMultipleAnswerRow
     {
         public string Text { get; set; }
-        public long AnswerId { get; set; }
         public string RowName { get; set; }
     }
 
@@ -54,7 +53,6 @@ namespace SurveyMonkeyApi
     public class DateTimeAnswerRow
     {
         public DateTime TimeStamp { get; set; }
-        public long AnswerId { get; set; }
         public string RowName { get; set; }
     }
 
@@ -67,14 +65,12 @@ namespace SurveyMonkeyApi
     public class MatrixMenuAnswerRow
     {
         public string RowName { get; set; }
-        public long RowId { get; set; }
         public Dictionary<long, MatrixMenuAnswerColumn> Columns { get; set; }
     }
 
     public class MatrixMenuAnswerColumn
     {
         public string ColumnName { get; set; }
-        public long ColumnId { get; set; }
         public string Choice {get; set; }
     }
 
