@@ -197,6 +197,8 @@ namespace SurveyMonkeyApi
                             return MatchMatrixRatingAnswer(question, responseAnswers);
                         case QuestionSubtype.single:
                             return MatchMatrixSingleAnswer(question, responseAnswers);
+                        case QuestionSubtype.multi:
+                            return MatchMatrixMultiAnswer(question, responseAnswers);
                     }
                     break;
             }
@@ -452,6 +454,39 @@ namespace SurveyMonkeyApi
                     });
                 }
             }
+
+            return reply;
+        }
+
+        private MatrixMultiAnswer MatchMatrixMultiAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        {
+            var reply = new MatrixMultiAnswer();
+
+            Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
+
+            var rows = new Dictionary<long, MatrixMultiRowAnswer>();
+
+            foreach (var responseAnswer in responseAnswers)
+            {
+                if (responseAnswer.row == 0)
+                {
+                    reply.Other = responseAnswer.text;
+                }
+                else
+                {
+                    if (!rows.ContainsKey(responseAnswer.row))
+                    {
+                        rows.Add(responseAnswer.row, new MatrixMultiRowAnswer
+                        {
+                            Name = answersLookup[responseAnswer.row].text,
+                            Choices = new List<string>()
+                        });
+                    }
+                    rows[responseAnswer.row].Choices.Add(answersLookup[responseAnswer.col].text);
+                }
+            }
+
+            reply.Rows = rows.Values.ToList();
 
             return reply;
         }
