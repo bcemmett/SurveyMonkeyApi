@@ -219,7 +219,7 @@ namespace SurveyMonkeyApi
                 }
                 if (answersLookup[responseAnswer.row].type == AnswerType.other)
                 {
-                    reply.OtherComment = responseAnswer.text;
+                    reply.OtherText = responseAnswer.text;
                     if (reply.Choice == null)
                     {
                         reply.Choice = answersLookup[responseAnswer.row].text;
@@ -247,7 +247,7 @@ namespace SurveyMonkeyApi
                 if (answersLookup[responseAnswer.row].type == AnswerType.other)
                 {
                     reply.Choices.Add(answersLookup[responseAnswer.row].text);
-                    reply.OtherComment = responseAnswer.text;
+                    reply.OtherText = responseAnswer.text;
                 }
             }
             return reply;
@@ -266,18 +266,18 @@ namespace SurveyMonkeyApi
         {
             var reply = new OpenEndedMultipleAnswer
             {
-                Replies = new List<OpenEndedMultipleAnswerReply>()
+                Rows = new List<OpenEndedMultipleAnswerRow>()
             };
 
             Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
 
             foreach (var responseAnswer in responseAnswers)
             {
-                var openEndedMultipleAnswerReply = new OpenEndedMultipleAnswerReply();
+                var openEndedMultipleAnswerReply = new OpenEndedMultipleAnswerRow();
                 openEndedMultipleAnswerReply.AnswerId = answersLookup[responseAnswer.row].answer_id;
-                openEndedMultipleAnswerReply.AnswerLabel = answersLookup[responseAnswer.row].text;
+                openEndedMultipleAnswerReply.RowName = answersLookup[responseAnswer.row].text;
                 openEndedMultipleAnswerReply.Text = responseAnswer.text;
-                reply.Replies.Add(openEndedMultipleAnswerReply);
+                reply.Rows.Add(openEndedMultipleAnswerReply);
             }
 
             return reply;
@@ -301,16 +301,16 @@ namespace SurveyMonkeyApi
         {
             var reply = new DateTimeAnswer
             {
-                Replies = new List<DateTimeAnswerReply>()
+                Rows = new List<DateTimeAnswerRow>()
             };
 
             Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
 
             foreach (var responseAnswer in responseAnswers)
             {
-                var dateTimeAnswerReply = new DateTimeAnswerReply();
+                var dateTimeAnswerReply = new DateTimeAnswerRow();
                 dateTimeAnswerReply.AnswerId = answersLookup[responseAnswer.row].answer_id;
-                dateTimeAnswerReply.AnswerLabel = answersLookup[responseAnswer.row].text;
+                dateTimeAnswerReply.RowName = answersLookup[responseAnswer.row].text;
                 dateTimeAnswerReply.TimeStamp = DateTime.MinValue;
 
                 DateTime timeStamp = DateTime.Parse(responseAnswer.text, CultureInfo.CreateSpecificCulture("en-US"));
@@ -324,7 +324,7 @@ namespace SurveyMonkeyApi
                     dateTimeAnswerReply.TimeStamp = timeStamp;
                 }
 
-                reply.Replies.Add(dateTimeAnswerReply);
+                reply.Rows.Add(dateTimeAnswerReply);
             }
             return reply;
         }
@@ -333,7 +333,7 @@ namespace SurveyMonkeyApi
         {
             var reply = new MatrixMenuAnswer
             {
-                Rows = new Dictionary<long, MatrixMenuRowAnswer>()
+                Rows = new Dictionary<long, MatrixMenuAnswerRow>()
             };
 
             Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
@@ -343,26 +343,26 @@ namespace SurveyMonkeyApi
             {
                 if (responseAnswer.row == 0)
                 {
-                    reply.Other = responseAnswer.text;
+                    reply.OtherText = responseAnswer.text;
                 }
                 else
                 {
                     if (!reply.Rows.ContainsKey(responseAnswer.row))
                     {
-                        reply.Rows.Add(responseAnswer.row, new MatrixMenuRowAnswer
+                        reply.Rows.Add(responseAnswer.row, new MatrixMenuAnswerRow
                         {
-                            Columns = new Dictionary<long, MatrixMenuColumnAnswer>()
+                            Columns = new Dictionary<long, MatrixMenuAnswerColumn>()
                         });
                     }
                     if (!reply.Rows[responseAnswer.row].Columns.ContainsKey(responseAnswer.col))
                     {
-                        reply.Rows[responseAnswer.row].Columns.Add(responseAnswer.col, new MatrixMenuColumnAnswer());
+                        reply.Rows[responseAnswer.row].Columns.Add(responseAnswer.col, new MatrixMenuAnswerColumn());
                     }
 
                     reply.Rows[responseAnswer.row].RowId = responseAnswer.row;
-                    reply.Rows[responseAnswer.row].Name = answersLookup[responseAnswer.row].text;
+                    reply.Rows[responseAnswer.row].RowName = answersLookup[responseAnswer.row].text;
                     reply.Rows[responseAnswer.row].Columns[responseAnswer.col].ColumnId = responseAnswer.col;
-                    reply.Rows[responseAnswer.row].Columns[responseAnswer.col].Name = answersLookup[responseAnswer.col].text;
+                    reply.Rows[responseAnswer.row].Columns[responseAnswer.col].ColumnName = answersLookup[responseAnswer.col].text;
                     reply.Rows[responseAnswer.row].Columns[responseAnswer.col].Choice = choicesLookup[responseAnswer.col_choice];
                 }   
             }
@@ -398,7 +398,7 @@ namespace SurveyMonkeyApi
         {
             var reply = new MatrixRatingAnswer
             {
-                Rows = new List<MatrixRatingRowAnswer>()
+                Rows = new List<MatrixRatingAnswerRow>()
             };
 
             Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
@@ -407,12 +407,12 @@ namespace SurveyMonkeyApi
             {
                 if (responseAnswer.row == 0)
                 {
-                    reply.Other = responseAnswer.text;
+                    reply.OtherText = responseAnswer.text;
                 }
                 else
                 {
-                    var row = new MatrixRatingRowAnswer();
-                    row.Name = answersLookup[responseAnswer.row].text;
+                    var row = new MatrixRatingAnswerRow();
+                    row.RowName = answersLookup[responseAnswer.row].text;
 
                     if (responseAnswer.col != 0)
                     {
@@ -421,7 +421,7 @@ namespace SurveyMonkeyApi
                     
                     if (!String.IsNullOrEmpty(responseAnswer.text))
                     {
-                        row.Other = responseAnswer.text;
+                        row.OtherText = responseAnswer.text;
                     }
                     reply.Rows.Add(row);
                 }
@@ -434,7 +434,7 @@ namespace SurveyMonkeyApi
         {
             var reply = new MatrixSingleAnswer
             {
-                Rows = new List<MatrixSingleRowAnswer>()
+                Rows = new List<MatrixSingleAnswerRow>()
             };
 
             Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
@@ -443,13 +443,13 @@ namespace SurveyMonkeyApi
             {
                 if (responseAnswer.row == 0)
                 {
-                    reply.Other = responseAnswer.text;
+                    reply.OtherText = responseAnswer.text;
                 }
                 else
                 {
-                    reply.Rows.Add(new MatrixSingleRowAnswer
+                    reply.Rows.Add(new MatrixSingleAnswerRow
                     {
-                        Name = answersLookup[responseAnswer.row].text,
+                        RowName = answersLookup[responseAnswer.row].text,
                         Choice = answersLookup[responseAnswer.col].text
                     });
                 }
@@ -464,21 +464,21 @@ namespace SurveyMonkeyApi
 
             Dictionary<long, Answer> answersLookup = question.answers.ToDictionary(a => a.answer_id, a => a);
 
-            var rows = new Dictionary<long, MatrixMultiRowAnswer>();
+            var rows = new Dictionary<long, MatrixMultiAnswerRow>();
 
             foreach (var responseAnswer in responseAnswers)
             {
                 if (responseAnswer.row == 0)
                 {
-                    reply.Other = responseAnswer.text;
+                    reply.OtherText = responseAnswer.text;
                 }
                 else
                 {
                     if (!rows.ContainsKey(responseAnswer.row))
                     {
-                        rows.Add(responseAnswer.row, new MatrixMultiRowAnswer
+                        rows.Add(responseAnswer.row, new MatrixMultiAnswerRow
                         {
-                            Name = answersLookup[responseAnswer.row].text,
+                            RowName = answersLookup[responseAnswer.row].text,
                             Choices = new List<string>()
                         });
                     }

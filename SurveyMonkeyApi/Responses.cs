@@ -6,13 +6,13 @@ namespace SurveyMonkeyApi
     public class SingleChoiceAnswer
     {
         public string Choice { get; set; }
-        public string OtherComment { get; set; }
+        public string OtherText { get; set; }
     }
 
     public class MultipleChoiceAnswer
     {
         public List<string> Choices { get; set; }
-        public string OtherComment { get; set; } 
+        public string OtherText { get; set; } 
     }
 
     public class OpenEndedSingleAnswer
@@ -22,14 +22,14 @@ namespace SurveyMonkeyApi
 
     public class OpenEndedMultipleAnswer
     {
-        public List<OpenEndedMultipleAnswerReply> Replies { get; set; }
+        public List<OpenEndedMultipleAnswerRow> Rows { get; set; }
     }
 
-    public class OpenEndedMultipleAnswerReply
+    public class OpenEndedMultipleAnswerRow
     {
         public string Text { get; set; }
         public long AnswerId { get; set; }
-        public string AnswerLabel { get; set; }
+        public string RowName { get; set; }
     }
 
     public class DemographicAnswer
@@ -48,32 +48,32 @@ namespace SurveyMonkeyApi
 
     public class DateTimeAnswer
     {
-        public List<DateTimeAnswerReply> Replies { get; set; }
+        public List<DateTimeAnswerRow> Rows { get; set; }
     }
 
-    public class DateTimeAnswerReply
+    public class DateTimeAnswerRow
     {
         public DateTime TimeStamp { get; set; }
         public long AnswerId { get; set; }
-        public string AnswerLabel { get; set; }
+        public string RowName { get; set; }
     }
 
     public class MatrixMenuAnswer
     {
-        public Dictionary<long, MatrixMenuRowAnswer> Rows { get; set; }
-        public string Other { get; set; }
+        public Dictionary<long, MatrixMenuAnswerRow> Rows { get; set; }
+        public string OtherText { get; set; }
     }
 
-    public class MatrixMenuRowAnswer
+    public class MatrixMenuAnswerRow
     {
-        public string Name { get; set; }
+        public string RowName { get; set; }
         public long RowId { get; set; }
-        public Dictionary<long, MatrixMenuColumnAnswer> Columns { get; set; }
+        public Dictionary<long, MatrixMenuAnswerColumn> Columns { get; set; }
     }
 
-    public class MatrixMenuColumnAnswer
+    public class MatrixMenuAnswerColumn
     {
-        public string Name { get; set; }
+        public string ColumnName { get; set; }
         public long ColumnId { get; set; }
         public string Choice {get; set; }
     }
@@ -86,38 +86,38 @@ namespace SurveyMonkeyApi
 
     public class MatrixRatingAnswer
     {
-        public List<MatrixRatingRowAnswer> Rows { get; set; }
-        public string Other { get; set; }
+        public List<MatrixRatingAnswerRow> Rows { get; set; }
+        public string OtherText { get; set; }
     }
 
-    public class MatrixRatingRowAnswer
+    public class MatrixRatingAnswerRow
     {
-        public string Name { get; set; }
+        public string RowName { get; set; }
         public string Choice { get; set; }
-        public string Other { get; set; }
+        public string OtherText { get; set; }
     }
 
     public class MatrixSingleAnswer
     {
-        public List<MatrixSingleRowAnswer> Rows { get; set; }
-        public string Other { get; set; }
+        public List<MatrixSingleAnswerRow> Rows { get; set; }
+        public string OtherText { get; set; }
     }
 
-    public class MatrixSingleRowAnswer
+    public class MatrixSingleAnswerRow
     {
-        public string Name { get; set; }
+        public string RowName { get; set; }
         public string Choice { get; set; }
     }
 
     public class MatrixMultiAnswer
     {
-        public List<MatrixMultiRowAnswer> Rows { get; set; }
-        public string Other { get; set; }
+        public List<MatrixMultiAnswerRow> Rows { get; set; }
+        public string OtherText { get; set; }
     }
 
-    public class MatrixMultiRowAnswer
+    public class MatrixMultiAnswerRow
     {
-        public string Name { get; set; }
+        public string RowName { get; set; }
         public List<string> Choices { get; set; }
     }
 
