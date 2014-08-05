@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SurveyMonkeyApi
 {
@@ -8,11 +9,11 @@ namespace SurveyMonkeyApi
 
     public class GetSurveyListSettings
     {
-        public DateTime start_date { get; set; }
-        public DateTime end_date { get; set; }
-        public string title { get; set; }
-        public string recipient_email { get; set; }
-        public bool order_asc { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Title { get; set; }
+        public string RecipientEmail { get; set; }
+        public bool OrderAsc { get; set; }
         public GetSurveyListSettingsOptionalData OptionalData { get; set; }
         internal RequestSettings Serialized
         {
@@ -20,33 +21,37 @@ namespace SurveyMonkeyApi
             {
                 var parameters = new RequestSettings();
 
-                if (start_date != DateTime.MaxValue)
+                if (StartDate != DateTime.MaxValue)
                 {
-                    parameters.Add("start_date", start_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (end_date != DateTime.MinValue)
+                if (EndDate != DateTime.MinValue)
                 {
-                    parameters.Add("end_date", end_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (!String.IsNullOrEmpty(title))
+                if (!String.IsNullOrEmpty(Title))
                 {
-                    parameters.Add("title", title);
+                    parameters.Add("title", Title);
                 }
-                if (!String.IsNullOrEmpty(recipient_email))
+                if (!String.IsNullOrEmpty(RecipientEmail))
                 {
-                    parameters.Add("recipient_email", recipient_email);
+                    parameters.Add("recipient_email", RecipientEmail);
                 }
-                if (order_asc)
+                if (OrderAsc)
                 {
                     parameters.Add("order_asc", "True");
                 }
 
                 var properties = typeof (GetSurveyListSettingsOptionalData).GetProperties();
-                List<string> optionalProperties =
-                    (from property in properties where (bool) property.GetValue(OptionalData) select property.Name).ToList();
-                if (optionalProperties.Count > 0)
+                List<string> optionalProperties = (from property in properties where (bool) property.GetValue(OptionalData) select property.Name).ToList();
+                var snakeCaseProperties = new List<string>();
+                foreach (var optionalProperty in optionalProperties)
                 {
-                    parameters.Add("fields", optionalProperties);
+                    snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
+                }
+                if (snakeCaseProperties.Count > 0)
+                {
+                    parameters.Add("fields", snakeCaseProperties);
                 }
 
                 return parameters;
@@ -55,36 +60,36 @@ namespace SurveyMonkeyApi
 
         public GetSurveyListSettings()
         {
-            start_date = DateTime.MaxValue;
-            end_date = DateTime.MinValue;
-            title = "";
-            recipient_email = "";
-            order_asc = false;
+            StartDate = DateTime.MaxValue;
+            EndDate = DateTime.MinValue;
+            Title = "";
+            RecipientEmail = "";
+            OrderAsc = false;
             OptionalData = new GetSurveyListSettingsOptionalData();    
         }
     }
 
     public class GetSurveyListSettingsOptionalData
     {
-        public bool title { get; set; }
-        public bool analysis_url { get; set; }
-        public bool preview_url { get; set; }
-        public bool date_created { get; set; }
-        public bool date_modified { get; set; }
-        public bool language_id { get; set; }
-        public bool question_count { get; set; }
-        public bool num_responses { get; set; }
+        public bool Title { get; set; }
+        public bool AnalysisUrl { get; set; }
+        public bool PreviewUrl { get; set; }
+        public bool DateCreated { get; set; }
+        public bool DateModified { get; set; }
+        public bool LanguageId { get; set; }
+        public bool QuestionCount { get; set; }
+        public bool NumResponses { get; set; }
 
         public GetSurveyListSettingsOptionalData()
         {
-            title = true;
-            analysis_url  = true;
-            preview_url  = true;
-            date_created  = true;
-            date_modified  = true;
-            language_id  = true;
-            question_count  = true;
-            num_responses  = true;
+            Title = true;
+            AnalysisUrl  = true;
+            PreviewUrl  = true;
+            DateCreated  = true;
+            DateModified  = true;
+            LanguageId  = true;
+            QuestionCount  = true;
+            NumResponses  = true;
         }
     }
 
@@ -94,10 +99,10 @@ namespace SurveyMonkeyApi
 
     public class GetCollectorListSettings
     {
-        public DateTime start_date { get; set; }
-        public DateTime end_date { get; set; }
-        public string name { get; set; }
-        public bool order_asc { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Name { get; set; }
+        public bool OrderAsc { get; set; }
         public GetCollectorListSettingsOptionalData OptionalData { get; set; }
         internal RequestSettings Serialized
         {
@@ -105,29 +110,33 @@ namespace SurveyMonkeyApi
             {
                 var parameters = new RequestSettings();
 
-                if (start_date != DateTime.MaxValue)
+                if (StartDate != DateTime.MaxValue)
                 {
-                    parameters.Add("start_date", start_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (end_date != DateTime.MinValue)
+                if (EndDate != DateTime.MinValue)
                 {
-                    parameters.Add("end_date", end_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (!String.IsNullOrEmpty(name))
+                if (!String.IsNullOrEmpty(Name))
                 {
-                    parameters.Add("name", name);
+                    parameters.Add("name", Name);
                 }
-                if (order_asc)
+                if (OrderAsc)
                 {
                     parameters.Add("order_asc", "True");
                 }
 
                 var properties = typeof(GetCollectorListSettingsOptionalData).GetProperties();
-                List<string> optionalProperties =
-                    (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
-                if (optionalProperties.Count > 0)
+                List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
+                var snakeCaseProperties = new List<string>();
+                foreach (var optionalProperty in optionalProperties)
                 {
-                    parameters.Add("fields", optionalProperties);
+                    snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
+                }
+                if (snakeCaseProperties.Count > 0)
+                {
+                    parameters.Add("fields", snakeCaseProperties);
                 }
 
                 return parameters;
@@ -136,31 +145,31 @@ namespace SurveyMonkeyApi
 
         public GetCollectorListSettings()
         {
-            start_date = DateTime.MaxValue;
-            end_date = DateTime.MinValue;
-            name = "";
-            order_asc = false;
+            StartDate = DateTime.MaxValue;
+            EndDate = DateTime.MinValue;
+            Name = "";
+            OrderAsc = false;
             OptionalData = new GetCollectorListSettingsOptionalData();
         }
     }
 
     public class GetCollectorListSettingsOptionalData
     {
-        public bool url { get; set; }
-        public bool open { get; set; }
-        public bool type { get; set; }
-        public bool name { get; set; }
-        public bool date_created { get; set; }
-        public bool date_modified { get; set; }
+        public bool Url { get; set; }
+        public bool Open { get; set; }
+        public bool Type { get; set; }
+        public bool Name { get; set; }
+        public bool DateCreated { get; set; }
+        public bool DateModified { get; set; }
 
         public GetCollectorListSettingsOptionalData()
         {
-            url = true;
-            open = true;
-            type = true;
-            name = true;
-            date_created = true;
-            date_modified = true;
+            Url = true;
+            Open = true;
+            Type = true;
+            Name = true;
+            DateCreated = true;
+            DateModified = true;
         }
     }
 
@@ -170,20 +179,20 @@ namespace SurveyMonkeyApi
 
     public class GetRespondentListSettings
     {
-        public enum OrderBy
+        public enum Order
         {
-            respondent_id,
-            date_modified,
-            date_start
+            RespondentId,
+            DateModified,
+            DateStart
         };
 
-        public long collector_id { get; set; }
-        public DateTime start_date { get; set; }
-        public DateTime end_date { get; set; }
-        public DateTime start_modified_date { get; set; }
-        public DateTime end_modified_date { get; set; }
-        public bool order_asc { get; set; }
-        public OrderBy order_by { get; set; }
+        public long CollectorId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime StartModifiedDate { get; set; }
+        public DateTime EndModifiedDate { get; set; }
+        public bool OrderAsc { get; set; }
+        public Order OrderBy { get; set; }
         public GetRespondentListSettingsOptionalData OptionalData { get; set; }
         internal RequestSettings Serialized
         {
@@ -191,52 +200,56 @@ namespace SurveyMonkeyApi
             {
                 var parameters = new RequestSettings();
 
-                if (collector_id != 0)
+                if (CollectorId != 0)
                 {
-                    parameters.Add("collector_id", collector_id.ToString());
+                    parameters.Add("collector_id", CollectorId.ToString());
                 }
-                if (start_date != DateTime.MaxValue)
+                if (StartDate != DateTime.MaxValue)
                 {
-                    parameters.Add("start_date", start_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (end_date != DateTime.MinValue)
+                if (EndDate != DateTime.MinValue)
                 {
-                    parameters.Add("end_date", end_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (start_modified_date != DateTime.MaxValue)
+                if (StartModifiedDate != DateTime.MaxValue)
                 {
-                    parameters.Add("start_modified_date", start_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("start_modified_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (end_modified_date != DateTime.MinValue)
+                if (EndModifiedDate != DateTime.MinValue)
                 {
-                    parameters.Add("end_modified_date", end_date.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("end_modified_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (order_asc)
+                if (OrderAsc)
                 {
                     parameters.Add("order_asc", "True");
                 }
 
                 string order_by_string = "";
-                if (order_by == OrderBy.respondent_id)
+                if (OrderBy == Order.RespondentId)
                 {
                     order_by_string = "respondent_id";
                 }
-                if (order_by == OrderBy.date_start)
+                if (OrderBy == Order.DateStart)
                 {
                     order_by_string = "date_start";
                 }
-                if (order_by == OrderBy.date_modified)
+                if (OrderBy == Order.DateModified)
                 {
                     order_by_string = "date_modified";
                 }
                 parameters.Add("order_by", order_by_string);
 
                 var properties = typeof(GetRespondentListSettingsOptionalData).GetProperties();
-                List<string> optionalProperties =
-                    (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
-                if (optionalProperties.Count > 0)
+                List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
+                var snakeCaseProperties = new List<string>();
+                foreach (var optionalProperty in optionalProperties)
                 {
-                    parameters.Add("fields", optionalProperties);
+                    snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
+                }
+                if (snakeCaseProperties.Count > 0)
+                {
+                    parameters.Add("fields", snakeCaseProperties);
                 }
 
                 return parameters;
@@ -245,46 +258,46 @@ namespace SurveyMonkeyApi
 
         public GetRespondentListSettings()
         {
-            collector_id = 0;
-            start_date = DateTime.MaxValue;
-            end_date = DateTime.MinValue;
-            start_modified_date = DateTime.MaxValue;
-            end_modified_date = DateTime.MinValue;
-            order_asc = false;
-            order_by = OrderBy.respondent_id;
+            CollectorId = 0;
+            StartDate = DateTime.MaxValue;
+            EndDate = DateTime.MinValue;
+            StartModifiedDate = DateTime.MaxValue;
+            EndModifiedDate = DateTime.MinValue;
+            OrderAsc = false;
+            OrderBy = Order.RespondentId;
             OptionalData = new GetRespondentListSettingsOptionalData();
         }
     }
 
     public class GetRespondentListSettingsOptionalData
     {
-        public bool date_start {get; set;}
-        public bool date_modified {get; set;}
-        public bool collector_id {get; set;}
-        public bool collection_mode {get; set;}
-        public bool custom_id {get; set;}
-        public bool email {get; set;}
-        public bool first_name {get; set;}
-        public bool last_name {get; set;}
-        public bool ip_address {get; set;}
-        public bool status {get; set;}
-        public bool analysis_url {get; set;}
-        public bool recipient_id { get; set; }
+        public bool DateStart {get; set;}
+        public bool DateModified {get; set;}
+        public bool CollectorId {get; set;}
+        public bool CollectionMode {get; set;}
+        public bool CustomId {get; set;}
+        public bool Email {get; set;}
+        public bool FirstName {get; set;}
+        public bool LastName {get; set;}
+        public bool IpAddress {get; set;}
+        public bool Status {get; set;}
+        public bool AnalysisUrl {get; set;}
+        public bool RecipientId { get; set; }
 
         public GetRespondentListSettingsOptionalData()
         {
-            date_start = true;
-            date_modified = true;
-            collector_id = true;
-            collection_mode = true;
-            custom_id = true;
-            email = true;
-            first_name = true;
-            last_name = true;
-            ip_address = true;
-            status = true;
-            analysis_url = true;
-            recipient_id = true;
+            DateStart = true;
+            DateModified = true;
+            CollectorId = true;
+            CollectionMode = true;
+            CustomId = true;
+            Email = true;
+            FirstName = true;
+            LastName = true;
+            IpAddress = true;
+            Status = true;
+            AnalysisUrl = true;
+            RecipientId = true;
         }
     }
 
