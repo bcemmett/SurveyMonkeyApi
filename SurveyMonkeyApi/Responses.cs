@@ -33,16 +33,16 @@ namespace SurveyMonkeyApi
 
     public class DemographicAnswer
     {
-        public string name { get; set; }
-        public string company { get; set; }
-        public string address { get; set; }
-        public string address2 { get; set; }
-        public string city { get; set; }
-        public string state { get; set; }
-        public string zip { get; set; }
-        public string country { get; set; }
-        public string email { get; set; }
-        public string phone { get; set; }
+        public string Name { get; set; }
+        public string Company { get; set; }
+        public string Address { get; set; }
+        public string Address2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string Country { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
     }
 
     public class DateTimeAnswer
