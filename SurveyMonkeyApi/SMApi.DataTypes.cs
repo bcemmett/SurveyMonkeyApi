@@ -1,88 +1,104 @@
-﻿namespace SurveyMonkeyApi
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Runtime.Serialization;
+
+namespace SurveyMonkeyApi
 {
     public partial class SMApi
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum QuestionFamily
         {
-            single_choice,
-            multiple_choice,
-            matrix,
-            open_ended,
+            [EnumMember(Value = "single_choice")]
+            SingleChoice,
+            [EnumMember(Value = "multiple_choice")]
+            MultipleChoice,
+            Matrix,
+            [EnumMember(Value = "open_ended")]
+            OpenEnded,
             Demographic,
-            datetime,
-            presentation
+            DateTime,
+            Presentation
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum QuestionSubtype
         {
-            menu,
-            vertical,
-            vertical_two_col,
-            vertical_three_col,
-            horiz,
-            ranking,
-            rating,
-            single,
-            multi,
-            essay,
-            international,
-            us,
-            both,
-            date_only,
-            time_only,
-            descriptive_text,
-            image,
-            numerical
+            Menu,
+            Vertical,
+            [EnumMember(Value = "vertical_two_col")]
+            VerticalTwoCol,
+            [EnumMember(Value = "vertical_three_col")]
+            VerticalThreeCol,
+            Horiz,
+            Ranking,
+            Rating,
+            Single,
+            Multi,
+            Essay,
+            International,
+            US,
+            Both,
+            [EnumMember(Value = "date_only")]
+            DateOnly,
+            [EnumMember(Value = "time_only")]
+            TimeOnly,
+            [EnumMember(Value = "descriptive_text")]
+            DescriptiveText,
+            Image,
+            Numerical
         }
 
         public enum AnswerType
         {
-            row,
-            col,
-            other,
-            img,
-            label,
-            name,
-            company,
-            address,
-            address2,
-            city,
-            state,
-            zip,
-            country,
-            email,
-            phone
+            Row,
+            Col,
+            Other,
+            Img,
+            Label,
+            Name,
+            Company,
+            Address,
+            Address2,
+            City,
+            State,
+            Zip,
+            Country,
+            Email,
+            Phone
         }
 
         public enum CollectorType
         {
-            url,
-            embedded,
-            email,
-            facebook,
-            audience
+            Url,
+            Embedded,
+            Email,
+            Facebook,
+            Audience
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum RespondentCollectionMode
         {
-            normal,
-            manual,
-            survey_preview,
-            edited
+            Normal,
+            Manual,
+            [EnumMember(Value = "survey_preview")]
+            SurveyPreview,
+            Edited
         }
 
         public enum RespondentStatus
         {
-            completed,
-            partial,
-            disqualified
+            Completed,
+            Partial,
+            Disqualified
         }
 
         public enum Language
         {
             English = 1,
-            Chinese_Simplified = 2,
-            Chinese_Traditional = 3,
+            ChineseSimplified = 2,
+            ChineseTraditional = 3,
             Danish = 4,
             Dutch = 5,
             Finnish = 6,
@@ -95,8 +111,8 @@
             Malay = 13,
             Norwegian = 14,
             Polish = 15,
-            Portuguese_Iberian = 16,
-            Portuguese_Brazilian = 17,
+            PortugueseIberian = 16,
+            PortugueseBrazilian = 17,
             Russian = 18,
             Spanish = 19,
             Swedish = 20,

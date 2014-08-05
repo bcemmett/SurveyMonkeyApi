@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 
 namespace SurveyMonkeyApi
 {
@@ -165,21 +166,21 @@ namespace SurveyMonkeyApi
         {
             switch (question.type.family)
             {
-                case QuestionFamily.single_choice:
+                case QuestionFamily.SingleChoice:
                     return MatchSingleChoiceAnswer(question, responseAnswers);
 
-                case QuestionFamily.multiple_choice:
+                case QuestionFamily.MultipleChoice:
                     return MatchMultipleChoiceAnswer(question, responseAnswers);
 
-                case QuestionFamily.open_ended:
+                case QuestionFamily.OpenEnded:
                     switch (question.type.subtype)
                     {
-                        case QuestionSubtype.essay:
-                        case QuestionSubtype.single:
+                        case QuestionSubtype.Essay:
+                        case QuestionSubtype.Single:
                             return MatchOpenEndedSingleAnswer(question, responseAnswers);
 
-                        case QuestionSubtype.multi:
-                        case QuestionSubtype.numerical:
+                        case QuestionSubtype.Multi:
+                        case QuestionSubtype.Numerical:
                             return MatchOpenEndedMultipleAnswer(question, responseAnswers);
                     }
                     break;
@@ -187,21 +188,21 @@ namespace SurveyMonkeyApi
                 case QuestionFamily.Demographic:
                     return MatchDemographicAnswer(question, responseAnswers);
 
-                case QuestionFamily.datetime:
+                case QuestionFamily.DateTime:
                     return MatchDateTimeAnswer(question, responseAnswers);
 
-                case QuestionFamily.matrix:
+                case QuestionFamily.Matrix:
                     switch (question.type.subtype)
                     {
-                        case QuestionSubtype.menu:
+                        case QuestionSubtype.Menu:
                             return MatchMatrixMenuAnswer(question, responseAnswers);
-                        case QuestionSubtype.ranking:
+                        case QuestionSubtype.Ranking:
                             return MatchMatrixRankingAnswer(question, responseAnswers);
-                        case QuestionSubtype.rating:
+                        case QuestionSubtype.Rating:
                             return MatchMatrixRatingAnswer(question, responseAnswers);
-                        case QuestionSubtype.single:
+                        case QuestionSubtype.Single:
                             return MatchMatrixSingleAnswer(question, responseAnswers);
-                        case QuestionSubtype.multi:
+                        case QuestionSubtype.Multi:
                             return MatchMatrixMultiAnswer(question, responseAnswers);
                     }
                     break;
@@ -215,11 +216,11 @@ namespace SurveyMonkeyApi
             
             foreach (var responseAnswer in responseAnswers)
             {
-                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.row)
+                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.Row)
                 {
                     reply.Choice = question.AnswersLookup[responseAnswer.row].text;
                 }
-                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.other)
+                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.Other)
                 {
                     reply.OtherText = responseAnswer.text;
                     if (reply.Choice == null)
@@ -240,11 +241,11 @@ namespace SurveyMonkeyApi
 
             foreach (var responseAnswer in responseAnswers)
             {
-                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.row)
+                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.Row)
                 {
                     reply.Choices.Add(question.AnswersLookup[responseAnswer.row].text);
                 }
-                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.other)
+                if (question.AnswersLookup[responseAnswer.row].type == AnswerType.Other)
                 {
                     reply.Choices.Add(question.AnswersLookup[responseAnswer.row].text);
                     reply.OtherText = responseAnswer.text;
@@ -287,7 +288,7 @@ namespace SurveyMonkeyApi
             foreach (var responseAnswer in responseAnswers)
             {
                 var propertyName = question.AnswersLookup[responseAnswer.row].type.ToString();
-                typeof(DemographicAnswer).GetProperty(propertyName).SetValue(reply, responseAnswer.text);
+                typeof(DemographicAnswer).GetProperty(propertyName, (BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)).SetValue(reply, responseAnswer.text);
             }
             return reply;
         }
@@ -306,7 +307,7 @@ namespace SurveyMonkeyApi
                 dateTimeAnswerReply.TimeStamp = DateTime.MinValue;
 
                 DateTime timeStamp = DateTime.Parse(responseAnswer.text, CultureInfo.CreateSpecificCulture("en-US"));
-                if (question.type.subtype == QuestionSubtype.time_only) //Where only a time is given, use date component from DateTime.MinValue
+                if (question.type.subtype == QuestionSubtype.TimeOnly) //Where only a time is given, use date component from DateTime.MinValue
                 {
                     dateTimeAnswerReply.TimeStamp = dateTimeAnswerReply.TimeStamp.AddHours(timeStamp.Hour);
                     dateTimeAnswerReply.TimeStamp = dateTimeAnswerReply.TimeStamp.AddMinutes(timeStamp.Minute);
