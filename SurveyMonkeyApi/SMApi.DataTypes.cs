@@ -9,6 +9,7 @@ namespace SurveyMonkeyApi
         [JsonConverter(typeof(LaxEnumMatchingConverter))]
         public enum QuestionFamily
         {
+            NotSet = 0,
             SingleChoice,
             MultipleChoice,
             Matrix,
@@ -21,6 +22,7 @@ namespace SurveyMonkeyApi
         [JsonConverter(typeof(LaxEnumMatchingConverter))]
         public enum QuestionSubtype
         {
+            NotSet = 0,
             Menu,
             Vertical,
             VerticalTwoCol,
@@ -43,6 +45,7 @@ namespace SurveyMonkeyApi
 
         public enum AnswerType
         {
+            NotSet = 0,
             Row,
             Col,
             Other,
@@ -62,6 +65,7 @@ namespace SurveyMonkeyApi
 
         public enum CollectorType
         {
+            NotSet = 0,
             Url,
             Embedded,
             Email,
@@ -72,6 +76,7 @@ namespace SurveyMonkeyApi
         [JsonConverter(typeof(LaxEnumMatchingConverter))]
         public enum RespondentCollectionMode
         {
+            NotSet = 0,
             Normal,
             Manual,
             SurveyPreview,
@@ -80,6 +85,7 @@ namespace SurveyMonkeyApi
 
         public enum RespondentStatus
         {
+            NotSet = 0,
             Completed,
             Partial,
             Disqualified
@@ -87,6 +93,7 @@ namespace SurveyMonkeyApi
 
         public enum Language
         {
+            NotSet = 0,
             English = 1,
             ChineseSimplified = 2,
             ChineseTraditional = 3,

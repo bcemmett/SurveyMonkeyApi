@@ -181,6 +181,7 @@ namespace SurveyMonkeyApi
     {
         public enum Order
         {
+            NotSet = 0,
             RespondentId,
             DateModified,
             DateStart
