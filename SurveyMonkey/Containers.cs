@@ -12,7 +12,7 @@ namespace SurveyMonkey
         public DateTime DateModified { get; set; }
         public string TitleText { get; set; }
         public bool TitleEnabled { get; set; }
-        public SurveyMonkeyApi.Language Language { get; set; }
+        public Language Language { get; set; }
         public int QuestionCount { get; set; }
         public int NumResponses { get; set; }
         public string AnalysisUrl { get; set; }
@@ -59,8 +59,8 @@ namespace SurveyMonkey
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class QuestionType
     {
-        public SurveyMonkeyApi.QuestionFamily Family { get; set; }
-        public SurveyMonkeyApi.QuestionSubtype Subtype { get; set; }
+        public QuestionFamily Family { get; set; }
+        public QuestionSubtype Subtype { get; set; }
     }
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
@@ -69,7 +69,7 @@ namespace SurveyMonkey
         public long AnswerId { get; set; }
         public int Position { get; set; }
         public string Text { get; set; }
-        public SurveyMonkeyApi.AnswerType Type { get; set; }
+        public AnswerType Type { get; set; }
         public bool Visible { get; set; }
         public int Weight { get; set; }
         public bool ApplyAllRows { get; set; }
@@ -94,7 +94,7 @@ namespace SurveyMonkey
         public DateTime DateModified { get; set; }
         public string Name { get; set; }
         public bool Open { get; set; }
-        public SurveyMonkeyApi.CollectorType Type { get; set; }
+        public CollectorType Type { get; set; }
         public string Url { get; set; }
         public int Completed { get; set; }
         public int Started { get; set; }
@@ -133,13 +133,13 @@ namespace SurveyMonkey
         public DateTime DateStart { get; set; }
         public DateTime DateModified { get; set; }
         public long CollectorId { get; set; }
-        public SurveyMonkeyApi.RespondentCollectionMode CollectionMode { get; set; }
+        public RespondentCollectionMode CollectionMode { get; set; }
         public string CustomId { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string IpAddress { get; set; }
-        public SurveyMonkeyApi.RespondentStatus Status { get; set; }
+        public RespondentStatus Status { get; set; }
         public string AnalysisUrl { get; set; }
         public string RecipientId { get; set; }
     }

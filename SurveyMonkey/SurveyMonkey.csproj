@@ -44,11 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="Responses.cs" />
-    <Compile Include="SurveyMonkeyApi.DataTypes.cs">
-      <DependentUpon>SurveyMonkeyApi.cs</DependentUpon>
-    </Compile>
     <Compile Include="SurveyMonkeyApi.Endpoints.cs">
       <DependentUpon>SurveyMonkeyApi.cs</DependentUpon>
     </Compile>

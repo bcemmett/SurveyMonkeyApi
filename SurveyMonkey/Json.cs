@@ -16,7 +16,7 @@ namespace SurveyMonkey
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public string Title { get; set; }
-        public SurveyMonkeyApi.Language LanguageId { get; set; }
+        public Language LanguageId { get; set; }
         public int QuestionCount { get; set; }
         public int NumResponses { get; set; }
         public string AnalysisUrl { get; set; }
@@ -46,7 +46,7 @@ namespace SurveyMonkey
         public long SurveyId { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
-        public SurveyMonkeyApi.Language LanguageId { get; set; }
+        public Language LanguageId { get; set; }
         public int NumResponses { get; set; }
         public int QuestionCount { get; set; }
         public string Nickname { get; set; }

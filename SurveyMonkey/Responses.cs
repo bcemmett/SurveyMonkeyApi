@@ -120,7 +120,7 @@ namespace SurveyMonkey
     public class ProcessedAnswer
     {
         public object Response { get; set; }
-        public SurveyMonkeyApi.QuestionFamily QuestionFamily { get; set; }
-        public SurveyMonkeyApi.QuestionSubtype QuestionSubtype { get; set; }
+        public QuestionFamily QuestionFamily { get; set; }
+        public QuestionSubtype QuestionSubtype { get; set; }
     }
 }
