@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SurveyMonkeyApi
+namespace SurveyMonkey
 {
     public class SingleChoiceAnswer
     {
@@ -120,7 +120,7 @@ namespace SurveyMonkeyApi
     public class ProcessedAnswer
     {
         public object Response { get; set; }
-        public SMApi.QuestionFamily QuestionFamily { get; set; }
-        public SMApi.QuestionSubtype QuestionSubtype { get; set; }
+        public SurveyMonkeyApi.QuestionFamily QuestionFamily { get; set; }
+        public SurveyMonkeyApi.QuestionSubtype QuestionSubtype { get; set; }
     }
 }

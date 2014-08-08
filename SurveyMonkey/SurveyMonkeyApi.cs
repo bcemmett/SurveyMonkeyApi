@@ -5,9 +5,9 @@ using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace SurveyMonkeyApi
+namespace SurveyMonkey
 {
-    public partial class SMApi
+    public partial class SurveyMonkeyApi
     {
         #region Members
 
@@ -23,24 +23,24 @@ namespace SurveyMonkeyApi
 
         #region Constructors
 
-        public SMApi(string apiKey, string oAuthSecret)
+        public SurveyMonkeyApi(string apiKey, string oAuthSecret)
         {
             SetSecretKeys(apiKey, oAuthSecret);
         }
 
-        public SMApi(string apiKey, string oAuthSecret, string customUrl)
+        public SurveyMonkeyApi(string apiKey, string oAuthSecret, string customUrl)
         {
             m_BaseUrl = customUrl;
             SetSecretKeys(apiKey, oAuthSecret);
         }
 
-        public SMApi(string apiKey, string oAuthSecret, int customDelay)
+        public SurveyMonkeyApi(string apiKey, string oAuthSecret, int customDelay)
         {
             m_RequestDelay = customDelay;
             SetSecretKeys(apiKey, oAuthSecret);
         }
 
-        public SMApi(string apiKey, string oAuthSecret, string customUrl, int customDelay)
+        public SurveyMonkeyApi(string apiKey, string oAuthSecret, string customUrl, int customDelay)
         {
             m_BaseUrl = customUrl;
             m_RequestDelay = customDelay;

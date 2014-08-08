@@ -4,9 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace SurveyMonkeyApi
+namespace SurveyMonkey
 {
-    public partial class SMApi
+    public partial class SurveyMonkeyApi
     {
         #region Fill all missing survey information
 

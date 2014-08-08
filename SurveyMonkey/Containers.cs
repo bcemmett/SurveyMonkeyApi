@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace SurveyMonkeyApi
+namespace SurveyMonkey
 {
     [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     internal class JsonSerializeGetSurveyList
@@ -12,7 +12,7 @@ namespace SurveyMonkeyApi
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
         public string Title { get; set; }
-        public SMApi.Language LanguageId { get; set; }
+        public SurveyMonkeyApi.Language LanguageId { get; set; }
         public int QuestionCount { get; set; }
         public int NumResponses { get; set; }
         public string AnalysisUrl { get; set; }
@@ -42,7 +42,7 @@ namespace SurveyMonkeyApi
         public long SurveyId { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
-        public SMApi.Language LanguageId { get; set; }
+        public SurveyMonkeyApi.Language LanguageId { get; set; }
         public int NumResponses { get; set; }
         public int QuestionCount { get; set; }
         public string Nickname { get; set; }
@@ -75,7 +75,7 @@ namespace SurveyMonkeyApi
         public DateTime DateModified { get; set; }
         public string TitleText { get; set; }
         public bool TitleEnabled { get; set; }
-        public SMApi.Language LanguageId { get; set; }
+        public SurveyMonkeyApi.Language LanguageId { get; set; }
         public int QuestionCount { get; set; }
         public int NumResponses { get; set; }
         public string AnalysisUrl { get; set; }
@@ -129,8 +129,8 @@ namespace SurveyMonkeyApi
     [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class QuestionType
     {
-        public SMApi.QuestionFamily Family { get; set; }
-        public SMApi.QuestionSubtype Subtype { get; set; }
+        public SurveyMonkeyApi.QuestionFamily Family { get; set; }
+        public SurveyMonkeyApi.QuestionSubtype Subtype { get; set; }
     }
 
     [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
@@ -139,7 +139,7 @@ namespace SurveyMonkeyApi
         public long AnswerId { get; set; }
         public int Position { get; set; }
         public string Text { get; set; }
-        public SMApi.AnswerType Type { get; set; }
+        public SurveyMonkeyApi.AnswerType Type { get; set; }
         public bool Visible { get; set; }
         public int Weight { get; set; }
         public bool ApplyAllRows { get; set; }
@@ -164,7 +164,7 @@ namespace SurveyMonkeyApi
         public DateTime DateModified { get; set; }
         public string Name { get; set; }
         public bool Open { get; set; }
-        public SMApi.CollectorType Type { get; set; }
+        public SurveyMonkeyApi.CollectorType Type { get; set; }
         public string Url { get; set; }
         public int Completed { get; set; }
         public int Started { get; set; }
@@ -203,13 +203,13 @@ namespace SurveyMonkeyApi
         public DateTime DateStart { get; set; }
         public DateTime DateModified { get; set; }
         public long CollectorId { get; set; }
-        public SMApi.RespondentCollectionMode CollectionMode { get; set; }
+        public SurveyMonkeyApi.RespondentCollectionMode CollectionMode { get; set; }
         public string CustomId { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string IpAddress { get; set; }
-        public SMApi.RespondentStatus Status { get; set; }
+        public SurveyMonkeyApi.RespondentStatus Status { get; set; }
         public string AnalysisUrl { get; set; }
         public string RecipientId { get; set; }
     }

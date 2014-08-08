@@ -2,9 +2,9 @@
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace SurveyMonkeyApi
+namespace SurveyMonkey
 {
-    public partial class SMApi
+    public partial class SurveyMonkeyApi
     {
         [JsonConverter(typeof(LaxEnumMatchingConverter))]
         public enum QuestionFamily

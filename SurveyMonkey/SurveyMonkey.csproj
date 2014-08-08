@@ -7,7 +7,7 @@
     <ProjectGuid>{69456A63-2D47-4A92-9A2D-60C2F10E931E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SurveyMonkeyApi</RootNamespace>
+    <RootNamespace>SurveyMonkey</RootNamespace>
     <AssemblyName>SurveyMonkeyApi</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -46,17 +46,17 @@
   <ItemGroup>
     <Compile Include="Json.cs" />
     <Compile Include="Responses.cs" />
-    <Compile Include="SMApi.DataTypes.cs">
-      <DependentUpon>SMApi.cs</DependentUpon>
+    <Compile Include="SurveyMonkeyApi.DataTypes.cs">
+      <DependentUpon>SurveyMonkeyApi.cs</DependentUpon>
     </Compile>
-    <Compile Include="SMApi.Endpoints.cs">
-      <DependentUpon>SMApi.cs</DependentUpon>
+    <Compile Include="SurveyMonkeyApi.Endpoints.cs">
+      <DependentUpon>SurveyMonkeyApi.cs</DependentUpon>
     </Compile>
-    <Compile Include="SMApi.DataProcessing.cs">
-      <DependentUpon>SMApi.cs</DependentUpon>
+    <Compile Include="SurveyMonkeyApi.DataProcessing.cs">
+      <DependentUpon>SurveyMonkeyApi.cs</DependentUpon>
     </Compile>
     <Compile Include="RequestSettings.cs" />
-    <Compile Include="SMApi.cs" />
+    <Compile Include="SurveyMonkeyApi.cs" />
     <Compile Include="Containers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

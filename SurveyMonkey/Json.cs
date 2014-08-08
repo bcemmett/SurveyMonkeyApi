@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace SurveyMonkeyApi
+namespace SurveyMonkey
 {
     //Using a custom converter to ignore underscores in the json returned by SM
 
