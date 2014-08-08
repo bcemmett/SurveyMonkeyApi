@@ -156,7 +156,7 @@ namespace SurveyMonkey
     [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
     public class EnterpriseDetails
     {
-        public int TotalSeatsInvoices { get; set; }
+        public int TotalSeatsInvoiced { get; set; }
         public int TotalSeatsActive { get; set; }
     }
 }
