@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 namespace SurveyMonkey
 {
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     internal class JsonSerializeGetSurveyList
     {
         public long SurveyId { get; set; }
@@ -40,7 +40,7 @@ namespace SurveyMonkey
         }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     internal class JsonSerializeGetSurveyDetails
     {
         public long SurveyId { get; set; }
@@ -72,7 +72,7 @@ namespace SurveyMonkey
         }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     internal class Title
     {
         public bool Enabled { get; set; }
@@ -81,7 +81,7 @@ namespace SurveyMonkey
 
     //Using a custom converter to ignore underscores in the json returned by SM
     //http://stackoverflow.com/questions/19792274/alternate-property-name-while-deserializing/19885911#19885911
-    internal class LaxPropertyNameMatchingConverter : JsonConverter
+    internal class LaxPropertyNameJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -120,7 +120,7 @@ namespace SurveyMonkey
     }
 
     //http://stackoverflow.com/questions/22752075/how-can-i-ignore-unknown-enum-values-during-json-deserialization/22755077#22755077
-    internal class LaxEnumMatchingConverter : JsonConverter
+    internal class LaxEnumJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

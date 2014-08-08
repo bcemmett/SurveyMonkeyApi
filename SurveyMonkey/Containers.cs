@@ -36,7 +36,7 @@ namespace SurveyMonkey
         }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class Page
     {
         public long PageId { get; set; }
@@ -45,7 +45,7 @@ namespace SurveyMonkey
         public List<Question> Questions { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class Question
     {
         public long QuestionId { get; set; }
@@ -56,14 +56,14 @@ namespace SurveyMonkey
         internal Dictionary<long, Answer> AnswersLookup { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class QuestionType
     {
         public SurveyMonkeyApi.QuestionFamily Family { get; set; }
         public SurveyMonkeyApi.QuestionSubtype Subtype { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class Answer
     {
         public long AnswerId { get; set; }
@@ -77,7 +77,7 @@ namespace SurveyMonkey
         public List<AnswerItem> Items { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class AnswerItem
     {
         public long AnswerId { get; set; }
@@ -86,7 +86,7 @@ namespace SurveyMonkey
         public string Text { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class Collector
     {
         public long CollectorId { get; set; }
@@ -101,7 +101,7 @@ namespace SurveyMonkey
         public List<Response> Responses { get; set; } 
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class Response
     {
         public long RespondentId { get; set; }
@@ -109,7 +109,7 @@ namespace SurveyMonkey
         public Respondent Respondent { get; set; } 
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class ResponseQuestion
     {
         public long QuestionId { get; set; }
@@ -117,7 +117,7 @@ namespace SurveyMonkey
         public ProcessedAnswer ProcessedAnswer { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class ResponseAnswer
     {
         public long Row { get; set; }
@@ -126,7 +126,7 @@ namespace SurveyMonkey
         public string Text { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class Respondent
     {
         public long RespondentId { get; set; }
@@ -144,7 +144,7 @@ namespace SurveyMonkey
         public string RecipientId { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class UserDetails
     {
         public bool IsPaidAccount { get; set; }
@@ -153,7 +153,7 @@ namespace SurveyMonkey
         public EnterpriseDetails EnterpriseDetails { get; set; }
     }
 
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class EnterpriseDetails
     {
         public int TotalSeatsInvoiced { get; set; }

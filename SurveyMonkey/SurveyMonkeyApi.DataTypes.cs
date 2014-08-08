@@ -6,7 +6,7 @@ namespace SurveyMonkey
 {
     public partial class SurveyMonkeyApi
     {
-        [JsonConverter(typeof(LaxEnumMatchingConverter))]
+        [JsonConverter(typeof(LaxEnumJsonConverter))]
         public enum QuestionFamily
         {
             NotSet = 0,
@@ -19,7 +19,7 @@ namespace SurveyMonkey
             Presentation
         }
 
-        [JsonConverter(typeof(LaxEnumMatchingConverter))]
+        [JsonConverter(typeof(LaxEnumJsonConverter))]
         public enum QuestionSubtype
         {
             NotSet = 0,
@@ -73,7 +73,7 @@ namespace SurveyMonkey
             Audience
         }
 
-        [JsonConverter(typeof(LaxEnumMatchingConverter))]
+        [JsonConverter(typeof(LaxEnumJsonConverter))]
         public enum RespondentCollectionMode
         {
             NotSet = 0,
