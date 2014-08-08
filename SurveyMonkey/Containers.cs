@@ -5,69 +5,6 @@ using Newtonsoft.Json;
 
 namespace SurveyMonkey
 {
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
-    internal class JsonSerializeGetSurveyList
-    {
-        public long SurveyId { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateModified { get; set; }
-        public string Title { get; set; }
-        public SurveyMonkeyApi.Language LanguageId { get; set; }
-        public int QuestionCount { get; set; }
-        public int NumResponses { get; set; }
-        public string AnalysisUrl { get; set; }
-        public string PreviewUrl { get; set; }
-
-        public Survey ToSurvey()
-        {
-            var survey = new Survey()
-            {
-                SurveyId = SurveyId,
-                DateCreated = DateCreated,
-                DateModified = DateModified,
-                Nickname = Title,
-                LanguageId = LanguageId,
-                QuestionCount = QuestionCount,
-                NumResponses = NumResponses,
-                AnalysisUrl = AnalysisUrl,
-                PreviewUrl = PreviewUrl
-            };
-            return survey;
-        }
-    }
-
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
-    internal class JsonSerializeGetSurveyDetails
-    {
-        public long SurveyId { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateModified { get; set; }
-        public SurveyMonkeyApi.Language LanguageId { get; set; }
-        public int NumResponses { get; set; }
-        public int QuestionCount { get; set; }
-        public string Nickname { get; set; }
-        public Title Title { get; set; }
-        public List<Page> Pages { get; set; }
-
-        public Survey ToSurvey()
-        {
-            var survey = new Survey()
-            {
-                SurveyId = SurveyId,
-                DateCreated = DateCreated,
-                DateModified = DateModified,
-                TitleText = Title.Text,
-                TitleEnabled = Title.Enabled,
-                LanguageId = LanguageId,
-                QuestionCount = QuestionCount,
-                NumResponses = NumResponses,
-                Nickname = Nickname,
-                Pages = Pages
-            };
-            return survey;
-        }
-    }
-
     public class Survey
     {
         public long SurveyId { get; set; }
@@ -97,13 +34,6 @@ namespace SurveyMonkey
                 return Pages == null ? null : Pages.SelectMany(page => page.Questions).ToList();
             }
         }
-    }
-
-    [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
-    internal class Title
-    {
-        public bool Enabled { get; set; }
-        public string Text { get; set; }
     }
 
     [JsonConverter(typeof(LaxPropertyNameMatchingConverter))]
