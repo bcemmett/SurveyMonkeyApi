@@ -36,7 +36,7 @@ namespace SurveyMonkey
             Survey surveyDetails = GetSurveyDetails(survey.SurveyId);
             survey.DateCreated = surveyDetails.DateCreated;
             survey.DateModified = surveyDetails.DateModified;
-            survey.LanguageId = surveyDetails.LanguageId;
+            survey.Language = surveyDetails.Language;
             survey.NumResponses = surveyDetails.NumResponses;
             survey.QuestionCount = surveyDetails.QuestionCount;
             survey.Nickname = surveyDetails.Nickname;

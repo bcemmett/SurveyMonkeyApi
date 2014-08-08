@@ -12,7 +12,7 @@ namespace SurveyMonkey
         public DateTime DateModified { get; set; }
         public string TitleText { get; set; }
         public bool TitleEnabled { get; set; }
-        public SurveyMonkeyApi.Language LanguageId { get; set; }
+        public SurveyMonkeyApi.Language Language { get; set; }
         public int QuestionCount { get; set; }
         public int NumResponses { get; set; }
         public string AnalysisUrl { get; set; }
