@@ -226,20 +226,20 @@ namespace SurveyMonkey
                     parameters.Add("order_asc", "True");
                 }
 
-                string order_by_string = "";
+                string orderByString = "";
                 if (OrderBy == Order.RespondentId)
                 {
-                    order_by_string = "respondent_id";
+                    orderByString = "respondent_id";
                 }
                 if (OrderBy == Order.DateStart)
                 {
-                    order_by_string = "date_start";
+                    orderByString = "date_start";
                 }
                 if (OrderBy == Order.DateModified)
                 {
-                    order_by_string = "date_modified";
+                    orderByString = "date_modified";
                 }
-                parameters.Add("order_by", order_by_string);
+                parameters.Add("order_by", orderByString);
 
                 var properties = typeof(GetRespondentListSettingsOptionalData).GetProperties();
                 List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
