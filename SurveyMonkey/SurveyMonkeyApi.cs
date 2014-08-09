@@ -77,6 +77,7 @@ namespace SurveyMonkey
                 result = webClient.UploadString(url, "POST", serializedParameters);
             }
 
+            _lastRequestTime = DateTime.Now;
             RequestsMade++;
             
             var o = JObject.Parse(result);
@@ -93,7 +94,7 @@ namespace SurveyMonkey
             {
                 Thread.Sleep(remainingTime);
             }
-            _lastRequestTime = DateTime.Now;
+            _lastRequestTime = DateTime.Now; //Also setting here as otherwise if a WebException is thrown while making the request it wouldn't get set at all
         }
 
         private void CheckSurveyMonkeyResponseIsValid(JObject o)
