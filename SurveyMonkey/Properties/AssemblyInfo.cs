@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SurveyMonkeyApi")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Library for accessing v2 of the Survey Monkey Api")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("RedGate Software")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SurveyMonkeyApi")]
-[assembly: AssemblyCopyright("Copyright © RedGate Software 2014")]
+[assembly: AssemblyCopyright("Copyright © Ben Emmett")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
