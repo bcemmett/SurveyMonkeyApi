@@ -84,12 +84,19 @@ namespace SurveyMonkey
 
         private List<Survey> GetSurveyListRequest(RequestSettings parameters)
         {
-            const string endPoint = "/surveys/get_survey_list";
-            var o = MakeApiRequest(endPoint, parameters);
-            var surveysJson = o["surveys"].ToString();
-            var surveysProcessedJson = JsonConvert.DeserializeObject<List<JsonSerializeGetSurveyList>>(surveysJson);
-            List<Survey> surveys = surveysProcessedJson.Select(x => x.ToSurvey()).ToList();
-            return surveys;
+            try
+            {
+                const string endPoint = "/surveys/get_survey_list";
+                var o = MakeApiRequest(endPoint, parameters);
+                var surveysJson = o["surveys"].ToString();
+                var surveysProcessedJson = JsonConvert.DeserializeObject<List<JsonSerializeGetSurveyList>>(surveysJson);
+                List<Survey> surveys = surveysProcessedJson.Select(x => x.ToSurvey()).ToList();
+                return surveys;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
         }
 
         #endregion
@@ -98,14 +105,20 @@ namespace SurveyMonkey
 
         public Survey GetSurveyDetails(long surveyId)
         {
-            const string endPoint = "/surveys/get_survey_details";
-            var parameters = new RequestSettings();
-            parameters.Add("survey_id", surveyId.ToString());
-            var o = MakeApiRequest(endPoint, parameters);
-            var surveyJson = o.ToString();
-            var surveysProcessedJson = JsonConvert.DeserializeObject<JsonSerializeGetSurveyDetails>(surveyJson);
-            Survey survey = surveysProcessedJson.ToSurvey();
-            return survey;
+            try {
+                const string endPoint = "/surveys/get_survey_details";
+                var parameters = new RequestSettings();
+                parameters.Add("survey_id", surveyId.ToString());
+                var o = MakeApiRequest(endPoint, parameters);
+                var surveyJson = o.ToString();
+                var surveysProcessedJson = JsonConvert.DeserializeObject<JsonSerializeGetSurveyDetails>(surveyJson);
+                Survey survey = surveysProcessedJson.ToSurvey();
+                return survey;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
         }
 
         #endregion
@@ -157,7 +170,6 @@ namespace SurveyMonkey
             return GetCollectorList(surveyId, page, new GetCollectorListSettings());
         }
 
-
         //Limit the page size returned
         public List<Collector> GetCollectorList(long surveyId, int page, int pageSize, GetCollectorListSettings settings)
         {
@@ -173,7 +185,6 @@ namespace SurveyMonkey
             return GetCollectorList(surveyId, page, pageSize, new GetCollectorListSettings());
         }
 
-
         private List<Collector> GetCollectorListPage(long surveyId, int page, int pageSize, bool limitPageSize, GetCollectorListSettings settings)
         {
             RequestSettings parameters = settings.Serialized;
@@ -188,11 +199,17 @@ namespace SurveyMonkey
 
         private List<Collector> GetCollectorListRequest(RequestSettings parameters)
         {
-            const string endPoint = "/surveys/get_collector_list";
-            var o = MakeApiRequest(endPoint, parameters);
-            var collectorsJson = o["collectors"].ToString();
-            List<Collector> collectors = JsonConvert.DeserializeObject<List<Collector>>(collectorsJson);
-            return collectors;
+            try {
+                const string endPoint = "/surveys/get_collector_list";
+                var o = MakeApiRequest(endPoint, parameters);
+                var collectorsJson = o["collectors"].ToString();
+                List<Collector> collectors = JsonConvert.DeserializeObject<List<Collector>>(collectorsJson);
+                return collectors;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
         }
 
         #endregion
@@ -277,11 +294,17 @@ namespace SurveyMonkey
 
         private List<Respondent> GetRespondentListRequest(RequestSettings parameters)
         {
-            const string endPoint = "/surveys/get_respondent_list";
-            var o = MakeApiRequest(endPoint, parameters);
-            var respondentsJson = o["respondents"].ToString();
-            List<Respondent> respondents = JsonConvert.DeserializeObject<List<Respondent>>(respondentsJson);
-            return respondents;
+            try {
+                const string endPoint = "/surveys/get_respondent_list";
+                var o = MakeApiRequest(endPoint, parameters);
+                var respondentsJson = o["respondents"].ToString();
+                List<Respondent> respondents = JsonConvert.DeserializeObject<List<Respondent>>(respondentsJson);
+                return respondents;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
         }
 
         #endregion
@@ -290,14 +313,20 @@ namespace SurveyMonkey
 
         public List<Response> GetResponses(long surveyId, List<long> respondents)
         {
-            const string endPoint = "/surveys/get_responses";
-            var parameters = new RequestSettings();
-            parameters.Add("survey_id", surveyId.ToString());
-            parameters.Add("respondent_ids", respondents.Select(r => r.ToString()));
-            var o = MakeApiRequest(endPoint, parameters);
-            var responsesJson = o.ToString();
-            List<Response> responses = JsonConvert.DeserializeObject<List<Response>>(responsesJson);
-            return responses;
+            try {
+                const string endPoint = "/surveys/get_responses";
+                var parameters = new RequestSettings();
+                parameters.Add("survey_id", surveyId.ToString());
+                parameters.Add("respondent_ids", respondents.Select(r => r.ToString()));
+                var o = MakeApiRequest(endPoint, parameters);
+                var responsesJson = o.ToString();
+                List<Response> responses = JsonConvert.DeserializeObject<List<Response>>(responsesJson);
+                return responses;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
         }
 
         #endregion
@@ -306,13 +335,19 @@ namespace SurveyMonkey
 
         public Collector GetResponseCounts(long collectorId)
         {
-            const string endPoint = "/surveys/get_response_counts";
-            var parameters = new RequestSettings();
-            parameters.Add("collector_id", collectorId.ToString());
-            var o = MakeApiRequest(endPoint, parameters);
-            var collectorJson = o.ToString();
-            Collector collector = JsonConvert.DeserializeObject<Collector>(collectorJson);
-            return collector;
+            try {
+                const string endPoint = "/surveys/get_response_counts";
+                var parameters = new RequestSettings();
+                parameters.Add("collector_id", collectorId.ToString());
+                var o = MakeApiRequest(endPoint, parameters);
+                var collectorJson = o.ToString();
+                Collector collector = JsonConvert.DeserializeObject<Collector>(collectorJson);
+                return collector;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
         }
 
         #endregion
@@ -321,12 +356,18 @@ namespace SurveyMonkey
 
         public UserDetails GetUserDetails()
         {
-            const string endPoint = "/user/get_user_details";
-            var parameters = new RequestSettings();
-            var o = MakeApiRequest(endPoint, parameters);
-            var userDetailsJson = o["user_details"].ToString();
-            UserDetails userDetails = JsonConvert.DeserializeObject<UserDetails>(userDetailsJson);
-            return userDetails;
+            try {
+                const string endPoint = "/user/get_user_details";
+                var parameters = new RequestSettings();
+                var o = MakeApiRequest(endPoint, parameters);
+                var userDetailsJson = o["user_details"].ToString();
+                UserDetails userDetails = JsonConvert.DeserializeObject<UserDetails>(userDetailsJson);
+                return userDetails;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
         }
 
         #endregion

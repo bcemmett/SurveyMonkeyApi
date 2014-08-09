@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace SurveyMonkey
@@ -158,5 +159,30 @@ namespace SurveyMonkey
     {
         public int TotalSeatsInvoiced { get; set; }
         public int TotalSeatsActive { get; set; }
+    }
+
+    [Serializable]
+    public class SurveyMonkeyException : Exception
+    {
+        public SurveyMonkeyException()
+        {
+        }
+
+        public SurveyMonkeyException(string message)
+            : base(message)
+        {
+        }
+
+        public SurveyMonkeyException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+
+        protected SurveyMonkeyException(
+            SerializationInfo info,
+            StreamingContext context)
+            : base(info, context)
+        {
+        }
     }
 }

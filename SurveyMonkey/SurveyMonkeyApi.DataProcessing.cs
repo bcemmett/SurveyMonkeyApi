@@ -20,11 +20,18 @@ namespace SurveyMonkey
 
         public void FillMissingSurveyInformation(Survey survey)
         {
-            FillMissingCollectorDetails(survey);
-            FillMissingResponseCounts(survey);
-            FillMissingSurveyDetails(survey);
-            FillMissingResponseDetails(survey);
-            MatchResponsesToSurveyStructure(survey);
+            try
+            {
+                FillMissingCollectorDetails(survey);
+                FillMissingResponseCounts(survey);
+                FillMissingSurveyDetails(survey);
+                FillMissingResponseDetails(survey);
+                MatchResponsesToSurveyStructure(survey);
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Could not fill missing survey information", e);
+            }
         }
 
         #endregion
