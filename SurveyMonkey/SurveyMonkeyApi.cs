@@ -11,13 +11,12 @@ namespace SurveyMonkey
     {
         #region Members
 
-        private string m_ApiKey;
-        private string m_OAuthSecret;
-        private string m_BaseUrl = "https://api.surveymonkey.net/v2";
-        private int m_RequestDelay = 500;
-        private DateTime m_LastRequestTime = DateTime.MinValue;
-        private int m_RequestsMade = 0;
-        public int RequestsMade {get { return m_RequestsMade; }}
+        private string _apiKey;
+        private string _oAuthSecret;
+        private string _baseUrl = "https://api.surveymonkey.net/v2";
+        private int _rateLimitDelay = 500;
+        private DateTime _lastRequestTime = DateTime.MinValue;
+        public int RequestsMade { get; private set; }
 
         #endregion
 
@@ -28,22 +27,22 @@ namespace SurveyMonkey
             SetSecretKeys(apiKey, oAuthSecret);
         }
 
-        public SurveyMonkeyApi(string apiKey, string oAuthSecret, string customUrl)
+        public SurveyMonkeyApi(string apiKey, string oAuthSecret, string baseUrl)
         {
-            m_BaseUrl = customUrl;
+            _baseUrl = baseUrl;
             SetSecretKeys(apiKey, oAuthSecret);
         }
 
-        public SurveyMonkeyApi(string apiKey, string oAuthSecret, int customDelay)
+        public SurveyMonkeyApi(string apiKey, string oAuthSecret, int rateLimitDelay)
         {
-            m_RequestDelay = customDelay;
+            _rateLimitDelay = rateLimitDelay;
             SetSecretKeys(apiKey, oAuthSecret);
         }
 
-        public SurveyMonkeyApi(string apiKey, string oAuthSecret, string customUrl, int customDelay)
+        public SurveyMonkeyApi(string apiKey, string oAuthSecret, string baseUrl, int rateLimitDelay)
         {
-            m_BaseUrl = customUrl;
-            m_RequestDelay = customDelay;
+            _baseUrl = baseUrl;
+            _rateLimitDelay = rateLimitDelay;
             SetSecretKeys(apiKey, oAuthSecret);
         }
 
@@ -53,8 +52,8 @@ namespace SurveyMonkey
             {
                 throw new ArgumentNullException();
             }
-            m_ApiKey = apiKey;
-            m_OAuthSecret = oAuthSecret;
+            _apiKey = apiKey;
+            _oAuthSecret = oAuthSecret;
         }
 
         #endregion
@@ -65,7 +64,7 @@ namespace SurveyMonkey
         {
             RateLimit();
 
-            string url = m_BaseUrl + endPoint;
+            string url = _baseUrl + endPoint;
             var serializedParameters = JsonConvert.SerializeObject(data);
             string result;
 
@@ -73,12 +72,12 @@ namespace SurveyMonkey
             {
                 webClient.Encoding = Encoding.UTF8;
                 webClient.Headers.Add("Content-Type", "application/json");
-                webClient.Headers.Add("Authorization", "Bearer " + m_OAuthSecret);
-                webClient.QueryString.Add("api_key", m_ApiKey);
+                webClient.Headers.Add("Authorization", "Bearer " + _oAuthSecret);
+                webClient.QueryString.Add("api_key", _apiKey);
                 result = webClient.UploadString(url, "POST", serializedParameters);
             }
 
-            m_RequestsMade++;
+            RequestsMade++;
             
             var o = JObject.Parse(result);
             CheckSurveyMonkeyResponseIsValid(o);
@@ -87,14 +86,14 @@ namespace SurveyMonkey
 
         private void RateLimit()
         {
-            TimeSpan timeSpan = DateTime.Now - m_LastRequestTime;
+            TimeSpan timeSpan = DateTime.Now - _lastRequestTime;
             int elapsedTime = (int)timeSpan.TotalMilliseconds;
-            int remainingTime = m_RequestDelay - elapsedTime;
-            if ((m_LastRequestTime != DateTime.MinValue) && (remainingTime > 0))
+            int remainingTime = _rateLimitDelay - elapsedTime;
+            if ((_lastRequestTime != DateTime.MinValue) && (remainingTime > 0))
             {
                 Thread.Sleep(remainingTime);
             }
-            m_LastRequestTime = DateTime.Now;
+            _lastRequestTime = DateTime.Now;
         }
 
         private void CheckSurveyMonkeyResponseIsValid(JObject o)
