@@ -21,6 +21,8 @@ namespace SurveyMonkey
         public string Nickname { get; set; }
         public List<Page> Pages { get; set; }
         public List<Collector> Collectors { get; set; }
+        public int CustomVariableCount { get; set; }
+        public List<CustomVariable> CustomVariables { get; set; }
         public List<Response> Responses
         {
             get
@@ -143,6 +145,13 @@ namespace SurveyMonkey
         public RespondentStatus Status { get; set; }
         public string AnalysisUrl { get; set; }
         public string RecipientId { get; set; }
+    }
+
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class CustomVariable
+    {
+        public long QuestionId { get; set; }
+        public string VariableLabel { get; set; }
     }
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]

@@ -52,6 +52,8 @@ namespace SurveyMonkey
         public string Nickname { get; set; }
         public Title Title { get; set; }
         public List<Page> Pages { get; set; }
+        public int CustomVariableCount { get; set; }
+        public List<CustomVariable> CustomVariables { get; set; }
 
         public Survey ToSurvey()
         {
@@ -66,7 +68,9 @@ namespace SurveyMonkey
                 QuestionCount = QuestionCount,
                 NumResponses = NumResponses,
                 Nickname = Nickname,
-                Pages = Pages
+                Pages = Pages,
+                CustomVariableCount = CustomVariableCount,
+                CustomVariables = CustomVariables
             };
             return survey;
         }
