@@ -164,7 +164,7 @@ namespace SurveyMonkey
                 {
                     QuestionFamily = questionsLookup[responseQuestion.QuestionId].Type.Family,
                     QuestionSubtype = questionsLookup[responseQuestion.QuestionId].Type.Subtype,
-                    Response = MatchResponseQuestionToSurveyStructure(questionsLookup[responseQuestion.QuestionId], responseQuestion.Answers)
+                    Response = questionsLookup.ContainsKey(responseQuestion.QuestionId) ? MatchResponseQuestionToSurveyStructure(questionsLookup[responseQuestion.QuestionId], responseQuestion.Answers) : null
                 };                
             }
         }
