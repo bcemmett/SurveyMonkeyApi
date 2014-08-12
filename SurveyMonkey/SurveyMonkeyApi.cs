@@ -80,8 +80,7 @@ namespace SurveyMonkey
             _lastRequestTime = DateTime.Now;
             RequestsMade++;
             
-            var o = JObject.Parse(result);
-            CheckSurveyMonkeyResponseIsValid(o);
+            JObject o = ParseApiResponse(result);
             return o["data"];
         }
 
@@ -97,13 +96,26 @@ namespace SurveyMonkey
             _lastRequestTime = DateTime.Now; //Also setting here as otherwise if a WebException is thrown while making the request it wouldn't get set at all
         }
 
-        private void CheckSurveyMonkeyResponseIsValid(JObject o)
+        private JObject ParseApiResponse(string apiResponse)
         {
+            JObject o;
+            
+            try
+            {
+                o = JObject.Parse(apiResponse);
+            }
+            catch (JsonReaderException e)
+            {
+                string msg = String.Format("Could not parse the data returned by the API: {0}", apiResponse);
+                throw new WebException(msg, e);
+            }
+
             if ((int)o["status"] != 0)
             {
                 string msg = String.Format("Problem querying the Survey Monkey API, error code {0}: {1}", (string) o["status"], (string) o["errmsg"]);
                 throw new WebException(msg);
             }
+            return o;
         }
 
         #endregion
