@@ -127,5 +127,6 @@ namespace SurveyMonkey
         public object Response { get; set; }
         public QuestionFamily QuestionFamily { get; set; }
         public QuestionSubtype QuestionSubtype { get; set; }
+        public string QuestionHeading { get; set; }
     }
 }

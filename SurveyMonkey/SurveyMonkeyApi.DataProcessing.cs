@@ -176,6 +176,7 @@ namespace SurveyMonkey
                     {
                         QuestionFamily = questionsLookup[responseQuestion.QuestionId].Type.Family,
                         QuestionSubtype = questionsLookup[responseQuestion.QuestionId].Type.Subtype,
+                        QuestionHeading = questionsLookup[responseQuestion.QuestionId].Heading,
                         Response = MatchResponseQuestionToSurveyStructure(questionsLookup[responseQuestion.QuestionId], responseQuestion.Answers)
                     };
                 }
@@ -187,6 +188,7 @@ namespace SurveyMonkey
                     {
                         QuestionFamily = QuestionFamily.CustomVariable,
                         QuestionSubtype = QuestionSubtype.CustomVariable,
+                        QuestionHeading = customVariablesLookup[responseQuestion.QuestionId].VariableLabel,
                         Response = new CustomVariableAnswer
                         {
                             Text = responseQuestion.Answers.First().Text
