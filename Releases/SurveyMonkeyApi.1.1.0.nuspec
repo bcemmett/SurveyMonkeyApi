@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>SurveyMonkeyApi</id>
+        <version>1.1.0</version>
+        <title>Survey Monkey Api</title>
+        <authors>Ben Emmett</authors>
+        <owners>Ben Emmett</owners>
+        <licenseUrl>https://github.com/bcemmett/SurveyMonkeyApi/blob/master/license.txt</licenseUrl>
+        <projectUrl>https://github.com/bcemmett/SurveyMonkeyApi</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Makes it easy to work with the Survey Monkey API from within .NET, handles paging and rate-limiting for you, and processes raw data to show how responses map to questions.</description>
+        <summary>A library for accessing v2 of the Survey Monkey API.</summary>
+        <releaseNotes>-Added MIT license
+-Added support for custom variables
+-Added question text to processed answer
+-More resilient error handling</releaseNotes>
+        <copyright>Ben Emmett</copyright>
+        <language />
+        <dependencies>
+            <dependency id="Newtonsoft.Json" version="6.0.4" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\SurveyMonkey\bin\Release\SurveyMonkeyApi.dll" target="lib\SurveyMonkeyApi.dll" />
+    </files>
+</package>
