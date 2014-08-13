@@ -23,6 +23,7 @@ namespace SurveyMonkey
         public List<Collector> Collectors { get; set; }
         public int CustomVariableCount { get; set; }
         public List<CustomVariable> CustomVariables { get; set; }
+        internal Dictionary<long, CustomVariable> CustomVariablesLookup { get; set; }
         public List<Response> Responses
         {
             get

@@ -50,6 +50,8 @@ namespace SurveyMonkey
             survey.TitleText = surveyDetails.TitleText;
             survey.TitleEnabled = surveyDetails.TitleEnabled;
             survey.Pages = surveyDetails.Pages;
+            survey.CustomVariables = surveyDetails.CustomVariables;
+            survey.CustomVariableCount = surveyDetails.CustomVariableCount;
         }
 
         #endregion
@@ -141,31 +143,58 @@ namespace SurveyMonkey
             {
                 question.AnswersLookup = question.Answers.ToDictionary(a => a.AnswerId, a => a);
             }
+            
+            if (survey.CustomVariables != null)
+            {
+                survey.CustomVariablesLookup = survey.CustomVariables.ToDictionary(c => c.QuestionId, c => c);
+            }
+            
             Dictionary<long, Question> questionsLookup = survey.Questions.ToDictionary(q => q.QuestionId, q => q);
+            
             foreach (var collector in survey.Collectors)
             {
-                MatchCollectorsToSurveyStructure(questionsLookup, collector);
+                MatchCollectorsToSurveyStructure(questionsLookup, survey.CustomVariablesLookup, collector);
             }
         }
 
-        private void MatchCollectorsToSurveyStructure(Dictionary<long, Question> questionsLookup, Collector collector)
+        private void MatchCollectorsToSurveyStructure(Dictionary<long, Question> questionsLookup, Dictionary<long, CustomVariable> customVariablesLookup, Collector collector)
         {
             foreach (var response in collector.Responses)
             {
-                MatchIndividualResponseToSurveyStructure(questionsLookup, response);
+                MatchIndividualResponseToSurveyStructure(questionsLookup, customVariablesLookup, response);
             }
         }
 
-        private void MatchIndividualResponseToSurveyStructure(Dictionary<long, Question> questionsLookup, Response response)
+        private void MatchIndividualResponseToSurveyStructure(Dictionary<long, Question> questionsLookup, Dictionary<long, CustomVariable> customVariablesLookup, Response response)
         {
             foreach (var responseQuestion in response.Questions)
             {
-                responseQuestion.ProcessedAnswer = new ProcessedAnswer
+                //First try to match the ResponseQuestion with the survey structure
+                if (questionsLookup.ContainsKey(responseQuestion.QuestionId))
                 {
-                    QuestionFamily = questionsLookup[responseQuestion.QuestionId].Type.Family,
-                    QuestionSubtype = questionsLookup[responseQuestion.QuestionId].Type.Subtype,
-                    Response = questionsLookup.ContainsKey(responseQuestion.QuestionId) ? MatchResponseQuestionToSurveyStructure(questionsLookup[responseQuestion.QuestionId], responseQuestion.Answers) : null
-                };                
+                    responseQuestion.ProcessedAnswer = new ProcessedAnswer
+                    {
+                        QuestionFamily = questionsLookup[responseQuestion.QuestionId].Type.Family,
+                        QuestionSubtype = questionsLookup[responseQuestion.QuestionId].Type.Subtype,
+                        Response = MatchResponseQuestionToSurveyStructure(questionsLookup[responseQuestion.QuestionId], responseQuestion.Answers)
+                    };
+                }
+                
+                //Failing that, try to find a match in the custom variables
+                else if(customVariablesLookup != null && customVariablesLookup.ContainsKey(responseQuestion.QuestionId))
+                {
+                    responseQuestion.ProcessedAnswer = new ProcessedAnswer
+                    {
+                        QuestionFamily = QuestionFamily.CustomVariable,
+                        QuestionSubtype = QuestionSubtype.CustomVariable,
+                        Response = new CustomVariableAnswer
+                        {
+                            Text = responseQuestion.Answers.First().Text
+                        }
+                    };
+                }
+                
+                //If there's still no match (probably because the question's been deleted), leave ProcessedAnswer as null
             }
         }
 

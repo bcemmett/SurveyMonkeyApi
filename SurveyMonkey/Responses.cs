@@ -117,6 +117,11 @@ namespace SurveyMonkey
         public List<string> Choices { get; set; }
     }
 
+    public class CustomVariableAnswer
+    {
+        public string Text { get; set; }
+    }
+
     public class ProcessedAnswer
     {
         public object Response { get; set; }

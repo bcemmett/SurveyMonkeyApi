@@ -12,7 +12,8 @@ namespace SurveyMonkey
         OpenEnded,
         Demographic,
         DateTime,
-        Presentation
+        Presentation,
+        CustomVariable
     }
 
     [JsonConverter(typeof(LaxEnumJsonConverter))]
@@ -36,7 +37,8 @@ namespace SurveyMonkey
         TimeOnly,
         DescriptiveText,
         Image,
-        Numerical
+        Numerical,
+        CustomVariable
     }
 
     public enum AnswerType
