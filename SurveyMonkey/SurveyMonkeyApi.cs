@@ -17,6 +17,8 @@ namespace SurveyMonkey
         private int _rateLimitDelay = 500;
         private DateTime _lastRequestTime = DateTime.MinValue;
         public int RequestsMade { get; private set; }
+        public int QuotaAllotted { get; private set; }
+        public int QuotaUsed { get; private set; }
 
         #endregion
 
@@ -75,6 +77,7 @@ namespace SurveyMonkey
                 webClient.Headers.Add("Authorization", "Bearer " + _oAuthSecret);
                 webClient.QueryString.Add("api_key", _apiKey);
                 result = webClient.UploadString(url, "POST", serializedParameters);
+                UpdateQuotaInformation(webClient.ResponseHeaders);
             }
 
             _lastRequestTime = DateTime.Now;
@@ -116,6 +119,19 @@ namespace SurveyMonkey
                 throw new WebException(msg);
             }
             return o;
+        }
+
+        private void UpdateQuotaInformation(WebHeaderCollection headers)
+        {
+            try
+            {
+                QuotaAllotted = Int32.Parse(headers["X-Plan-Quota-Allotted"]);
+                QuotaUsed = Int32.Parse(headers["X-Plan-Quota-Current"]);
+            }
+            catch (Exception e)
+            {
+                throw new WebException("Invalid quota header information returned by the API", e);
+            }
         }
 
         #endregion
