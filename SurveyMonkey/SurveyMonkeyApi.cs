@@ -128,9 +128,10 @@ namespace SurveyMonkey
                 QuotaAllotted = Int32.Parse(headers["X-Plan-Quota-Allotted"]);
                 QuotaUsed = Int32.Parse(headers["X-Plan-Quota-Current"]);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw new WebException("Invalid quota header information returned by the API", e);
+                //Just swallow anything. The information's not critical and I'm not sure the header's guaranteed to exist.
+                //If there's an actual problem it'll be more helpful to throw in ParseApiResponse()
             }
         }
 
