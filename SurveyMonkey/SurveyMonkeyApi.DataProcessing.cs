@@ -328,7 +328,10 @@ namespace SurveyMonkey
             foreach (var responseAnswer in responseAnswers)
             {
                 var propertyName = question.AnswersLookup[responseAnswer.Row].Type.ToString();
-                typeof(DemographicAnswer).GetProperty(propertyName, (BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)).SetValue(reply, responseAnswer.Text);
+                if (typeof(DemographicAnswer).GetProperty(propertyName, (BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)) != null)
+                {
+                    typeof(DemographicAnswer).GetProperty(propertyName, (BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)).SetValue(reply, responseAnswer.Text);
+                }
             }
             return reply;
         }
