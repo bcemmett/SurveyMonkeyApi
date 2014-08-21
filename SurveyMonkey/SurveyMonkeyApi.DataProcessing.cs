@@ -69,7 +69,7 @@ namespace SurveyMonkey
 
         private void FillMissingResponseDetails(Survey survey)
         {
-            List<Response> responses = GetAllSurveyResponses(survey);
+            IEnumerable<Response> responses = GetAllSurveyResponses(survey);
 
             //Need to initialise responses before adding to them
             foreach (var collector in survey.Collectors)
@@ -86,7 +86,7 @@ namespace SurveyMonkey
             survey.Collectors = collectorLookup.Values.ToList();
         }
 
-        private List<Response> GetAllSurveyResponses(Survey survey)
+        private IEnumerable<Response> GetAllSurveyResponses(Survey survey)
         {
             const int maxRespondentsPerPage = 100;
             List<Respondent> respondents = GetRespondentList(survey.SurveyId);
@@ -200,7 +200,7 @@ namespace SurveyMonkey
             }
         }
 
-        private object MatchResponseQuestionToSurveyStructure(Question question, List<ResponseAnswer> responseAnswers)
+        private object MatchResponseQuestionToSurveyStructure(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             switch (question.Type.Family)
             {
@@ -248,7 +248,7 @@ namespace SurveyMonkey
             return null;
         }
 
-        private SingleChoiceAnswer MatchSingleChoiceAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private SingleChoiceAnswer MatchSingleChoiceAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new SingleChoiceAnswer();
             
@@ -270,7 +270,7 @@ namespace SurveyMonkey
             return reply;
         }
 
-        private MultipleChoiceAnswer MatchMultipleChoiceAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private MultipleChoiceAnswer MatchMultipleChoiceAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new MultipleChoiceAnswer
             {
@@ -292,16 +292,17 @@ namespace SurveyMonkey
             return reply;
         }
 
-        private OpenEndedSingleAnswer MatchOpenEndedSingleAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private OpenEndedSingleAnswer MatchOpenEndedSingleAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
-            var reply = new OpenEndedSingleAnswer();
-
-            reply.Text = responseAnswers.First().Text;
+            var reply = new OpenEndedSingleAnswer
+            {
+                Text = responseAnswers.First().Text
+            };
 
             return reply;
         }
 
-        private OpenEndedMultipleAnswer MatchOpenEndedMultipleAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private OpenEndedMultipleAnswer MatchOpenEndedMultipleAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new OpenEndedMultipleAnswer
             {
@@ -310,16 +311,17 @@ namespace SurveyMonkey
 
             foreach (var responseAnswer in responseAnswers)
             {
-                var openEndedMultipleAnswerReply = new OpenEndedMultipleAnswerRow();
-                openEndedMultipleAnswerReply.RowName = question.AnswersLookup[responseAnswer.Row].Text;
-                openEndedMultipleAnswerReply.Text = responseAnswer.Text;
-                reply.Rows.Add(openEndedMultipleAnswerReply);
+                reply.Rows.Add(new OpenEndedMultipleAnswerRow
+                {
+                    RowName = question.AnswersLookup[responseAnswer.Row].Text,
+                    Text = responseAnswer.Text
+                });
             }
 
             return reply;
         }
 
-        private DemographicAnswer MatchDemographicAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private DemographicAnswer MatchDemographicAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new DemographicAnswer();
 
@@ -331,7 +333,7 @@ namespace SurveyMonkey
             return reply;
         }
 
-        private DateTimeAnswer MatchDateTimeAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private DateTimeAnswer MatchDateTimeAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new DateTimeAnswer
             {
@@ -340,9 +342,11 @@ namespace SurveyMonkey
 
             foreach (var responseAnswer in responseAnswers)
             {
-                var dateTimeAnswerReply = new DateTimeAnswerRow();
-                dateTimeAnswerReply.RowName = question.AnswersLookup[responseAnswer.Row].Text;
-                dateTimeAnswerReply.TimeStamp = DateTime.MinValue;
+                var dateTimeAnswerReply = new DateTimeAnswerRow
+                {
+                    RowName = question.AnswersLookup[responseAnswer.Row].Text,
+                    TimeStamp = DateTime.MinValue
+                };
 
                 DateTime timeStamp = DateTime.Parse(responseAnswer.Text, CultureInfo.CreateSpecificCulture("en-US"));
                 if (question.Type.Subtype == QuestionSubtype.TimeOnly) //Where only a time is given, use date component from DateTime.MinValue
@@ -357,10 +361,11 @@ namespace SurveyMonkey
 
                 reply.Rows.Add(dateTimeAnswerReply);
             }
+
             return reply;
         }
 
-        private MatrixMenuAnswer MatchMatrixMenuAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private MatrixMenuAnswer MatchMatrixMenuAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new MatrixMenuAnswer
             {
@@ -398,7 +403,7 @@ namespace SurveyMonkey
             return reply;
         }
 
-        private MatrixRankingAnswer MatchMatrixRankingAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private MatrixRankingAnswer MatchMatrixRankingAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new MatrixRankingAnswer
             {
@@ -417,10 +422,11 @@ namespace SurveyMonkey
                     reply.Ranking.Add(question.AnswersLookup[responseAnswer.Col].Weight, question.AnswersLookup[responseAnswer.Row].Text);
                 }
             }
+
             return reply;
         }
 
-        private MatrixRatingAnswer MatchMatrixRatingAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private MatrixRatingAnswer MatchMatrixRatingAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new MatrixRatingAnswer
             {
@@ -435,8 +441,10 @@ namespace SurveyMonkey
                 }
                 else
                 {
-                    var row = new MatrixRatingAnswerRow();
-                    row.RowName = question.AnswersLookup[responseAnswer.Row].Text;
+                    var row = new MatrixRatingAnswerRow
+                    {
+                        RowName = question.AnswersLookup[responseAnswer.Row].Text
+                    };
 
                     if (responseAnswer.Col != 0)
                     {
@@ -454,7 +462,7 @@ namespace SurveyMonkey
             return reply;
         }
 
-        private MatrixSingleAnswer MatchMatrixSingleAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private MatrixSingleAnswer MatchMatrixSingleAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new MatrixSingleAnswer
             {
@@ -480,7 +488,7 @@ namespace SurveyMonkey
             return reply;
         }
 
-        private MatrixMultiAnswer MatchMatrixMultiAnswer(Question question, List<ResponseAnswer> responseAnswers)
+        private MatrixMultiAnswer MatchMatrixMultiAnswer(Question question, IEnumerable<ResponseAnswer> responseAnswers)
         {
             var reply = new MatrixMultiAnswer();
 
