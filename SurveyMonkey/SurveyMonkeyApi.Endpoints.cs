@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace SurveyMonkey
 {
@@ -88,9 +87,8 @@ namespace SurveyMonkey
             {
                 const string endPoint = "/surveys/get_survey_list";
                 var o = MakeApiRequest(endPoint, parameters);
-                var surveysJson = o["surveys"].ToString();
-                var surveysProcessedJson = JsonConvert.DeserializeObject<List<JsonSerializeGetSurveyList>>(surveysJson);
-                List<Survey> surveys = surveysProcessedJson.Select(x => x.ToSurvey()).ToList();
+                List<JsonSerializeGetSurveyList> rawSurveys = o["surveys"].ToObject<List<JsonSerializeGetSurveyList>>();
+                List<Survey> surveys = rawSurveys.Select(x => x.ToSurvey()).ToList();
                 return surveys;
             }
             catch (Exception e)
@@ -110,9 +108,8 @@ namespace SurveyMonkey
                 var parameters = new RequestSettings();
                 parameters.Add("survey_id", surveyId.ToString());
                 var o = MakeApiRequest(endPoint, parameters);
-                var surveyJson = o.ToString();
-                var surveysProcessedJson = JsonConvert.DeserializeObject<JsonSerializeGetSurveyDetails>(surveyJson);
-                Survey survey = surveysProcessedJson.ToSurvey();
+                JsonSerializeGetSurveyDetails rawSurvey = o.ToObject<JsonSerializeGetSurveyDetails>();
+                Survey survey = rawSurvey.ToSurvey();
                 return survey;
             }
             catch (Exception e)
@@ -202,8 +199,7 @@ namespace SurveyMonkey
             try {
                 const string endPoint = "/surveys/get_collector_list";
                 var o = MakeApiRequest(endPoint, parameters);
-                var collectorsJson = o["collectors"].ToString();
-                List<Collector> collectors = JsonConvert.DeserializeObject<List<Collector>>(collectorsJson);
+                List<Collector> collectors = o["collectors"].ToObject<List<Collector>>();
                 return collectors;
             }
             catch (Exception e)
@@ -297,8 +293,7 @@ namespace SurveyMonkey
             try {
                 const string endPoint = "/surveys/get_respondent_list";
                 var o = MakeApiRequest(endPoint, parameters);
-                var respondentsJson = o["respondents"].ToString();
-                List<Respondent> respondents = JsonConvert.DeserializeObject<List<Respondent>>(respondentsJson);
+                List<Respondent> respondents = o["respondents"].ToObject<List<Respondent>>();
                 return respondents;
             }
             catch (Exception e)
@@ -319,8 +314,7 @@ namespace SurveyMonkey
                 parameters.Add("survey_id", surveyId.ToString());
                 parameters.Add("respondent_ids", respondents.Select(r => r.ToString()));
                 var o = MakeApiRequest(endPoint, parameters);
-                var responsesJson = o.ToString();
-                List<Response> responses = JsonConvert.DeserializeObject<List<Response>>(responsesJson);
+                List<Response> responses = o.ToObject<List<Response>>();
                 return responses;
             }
             catch (Exception e)
@@ -340,8 +334,7 @@ namespace SurveyMonkey
                 var parameters = new RequestSettings();
                 parameters.Add("collector_id", collectorId.ToString());
                 var o = MakeApiRequest(endPoint, parameters);
-                var collectorJson = o.ToString();
-                Collector collector = JsonConvert.DeserializeObject<Collector>(collectorJson);
+                Collector collector = o.ToObject<Collector>();
                 return collector;
             }
             catch (Exception e)
@@ -360,8 +353,7 @@ namespace SurveyMonkey
                 const string endPoint = "/user/get_user_details";
                 var parameters = new RequestSettings();
                 var o = MakeApiRequest(endPoint, parameters);
-                var userDetailsJson = o["user_details"].ToString();
-                UserDetails userDetails = JsonConvert.DeserializeObject<UserDetails>(userDetailsJson);
+                UserDetails userDetails = o["user_details"].ToObject<UserDetails>();
                 return userDetails;
             }
             catch (Exception e)
