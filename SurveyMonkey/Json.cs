@@ -99,6 +99,10 @@ namespace SurveyMonkey
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            if (reader.TokenType == JsonToken.Null)
+            {
+                return null;
+            }
             object instance = objectType.GetConstructor(Type.EmptyTypes).Invoke(null);
             PropertyInfo[] props = objectType.GetProperties();
 
