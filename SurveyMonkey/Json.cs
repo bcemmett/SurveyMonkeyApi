@@ -10,7 +10,7 @@ namespace SurveyMonkey
 {
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
-    internal class JsonSerializeGetSurveyList
+    internal class JsonDeserializeGetSurveyList
     {
         public long SurveyId { get; set; }
         public DateTime DateCreated { get; set; }
@@ -41,7 +41,7 @@ namespace SurveyMonkey
     }
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
-    internal class JsonSerializeGetSurveyDetails
+    internal class JsonDeserializeGetSurveyDetails
     {
         public long SurveyId { get; set; }
         public DateTime DateCreated { get; set; }

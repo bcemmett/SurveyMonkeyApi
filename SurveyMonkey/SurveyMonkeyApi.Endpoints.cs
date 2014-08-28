@@ -87,7 +87,7 @@ namespace SurveyMonkey
             {
                 const string endPoint = "/surveys/get_survey_list";
                 var o = MakeApiRequest(endPoint, parameters);
-                List<JsonSerializeGetSurveyList> rawSurveys = o["surveys"].ToObject<List<JsonSerializeGetSurveyList>>();
+                List<JsonDeserializeGetSurveyList> rawSurveys = o["surveys"].ToObject<List<JsonDeserializeGetSurveyList>>();
                 List<Survey> surveys = rawSurveys.Select(x => x.ToSurvey()).ToList();
                 return surveys;
             }
@@ -108,7 +108,7 @@ namespace SurveyMonkey
                 var parameters = new RequestSettings();
                 parameters.Add("survey_id", surveyId.ToString());
                 var o = MakeApiRequest(endPoint, parameters);
-                JsonSerializeGetSurveyDetails rawSurvey = o.ToObject<JsonSerializeGetSurveyDetails>();
+                JsonDeserializeGetSurveyDetails rawSurvey = o.ToObject<JsonDeserializeGetSurveyDetails>();
                 Survey survey = rawSurvey.ToSurvey();
                 return survey;
             }
