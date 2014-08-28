@@ -90,8 +90,14 @@ namespace SurveyMonkey
         {
             const int maxRespondentsPerPage = 100;
             List<Respondent> respondents = GetRespondentList(survey.SurveyId);
-            Dictionary<long, Respondent> respondentLookup = respondents.ToDictionary(r => r.RespondentId, r => r);
-            var responses = new List<Response>();
+
+            Dictionary<long, Response> responseLookup = respondents
+                .Select(respondent => new Response
+                {
+                    Respondent = respondent,
+                    RespondentId = respondent.RespondentId
+                })
+                .ToDictionary(r => r.RespondentId, r => r);
 
             //page through the respondents
             bool moreRespondents = true;
@@ -105,9 +111,11 @@ namespace SurveyMonkey
 
                     foreach (var newResponse in newResponses)
                     {
-                        newResponse.Respondent = respondentLookup[newResponse.RespondentId];
+                        if (newResponse != null)
+                        {
+                            responseLookup[newResponse.RespondentId].Questions = newResponse.Questions;
+                        }
                     }
-                    responses.AddRange(newResponses);
                 }
                 if (respondentIds.Count < 100)
                 {
@@ -116,7 +124,8 @@ namespace SurveyMonkey
 
                 page++;
             }
-            return responses;
+            IEnumerable<Response> result = responseLookup.Values.ToList();
+            return result;
         }
 
         #endregion
@@ -167,6 +176,10 @@ namespace SurveyMonkey
 
         private void MatchIndividualResponseToSurveyStructure(Dictionary<long, Question> questionsLookup, Dictionary<long, CustomVariable> customVariablesLookup, Response response)
         {
+            if (response.Questions == null) //In rare cases there can be a respondent with no responses to questions 
+            {
+                return;
+            }
             foreach (var responseQuestion in response.Questions)
             {
                 //First try to match the ResponseQuestion with the survey structure
