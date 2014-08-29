@@ -423,7 +423,7 @@ namespace SurveyMonkey
         {
             var reply = new MatrixRankingAnswer
             {
-                Ranking = new Dictionary<int, string>(),
+                Ranking = new List<Tuple<int, string>>(),
                 NotApplicable = new List<string>()
             };
             
@@ -435,7 +435,12 @@ namespace SurveyMonkey
                 }
                 else
                 {
-                    reply.Ranking.Add(question.AnswersLookup[responseAnswer.Col].Weight, question.AnswersLookup[responseAnswer.Row].Text);
+                    reply.Ranking.Add(
+                        new Tuple<int, string>(
+                            question.AnswersLookup[responseAnswer.Col].Weight,
+                            question.AnswersLookup[responseAnswer.Row].Text
+                        )
+                    );
                 }
             }
 

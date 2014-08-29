@@ -76,7 +76,7 @@ namespace SurveyMonkey
 
     public class MatrixRankingAnswer
     {
-        public Dictionary<int, string> Ranking { get; set; }
+        public List<Tuple<int, string>> Ranking { get; set; }
         public List<string> NotApplicable { get; set; }
     }
 
