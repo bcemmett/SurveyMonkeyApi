@@ -292,14 +292,19 @@ namespace SurveyMonkey
 
             foreach (var responseAnswer in responseAnswers)
             {
-                if (question.AnswersLookup[responseAnswer.Row].Type == AnswerType.Row)
+                //The API occasionally returns an invalid empty answer like "answers":[{"row":"0"},{"row":"123456789"}]
+                //Confirmed by SM as their problem, but need to ignore in the library to avoid a KeyNotFoundException which blows up data processing
+                if (responseAnswer.Row != 0)
                 {
-                    reply.Choices.Add(question.AnswersLookup[responseAnswer.Row].Text);
-                }
-                if (question.AnswersLookup[responseAnswer.Row].Type == AnswerType.Other)
-                {
-                    reply.Choices.Add(question.AnswersLookup[responseAnswer.Row].Text);
-                    reply.OtherText = responseAnswer.Text;
+                    if (question.AnswersLookup[responseAnswer.Row].Type == AnswerType.Row)
+                    {
+                        reply.Choices.Add(question.AnswersLookup[responseAnswer.Row].Text);
+                    }
+                    if (question.AnswersLookup[responseAnswer.Row].Type == AnswerType.Other)
+                    {
+                        reply.Choices.Add(question.AnswersLookup[responseAnswer.Row].Text);
+                        reply.OtherText = responseAnswer.Text;
+                    }
                 }
             }
             return reply;
