@@ -215,11 +215,11 @@ namespace SurveyMonkey
                 }
                 if (StartModifiedDate != DateTime.MaxValue)
                 {
-                    parameters.Add("start_modified_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("start_modified_date", StartModifiedDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
                 if (EndModifiedDate != DateTime.MinValue)
                 {
-                    parameters.Add("end_modified_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
+                    parameters.Add("end_modified_date", EndModifiedDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
                 if (OrderAsc)
                 {
