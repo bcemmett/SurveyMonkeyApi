@@ -13,7 +13,7 @@ namespace SurveyMonkey
         public DateTime EndDate { get; set; }
         public string Title { get; set; }
         public string RecipientEmail { get; set; }
-        public bool OrderAsc { get; set; }
+        public bool? OrderAsc { get; set; }
         public GetSurveyListSettingsOptionalData OptionalData { get; set; }
         internal RequestSettings Serialized
         {
@@ -37,9 +37,9 @@ namespace SurveyMonkey
                 {
                     parameters.Add("recipient_email", RecipientEmail);
                 }
-                if (OrderAsc)
+                if (OrderAsc.HasValue)
                 {
-                    parameters.Add("order_asc", true);
+                    parameters.Add("order_asc", OrderAsc.Value);
                 }
 
                 var properties = typeof (GetSurveyListSettingsOptionalData).GetProperties();
@@ -64,7 +64,6 @@ namespace SurveyMonkey
             EndDate = DateTime.MinValue;
             Title = "";
             RecipientEmail = "";
-            OrderAsc = false;
             OptionalData = new GetSurveyListSettingsOptionalData();    
         }
     }
@@ -102,7 +101,7 @@ namespace SurveyMonkey
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Name { get; set; }
-        public bool OrderAsc { get; set; }
+        public bool? OrderAsc { get; set; }
         public GetCollectorListSettingsOptionalData OptionalData { get; set; }
         internal RequestSettings Serialized
         {
@@ -122,9 +121,9 @@ namespace SurveyMonkey
                 {
                     parameters.Add("name", Name);
                 }
-                if (OrderAsc)
+                if (OrderAsc.HasValue)
                 {
-                    parameters.Add("order_asc", true);
+                    parameters.Add("order_asc", OrderAsc.Value);
                 }
 
                 var properties = typeof(GetCollectorListSettingsOptionalData).GetProperties();
@@ -148,7 +147,6 @@ namespace SurveyMonkey
             StartDate = DateTime.MaxValue;
             EndDate = DateTime.MinValue;
             Name = "";
-            OrderAsc = false;
             OptionalData = new GetCollectorListSettingsOptionalData();
         }
     }
@@ -192,7 +190,7 @@ namespace SurveyMonkey
         public DateTime EndDate { get; set; }
         public DateTime StartModifiedDate { get; set; }
         public DateTime EndModifiedDate { get; set; }
-        public bool OrderAsc { get; set; }
+        public bool? OrderAsc { get; set; }
         public Order OrderBy { get; set; }
         public GetRespondentListSettingsOptionalData OptionalData { get; set; }
         internal RequestSettings Serialized
@@ -221,9 +219,9 @@ namespace SurveyMonkey
                 {
                     parameters.Add("end_modified_date", EndModifiedDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
                 }
-                if (OrderAsc)
+                if (OrderAsc.HasValue)
                 {
-                    parameters.Add("order_asc", true);
+                    parameters.Add("order_asc", OrderAsc.Value);
                 }
 
                 string orderByString = "";
@@ -264,7 +262,6 @@ namespace SurveyMonkey
             EndDate = DateTime.MinValue;
             StartModifiedDate = DateTime.MaxValue;
             EndModifiedDate = DateTime.MinValue;
-            OrderAsc = false;
             OrderBy = Order.RespondentId;
             OptionalData = new GetRespondentListSettingsOptionalData();
         }
