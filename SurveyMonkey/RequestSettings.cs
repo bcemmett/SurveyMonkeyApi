@@ -39,7 +39,7 @@ namespace SurveyMonkey
                 }
                 if (OrderAsc)
                 {
-                    parameters.Add("order_asc", "True");
+                    parameters.Add("order_asc", true);
                 }
 
                 var properties = typeof (GetSurveyListSettingsOptionalData).GetProperties();
@@ -124,7 +124,7 @@ namespace SurveyMonkey
                 }
                 if (OrderAsc)
                 {
-                    parameters.Add("order_asc", "True");
+                    parameters.Add("order_asc", true);
                 }
 
                 var properties = typeof(GetCollectorListSettingsOptionalData).GetProperties();
@@ -223,7 +223,7 @@ namespace SurveyMonkey
                 }
                 if (OrderAsc)
                 {
-                    parameters.Add("order_asc", "True");
+                    parameters.Add("order_asc", true);
                 }
 
                 string orderByString = "";
