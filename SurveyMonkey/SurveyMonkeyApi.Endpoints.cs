@@ -308,7 +308,28 @@ namespace SurveyMonkey
 
         public List<Response> GetResponses(long surveyId, List<long> respondents)
         {
-            return GetResponsesRequest(surveyId, respondents);
+            var responses = new List<Response>();
+            const int maxRespondentsPerPage = 100;
+            
+            bool moreRespondents = true;
+            int page = 0;
+
+            while (moreRespondents)
+            {
+                List<long> respondentIds = respondents.Skip(page * maxRespondentsPerPage).Take(maxRespondentsPerPage).ToList();
+                if (respondentIds.Count > 0)
+                {
+                    List<Response> newResponses = GetResponsesRequest(surveyId, respondentIds);
+                    responses.AddRange(newResponses);
+                }
+                if (respondentIds.Count < 100)
+                {
+                    moreRespondents = false;
+                }
+
+                page++;
+            }
+            return responses;
         }
         
         private List<Response> GetResponsesRequest(long surveyId, List<long> respondents)
