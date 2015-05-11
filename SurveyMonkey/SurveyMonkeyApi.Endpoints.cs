@@ -308,7 +308,13 @@ namespace SurveyMonkey
 
         public List<Response> GetResponses(long surveyId, List<long> respondents)
         {
-            try {
+            return GetResponsesRequest(surveyId, respondents);
+        }
+        
+        private List<Response> GetResponsesRequest(long surveyId, List<long> respondents)
+        {
+            try
+            {
                 const string endPoint = "/surveys/get_responses";
                 var parameters = new RequestSettings();
                 parameters.Add("survey_id", surveyId.ToString());
