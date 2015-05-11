@@ -88,7 +88,6 @@ namespace SurveyMonkey
 
         private IEnumerable<Response> GetAllSurveyResponses(Survey survey)
         {
-            const int maxRespondentsPerPage = 100;
             List<Respondent> respondents = GetRespondentList(survey.SurveyId);
 
             Dictionary<long, Response> responseLookup = respondents
@@ -99,31 +98,14 @@ namespace SurveyMonkey
                 })
                 .ToDictionary(r => r.RespondentId, r => r);
 
-            //page through the respondents
-            bool moreRespondents = true;
-            int page = 0;
-            while (moreRespondents)
+            List<long> respondentIds = respondents.Select(r => r.RespondentId).ToList();
+            List<Response> responses = GetResponses(survey.SurveyId, respondentIds);
+
+            foreach (var newResponse in responses.Where(newResponse => newResponse != null))
             {
-                List<long> respondentIds = respondents.Skip(page * maxRespondentsPerPage).Take(maxRespondentsPerPage).Select(rp => rp.RespondentId).ToList();
-                if (respondentIds.Count > 0)
-                {
-                    List<Response> newResponses = GetResponses(survey.SurveyId, respondentIds);
-
-                    foreach (var newResponse in newResponses)
-                    {
-                        if (newResponse != null)
-                        {
-                            responseLookup[newResponse.RespondentId].Questions = newResponse.Questions;
-                        }
-                    }
-                }
-                if (respondentIds.Count < 100)
-                {
-                    moreRespondents = false;
-                }
-
-                page++;
+                responseLookup[newResponse.RespondentId].Questions = newResponse.Questions;
             }
+
             IEnumerable<Response> result = responseLookup.Values.ToList();
             return result;
         }
