@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
+    <Compile Include="ISurveyMonkeyApi.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="Responses.cs" />
     <Compile Include="SurveyMonkeyApi.Endpoints.cs">
