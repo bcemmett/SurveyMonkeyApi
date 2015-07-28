@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace SurveyMonkey
 {
-    public partial class SurveyMonkeyApi
+    public partial class SurveyMonkeyApi 
     {
         #region Members
 
