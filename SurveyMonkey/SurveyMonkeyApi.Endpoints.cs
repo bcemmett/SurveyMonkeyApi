@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SurveyMonkey
 {
-    public partial class SurveyMonkeyApi : ISurveyMonkeyApi
+    public partial class SurveyMonkeyApi
     {
         #region GetSurveyList endpoint
 
