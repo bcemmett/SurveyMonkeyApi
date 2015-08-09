@@ -374,9 +374,11 @@ namespace SurveyMonkey
             {
                 Rows = new Dictionary<long, MatrixMenuAnswerRow>()
             };
-
-            Dictionary<long, string> choicesLookup = (from answerItem in question.AnswersLookup where answerItem.Value.Items != null from item in answerItem.Value.Items select item).ToDictionary(item => item.AnswerId, item => item.Text);
-
+            Dictionary<long, string> choicesLookup = question.AnswersLookup
+                .Where(answerItem => answerItem.Value.Items != null)
+                .SelectMany(answerItem => answerItem.Value.Items)
+                .ToDictionary(item => item.AnswerId, item => item.Text);
+            
             foreach (var responseAnswer in responseAnswers)
             {
                 if (responseAnswer.Row == 0)
