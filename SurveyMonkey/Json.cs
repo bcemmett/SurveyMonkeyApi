@@ -115,7 +115,21 @@ namespace SurveyMonkey
                     pi.CanWrite && string.Equals(pi.Name, name, StringComparison.OrdinalIgnoreCase));
 
                 if (prop != null)
-                    prop.SetValue(instance, jp.Value.ToObject(prop.PropertyType, serializer));
+                {
+                    /*The api sometimes misbehaves and returns stringy values like "None"
+                    when it should be returning numeric values, leading to a FormatException
+                    doing the conversion. Detect and an use 0 in these situations*/
+                    long n;
+                    if ((prop.PropertyType == typeof (int) || prop.PropertyType == typeof (long))
+                        && !Int64.TryParse(jp.Value.ToString(), out n))
+                    {
+                        prop.SetValue(instance, 0);
+                    }
+                    else
+                    {
+                        prop.SetValue(instance, jp.Value.ToObject(prop.PropertyType, serializer));
+                    }
+                }    
             }
 
             return instance;
