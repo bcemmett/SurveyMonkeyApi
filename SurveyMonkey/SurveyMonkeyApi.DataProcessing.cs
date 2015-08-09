@@ -132,15 +132,15 @@ namespace SurveyMonkey
         {
             foreach (var question in survey.Questions)
             {
-                question.AnswersLookup = question.Answers.ToDictionary(a => a.AnswerId, a => a);
+                question.AnswersLookup = question.Answers.Where(a => a.AnswerId != 0).ToDictionary(a => a.AnswerId, a => a);
             }
             
             if (survey.CustomVariables != null)
             {
-                survey.CustomVariablesLookup = survey.CustomVariables.ToDictionary(c => c.QuestionId, c => c);
+                survey.CustomVariablesLookup = survey.CustomVariables.Where(c => c.QuestionId != 0).ToDictionary(c => c.QuestionId, c => c);
             }
             
-            Dictionary<long, Question> questionsLookup = survey.Questions.ToDictionary(q => q.QuestionId, q => q);
+            Dictionary<long, Question> questionsLookup = survey.Questions.Where(q => q.QuestionId != 0).ToDictionary(q => q.QuestionId, q => q);
             
             foreach (var collector in survey.Collectors)
             {
