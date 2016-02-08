@@ -86,7 +86,8 @@ namespace SurveyMonkey
         NotSet = 0,
         Completed,
         Partial,
-        Disqualified
+        Disqualified,
+        OverQuota
     }
 
     public enum Language
