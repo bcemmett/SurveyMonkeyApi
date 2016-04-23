@@ -518,6 +518,7 @@ namespace SurveyMonkey
                 response.Survey = rawSurvey.ToSurvey();
                 response.Collector = o["collector"].ToObject<Collector>();
                 response.RecipientsReport = o["recipients_report"].ToObject<RecipientsReport>();
+                response.EmailMessage = o["email_message"].ToObject<EmailMessage>();
                 return response;
             }
             catch (Exception e)
@@ -543,6 +544,7 @@ namespace SurveyMonkey
                 response.Survey = rawSurvey.ToSurvey();
                 response.Collector = o["collector"].ToObject<Collector>();
                 response.RecipientsReport = o["recipients_report"].ToObject<RecipientsReport>();
+                response.EmailMessage = o["email_message"].ToObject<EmailMessage>();
                 return response;
             }
             catch (Exception e)
