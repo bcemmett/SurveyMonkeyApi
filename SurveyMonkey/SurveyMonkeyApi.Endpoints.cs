@@ -423,7 +423,7 @@ namespace SurveyMonkey
         public SendFlowResponse SendFlow(long surveyId, SendFlowSettings settings)
         {
             var parameters = settings.Serialize();
-            parameters.Add("survey_id", surveyId);
+            parameters.Add("survey_id", surveyId.ToString());
             try
             {
                 const string endPoint = "/batch/send_flow";
