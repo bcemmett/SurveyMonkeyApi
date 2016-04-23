@@ -295,6 +295,53 @@ namespace SurveyMonkey
 
     #endregion
 
+    #region GetTemplateList
+
+    public class GetTemplateListSettings
+    {
+        public Language LanguageId { get; set; }
+        public long CategoryId { get; set; }
+        public bool? ShowOnlyAvailableToCurrentUser { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            if (LanguageId != Language.NotSet)
+            {
+                parameters.Add("language_id", (int)LanguageId);
+            }
+            if (CategoryId != 0)
+            {
+                parameters.Add("category_id", CategoryId);
+            }
+            if (ShowOnlyAvailableToCurrentUser.HasValue)
+            {
+                parameters.Add("show_only_available_to_current_user", ShowOnlyAvailableToCurrentUser.Value);
+            }
+            parameters.Add("fields", new List<string>
+            {
+                "language_id",
+                "title",
+                "short_description",
+                "long_description",
+                "is_available_to_current_user",
+                "is_featured",
+                "is_certified",
+                "page_count",
+                "question_count",
+                "preview_url",
+                "category_id",
+                "category_name",
+                "category_description",
+                "date_modified",
+                "date_created"
+            });
+            return parameters;
+        }
+    }
+
+    #endregion
+
     #region SendFlow
 
     public class SendFlowSettings
