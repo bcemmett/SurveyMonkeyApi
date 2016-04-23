@@ -391,6 +391,38 @@ namespace SurveyMonkey
 
         #endregion
 
+        #region GetTemplateList
+        
+        public List<Template> GetTemplateList()
+        {
+            return GetTemplateList(new GetTemplateListSettings());
+        }
+
+        public List<Template> GetTemplateList(GetTemplateListSettings settings)
+        {
+            RequestSettings parameters = settings.Serialize();
+            parameters.Add("page", 1);
+            parameters.Add("page_size", 1000);
+            return GetTemplateListRequest(parameters);
+        }
+        
+        private List<Template> GetTemplateListRequest(RequestSettings parameters)
+        {
+            try
+            {
+                const string endPoint = "/templates/get_template_list";
+                var o = MakeApiRequest(endPoint, parameters);
+                List<Template> templates = o["templates"].ToObject<List<Template>>();
+                return templates;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
+        }
+
+        #endregion
+
         #region CreateRecipients endpoint
 
         public CreateRecipientsResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients)
