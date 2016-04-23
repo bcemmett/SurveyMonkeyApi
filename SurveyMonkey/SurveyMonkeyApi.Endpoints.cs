@@ -392,20 +392,72 @@ namespace SurveyMonkey
         #endregion
 
         #region GetTemplateList
+
+        public List<Template> GetTemplateList(GetTemplateListSettings settings)
+        {
+            var templates = new List<Template>();
+            bool cont = true;
+            int page = 1;
+            while (cont)
+            {
+                var newTemplates = GetTemplateListPage(page, 0, false, settings);
+                if (newTemplates.Count > 0)
+                {
+                    templates.AddRange(newTemplates);
+                }
+                if (newTemplates.Count < 1000)
+                {
+                    cont = false;
+                }
+                page++;
+            }
+            return templates;
+        }
         
         public List<Template> GetTemplateList()
         {
             return GetTemplateList(new GetTemplateListSettings());
         }
 
-        public List<Template> GetTemplateList(GetTemplateListSettings settings)
+        public List<Template> GetTemplateList(int page, GetTemplateListSettings settings)
+        {
+            if (page < 1)
+            {
+                throw new ArgumentException("Page must be greater than 0.");
+            }
+            return GetTemplateListPage(page, 0, false, settings);
+        }
+
+        public List<Template> GetTemplateList(int page)
+        {
+            return GetTemplateList(page, new GetTemplateListSettings());
+        }
+
+        public List<Template> GetTemplateList(int page, int pageSize, GetTemplateListSettings settings)
+        {
+            if (pageSize < 1 || pageSize > 1000)
+            {
+                throw new ArgumentException("Page size must be between 1 and 1000.");
+            }
+            return GetTemplateListPage(page, pageSize, true, settings);
+        }
+
+        public List<Template> GetTemplateList(int page, int pageSize)
+        {
+            return GetTemplateList(page, pageSize, new GetTemplateListSettings());
+        }
+
+        private List<Template> GetTemplateListPage(int page, int pageSize, bool limitPageSize, GetTemplateListSettings settings)
         {
             RequestSettings parameters = settings.Serialize();
-            parameters.Add("page", 1);
-            parameters.Add("page_size", 1000);
+            parameters.Add("page", page);
+            if (limitPageSize)
+            {
+                parameters.Add("page_size", pageSize);
+            }
             return GetTemplateListRequest(parameters);
         }
-        
+
         private List<Template> GetTemplateListRequest(RequestSettings parameters)
         {
             try
