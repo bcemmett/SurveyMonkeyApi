@@ -231,6 +231,7 @@ namespace SurveyMonkey
         public Survey Survey { get; set; }
         public Collector Collector { get; set; }
         public RecipientsReport RecipientsReport { get; set; }
+        public EmailMessage EmailMessage { get; set; }
     }
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
@@ -239,6 +240,13 @@ namespace SurveyMonkey
         public Survey Survey { get; set; }
         public Collector Collector { get; set; }
         public RecipientsReport RecipientsReport { get; set; }
+        public EmailMessage EmailMessage { get; set; }
+    }
+
+    [JsonConverter(typeof (LaxPropertyNameJsonConverter))]
+    public class EmailMessage
+    {
+        public long EmailMessageId { get; set; }
     }
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
