@@ -375,6 +375,15 @@ namespace SurveyMonkey
         public CreateFlowSettingsSurvey Survey { get; set; }
         public CreateFlowSettingsCollector Collector { get; set; }
         public CreateFlowSettingsEmailMessage EmailMessage { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("survey", Survey.Serialize());
+            parameters.Add("collector", Collector.Serialize());
+            parameters.Add("email_message", EmailMessage.Serialize());
+            return parameters;
+        }
     }
 
     public class CreateFlowSettingsSurvey
@@ -384,6 +393,40 @@ namespace SurveyMonkey
         public string SurveyTitle { get; set; }
         public string SurveyNickname { get; set; }
         public Language LanguageId { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            if (String.IsNullOrEmpty(SurveyTitle) || String.IsNullOrEmpty(SurveyNickname))
+            {
+                throw new ArgumentException("SurveyTitle and SurveyNickname must both be populated.");
+            }
+            
+            if (TemplateId == FromSurveyId)
+            {
+                throw new ArgumentException("You must populate either TemplateId or FromSurveyId, and not both.");
+            }
+
+            var parameters = new RequestSettings();
+            
+            if (TemplateId != 0)
+            {
+                parameters.Add("template_id", TemplateId.ToString());
+            }
+            if (FromSurveyId != 0)
+            {
+                parameters.Add("from_survey_id", FromSurveyId.ToString());
+            }
+
+            parameters.Add("survey_title", SurveyTitle);
+            parameters.Add("survey_nickname", SurveyNickname);
+            
+            if (LanguageId != Language.NotSet)
+            {
+                parameters.Add("language_id", (int)LanguageId);
+            }
+            
+            return parameters;
+        }
     }
 
     public class CreateFlowSettingsCollector : CreateAndSendFlowSettingsCollector
