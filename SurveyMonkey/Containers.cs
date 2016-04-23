@@ -178,6 +178,7 @@ namespace SurveyMonkey
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string CustomId { get; set; }
+        public long RecipientId { get; set; }
 
         internal RequestSettings Serialize()
         {
