@@ -38,6 +38,13 @@ namespace SurveyMonkey
         
         UserDetails GetUserDetails();
 
+        List<Template> GetTemplateList();
+        List<Template> GetTemplateList(GetTemplateListSettings settings);
+        List<Template> GetTemplateList(int page);
+        List<Template> GetTemplateList(int page, GetTemplateListSettings settings);
+        List<Template> GetTemplateList(int page, int pageSize);
+        List<Template> GetTemplateList(int page, int pageSize, GetTemplateListSettings settings);
+
         CreateRecipientsResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients);
 
         SendFlowResponse SendFlow(long surveyId, SendFlowSettings settings);
