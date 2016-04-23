@@ -358,9 +358,49 @@ namespace SurveyMonkey
         }
     }
 
-    public class SendFlowSettingsCollector
+    public class SendFlowSettingsCollector : CreateAndSendFlowSettingsCollector
     {
-        public SendFlowSettingsCollector()
+    }
+
+    public class SendFlowSettingsEmailMessage : CreateAndSendFlowSettingsEmailMessage
+    {
+    }
+
+    #endregion
+
+    #region CreateFlow
+
+    public class CreateFlowSettings
+    {
+        public CreateFlowSettingsSurvey Survey { get; set; }
+        public CreateFlowSettingsCollector Collector { get; set; }
+        public CreateFlowSettingsEmailMessage EmailMessage { get; set; }
+    }
+
+    public class CreateFlowSettingsSurvey
+    {
+        public long TemplateId { get; set; }
+        public long FromSurveyId { get; set; }
+        public string SurveyTitle { get; set; }
+        public string SurveyNickname { get; set; }
+        public Language LanguageId { get; set; }
+    }
+
+    public class CreateFlowSettingsCollector : CreateAndSendFlowSettingsCollector
+    {
+    }
+
+    public class CreateFlowSettingsEmailMessage : CreateAndSendFlowSettingsEmailMessage
+    {
+    }
+
+    #endregion
+
+    #region CreateFlow and SendFlow common
+
+    public class CreateAndSendFlowSettingsCollector
+    {
+        public CreateAndSendFlowSettingsCollector()
         {
             Recipients = new List<Recipient>();
         }
@@ -374,7 +414,7 @@ namespace SurveyMonkey
         {
             var parameters = new RequestSettings();
             parameters.Add("type", "email"); //only email collectors are supported
-            if(!String.IsNullOrEmpty(Name))
+            if (!String.IsNullOrEmpty(Name))
             {
                 parameters.Add("name", Name);
             }
@@ -393,7 +433,7 @@ namespace SurveyMonkey
         }
     }
 
-    public class SendFlowSettingsEmailMessage
+    public class CreateAndSendFlowSettingsEmailMessage
     {
         public string ReplyEmail { get; set; }
         public string Subject { get; set; }
@@ -411,7 +451,7 @@ namespace SurveyMonkey
             }
             if (DisableFooter.HasValue)
             {
-                parameters.Add("disable_footer", DisableFooter);    
+                parameters.Add("disable_footer", DisableFooter);
             }
             return parameters;
         }
