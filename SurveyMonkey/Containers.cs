@@ -170,6 +170,14 @@ namespace SurveyMonkey
         public int TotalSeatsInvoiced { get; set; }
         public int TotalSeatsActive { get; set; }
     }
+    
+    public class Recipient
+    {
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string CustomId { get; set; }
+    }
 
     [Serializable]
     public class SurveyMonkeyException : Exception
