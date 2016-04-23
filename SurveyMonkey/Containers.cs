@@ -179,33 +179,30 @@ namespace SurveyMonkey
         public string LastName { get; set; }
         public string CustomId { get; set; }
 
-        internal RequestSettings Serialized
+        internal RequestSettings Serialize()
         {
-            get
-            {
-                var parameters = new RequestSettings();
+            var parameters = new RequestSettings();
                 
-                if (String.IsNullOrEmpty(Email))
-                {
-                    throw new ArgumentException("A recipient email address cannot be empty");
-                }
-
-                parameters.Add("email", Email);
-                if (!String.IsNullOrEmpty(FirstName))
-                {
-                    parameters.Add("first_name", FirstName);
-                }
-                if (!String.IsNullOrEmpty(LastName))
-                {
-                    parameters.Add("last_name", LastName);
-                }
-                if (!String.IsNullOrEmpty(CustomId))
-                {
-                    parameters.Add("custom_id", CustomId);
-                }
-
-                return parameters;
+            if (String.IsNullOrEmpty(Email))
+            {
+                throw new ArgumentException("A recipient email address cannot be empty");
             }
+
+            parameters.Add("email", Email);
+            if (!String.IsNullOrEmpty(FirstName))
+            {
+                parameters.Add("first_name", FirstName);
+            }
+            if (!String.IsNullOrEmpty(LastName))
+            {
+                parameters.Add("last_name", LastName);
+            }
+            if (!String.IsNullOrEmpty(CustomId))
+            {
+                parameters.Add("custom_id", CustomId);
+            }
+
+            return parameters;
         }
     }
 
