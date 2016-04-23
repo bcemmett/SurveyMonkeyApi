@@ -224,6 +224,14 @@ namespace SurveyMonkey
         public List<string> OptedOutEmails { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class SendFlowResponse
+    {
+        public Survey Survey { get; set; }
+        public Collector Collector { get; set; }
+        public RecipientsReport RecipientsReport { get; set; }
+    }
+
     [Serializable]
     public class SurveyMonkeyException : Exception
     {
