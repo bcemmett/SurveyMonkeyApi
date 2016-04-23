@@ -393,7 +393,7 @@ namespace SurveyMonkey
 
         #region CreateRecipients endpoint
 
-        public RecipientCreationResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients)
+        public CreateRecipientsResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients)
         {
             var parameters = new RequestSettings();
             parameters.Add("collector_id", collectorId.ToString());
@@ -405,7 +405,7 @@ namespace SurveyMonkey
                 const string endPoint = "/collectors/create_recipients";
                 var o = MakeApiRequest(endPoint, parameters);
                 
-                var response = new RecipientCreationResponse();
+                var response = new CreateRecipientsResponse();
                 response.Collector = o["collector"].ToObject<Collector>();
                 response.RecipientsReport = o["recipients_report"].ToObject<RecipientsReport>();
                 return response;
