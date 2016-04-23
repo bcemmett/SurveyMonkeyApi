@@ -68,7 +68,8 @@ namespace SurveyMonkey
         Embedded,
         Email,
         Facebook,
-        Audience
+        Audience,
+        WebLink
     }
 
     [JsonConverter(typeof(LaxEnumJsonConverter))]

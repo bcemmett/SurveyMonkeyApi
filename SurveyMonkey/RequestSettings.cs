@@ -442,7 +442,7 @@ namespace SurveyMonkey
             {
                 parameters.Add("redirect_url", RedirectUrl);
             }
-            parameters.Add("type", "url");
+            parameters.Add("type", "weblink");
             return parameters;
         }
     }
