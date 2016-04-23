@@ -49,6 +49,9 @@ namespace SurveyMonkey
 
         SendFlowResponse SendFlow(long surveyId, SendFlowSettings settings);
 
+        Collector CreateCollector(long surveyId);
+        Collector CreateCollector(long surveyId, CreateCollectorSettings settings);
+
         //Data processing
         void FillMissingSurveyInformation(List<Survey> surveys);
         void FillMissingSurveyInformation(Survey survey);
