@@ -312,7 +312,7 @@ namespace SurveyMonkey
             }
             if (CategoryId != 0)
             {
-                parameters.Add("category_id", CategoryId);
+                parameters.Add("category_id", CategoryId.ToString());
             }
             if (ShowOnlyAvailableToCurrentUser.HasValue)
             {
