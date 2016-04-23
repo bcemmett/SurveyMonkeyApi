@@ -358,9 +358,92 @@ namespace SurveyMonkey
         }
     }
 
-    public class SendFlowSettingsCollector
+    public class SendFlowSettingsCollector : CreateAndSendFlowSettingsCollector
     {
-        public SendFlowSettingsCollector()
+    }
+
+    public class SendFlowSettingsEmailMessage : CreateAndSendFlowSettingsEmailMessage
+    {
+    }
+
+    #endregion
+
+    #region CreateFlow
+
+    public class CreateFlowSettings
+    {
+        public CreateFlowSettingsSurvey Survey { get; set; }
+        public CreateFlowSettingsCollector Collector { get; set; }
+        public CreateFlowSettingsEmailMessage EmailMessage { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("survey", Survey.Serialize());
+            parameters.Add("collector", Collector.Serialize());
+            parameters.Add("email_message", EmailMessage.Serialize());
+            return parameters;
+        }
+    }
+
+    public class CreateFlowSettingsSurvey
+    {
+        public long TemplateId { get; set; }
+        public long FromSurveyId { get; set; }
+        public string SurveyTitle { get; set; }
+        public string SurveyNickname { get; set; }
+        public Language LanguageId { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            if (String.IsNullOrEmpty(SurveyTitle) || String.IsNullOrEmpty(SurveyNickname))
+            {
+                throw new ArgumentException("SurveyTitle and SurveyNickname must both be populated.");
+            }
+            
+            if ((TemplateId == 0 && FromSurveyId == 0) || (TemplateId > 0 && FromSurveyId > 0))
+            {
+                throw new ArgumentException("You must populate either TemplateId or FromSurveyId, and not both.");
+            }
+
+            var parameters = new RequestSettings();
+            
+            if (TemplateId != 0)
+            {
+                parameters.Add("template_id", TemplateId.ToString());
+            }
+            if (FromSurveyId != 0)
+            {
+                parameters.Add("from_survey_id", FromSurveyId.ToString());
+            }
+
+            parameters.Add("survey_title", SurveyTitle);
+            parameters.Add("survey_nickname", SurveyNickname);
+            
+            if (LanguageId != Language.NotSet)
+            {
+                parameters.Add("language_id", (int)LanguageId);
+            }
+            
+            return parameters;
+        }
+    }
+
+    public class CreateFlowSettingsCollector : CreateAndSendFlowSettingsCollector
+    {
+    }
+
+    public class CreateFlowSettingsEmailMessage : CreateAndSendFlowSettingsEmailMessage
+    {
+    }
+
+    #endregion
+
+    #region CreateFlow and SendFlow common
+
+    public class CreateAndSendFlowSettingsCollector
+    {
+        public CreateAndSendFlowSettingsCollector()
         {
             Recipients = new List<Recipient>();
         }
@@ -374,7 +457,7 @@ namespace SurveyMonkey
         {
             var parameters = new RequestSettings();
             parameters.Add("type", "email"); //only email collectors are supported
-            if(!String.IsNullOrEmpty(Name))
+            if (!String.IsNullOrEmpty(Name))
             {
                 parameters.Add("name", Name);
             }
@@ -393,7 +476,7 @@ namespace SurveyMonkey
         }
     }
 
-    public class SendFlowSettingsEmailMessage
+    public class CreateAndSendFlowSettingsEmailMessage
     {
         public string ReplyEmail { get; set; }
         public string Subject { get; set; }
@@ -411,7 +494,7 @@ namespace SurveyMonkey
             }
             if (DisableFooter.HasValue)
             {
-                parameters.Add("disable_footer", DisableFooter);    
+                parameters.Add("disable_footer", DisableFooter);
             }
             return parameters;
         }
