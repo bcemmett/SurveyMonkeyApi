@@ -38,7 +38,7 @@ namespace SurveyMonkey
         
         UserDetails GetUserDetails();
 
-        RecipientCreationResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients);
+        CreateRecipientsResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients);
         
         //Data processing
         void FillMissingSurveyInformation(List<Survey> surveys);

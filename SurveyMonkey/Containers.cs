@@ -207,7 +207,7 @@ namespace SurveyMonkey
     }
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
-    public class RecipientCreationResponse
+    public class CreateRecipientsResponse
     {
         public Collector Collector { get; set; }
         public RecipientsReport RecipientsReport { get; set; }
