@@ -170,7 +170,8 @@ namespace SurveyMonkey
         public int TotalSeatsInvoiced { get; set; }
         public int TotalSeatsActive { get; set; }
     }
-    
+
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class Recipient
     {
         public string Email { get; set; }
