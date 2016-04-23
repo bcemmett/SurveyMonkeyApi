@@ -396,8 +396,8 @@ namespace SurveyMonkey
         public RecipientCreationResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients)
         {
             var parameters = new RequestSettings();
-            parameters.Add("collector_id", collectorId);
-            parameters.Add("email_message_id", emailMessageId);
+            parameters.Add("collector_id", collectorId.ToString());
+            parameters.Add("email_message_id", emailMessageId.ToString());
             parameters.Add("send", true);
             try
             {
