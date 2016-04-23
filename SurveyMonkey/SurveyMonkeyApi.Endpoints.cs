@@ -399,6 +399,7 @@ namespace SurveyMonkey
             parameters.Add("collector_id", collectorId.ToString());
             parameters.Add("email_message_id", emailMessageId.ToString());
             parameters.Add("send", true);
+            parameters.Add("recipients", recipients.Select(r => r.Serialized));
             try
             {
                 const string endPoint = "/surveys/create_recipients";
