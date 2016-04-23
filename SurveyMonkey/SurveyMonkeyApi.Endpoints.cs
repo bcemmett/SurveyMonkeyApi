@@ -16,7 +16,7 @@ namespace SurveyMonkey
             int page = 1;
             while (cont)
             {
-                RequestSettings parameters = settings.Serialized;
+                RequestSettings parameters = settings.Serialize();
                 parameters.Add("page", page);
                 var newSurveys = GetSurveyListRequest(parameters);
                 if (newSurveys.Count > 0)
@@ -72,7 +72,7 @@ namespace SurveyMonkey
 
         private List<Survey> GetSurveyListPage(int page, int pageSize, bool limitPageSize, GetSurveyListSettings settings)
         {
-            RequestSettings parameters = settings.Serialized;
+            RequestSettings parameters = settings.Serialize();
             parameters.Add("page", page);
             if (limitPageSize)
             {
@@ -130,7 +130,7 @@ namespace SurveyMonkey
             int page = 1;
             while (cont)
             {
-                RequestSettings parameters = settings.Serialized;
+                RequestSettings parameters = settings.Serialize();
                 parameters.Add("survey_id", surveyId.ToString());
                 parameters.Add("page", page);
                 var newCollectors = GetCollectorListRequest(parameters);
@@ -184,7 +184,7 @@ namespace SurveyMonkey
 
         private List<Collector> GetCollectorListPage(long surveyId, int page, int pageSize, bool limitPageSize, GetCollectorListSettings settings)
         {
-            RequestSettings parameters = settings.Serialized;
+            RequestSettings parameters = settings.Serialize();
             parameters.Add("survey_id", surveyId.ToString());
             parameters.Add("page", page);
             if (limitPageSize)
@@ -222,7 +222,7 @@ namespace SurveyMonkey
             int page = 1;
             while (cont)
             {
-                RequestSettings parameters = settings.Serialized;
+                RequestSettings parameters = settings.Serialize();
                 parameters.Add("survey_id", surveyId.ToString());
                 parameters.Add("page", page);
                 var newRespondents = GetRespondentListRequest(parameters);
@@ -278,7 +278,7 @@ namespace SurveyMonkey
 
         private List<Respondent> GetRespondentListPage(long surveyId, int page, int pageSize, bool limitPageSize, GetRespondentListSettings settings)
         {
-            RequestSettings parameters = settings.Serialized;
+            RequestSettings parameters = settings.Serialize();
             parameters.Add("survey_id", surveyId.ToString());
             parameters.Add("page", page);
             if (limitPageSize)
@@ -382,6 +382,33 @@ namespace SurveyMonkey
                 var o = MakeApiRequest(endPoint, parameters);
                 UserDetails userDetails = o["user_details"].ToObject<UserDetails>();
                 return userDetails;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
+        }
+
+        #endregion
+
+        #region CreateRecipients endpoint
+
+        public RecipientCreationResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients)
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("collector_id", collectorId.ToString());
+            parameters.Add("email_message_id", emailMessageId.ToString());
+            parameters.Add("send", true);
+            parameters.Add("recipients", recipients.Select(r => r.Serialize()));
+            try
+            {
+                const string endPoint = "/collectors/create_recipients";
+                var o = MakeApiRequest(endPoint, parameters);
+                
+                var response = new RecipientCreationResponse();
+                response.Collector = o["collector"].ToObject<Collector>();
+                response.RecipientsReport = o["recipients_report"].ToObject<RecipientsReport>();
+                return response;
             }
             catch (Exception e)
             {

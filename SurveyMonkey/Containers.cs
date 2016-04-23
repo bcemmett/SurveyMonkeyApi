@@ -171,6 +171,59 @@ namespace SurveyMonkey
         public int TotalSeatsActive { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class Recipient
+    {
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string CustomId { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+                
+            if (String.IsNullOrEmpty(Email))
+            {
+                throw new ArgumentException("A recipient email address cannot be empty");
+            }
+
+            parameters.Add("email", Email);
+            if (!String.IsNullOrEmpty(FirstName))
+            {
+                parameters.Add("first_name", FirstName);
+            }
+            if (!String.IsNullOrEmpty(LastName))
+            {
+                parameters.Add("last_name", LastName);
+            }
+            if (!String.IsNullOrEmpty(CustomId))
+            {
+                parameters.Add("custom_id", CustomId);
+            }
+
+            return parameters;
+        }
+    }
+
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class RecipientCreationResponse
+    {
+        public Collector Collector { get; set; }
+        public RecipientsReport RecipientsReport { get; set; }
+    }
+
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class RecipientsReport
+    {
+        public List<Recipient>  Recipients { get; set; }
+        public int ValidEmailsCount { get; set; }
+        public List<string> InvalidEmails { get; set; }
+        public List<string> DuplicateEmails { get; set; }
+        public List<string> BouncedEmails { get; set; }
+        public List<string> OptedOutEmails { get; set; }
+    }
+
     [Serializable]
     public class SurveyMonkeyException : Exception
     {

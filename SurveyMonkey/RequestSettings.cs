@@ -15,47 +15,44 @@ namespace SurveyMonkey
         public string RecipientEmail { get; set; }
         public bool? OrderAsc { get; set; }
         public GetSurveyListSettingsOptionalData OptionalData { get; set; }
-        internal RequestSettings Serialized
+        internal RequestSettings Serialize()
         {
-            get
+            var parameters = new RequestSettings();
+
+            if (StartDate != DateTime.MaxValue)
             {
-                var parameters = new RequestSettings();
-
-                if (StartDate != DateTime.MaxValue)
-                {
-                    parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
-                }
-                if (EndDate != DateTime.MinValue)
-                {
-                    parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
-                }
-                if (!String.IsNullOrEmpty(Title))
-                {
-                    parameters.Add("title", Title);
-                }
-                if (!String.IsNullOrEmpty(RecipientEmail))
-                {
-                    parameters.Add("recipient_email", RecipientEmail);
-                }
-                if (OrderAsc.HasValue)
-                {
-                    parameters.Add("order_asc", OrderAsc.Value);
-                }
-
-                var properties = typeof (GetSurveyListSettingsOptionalData).GetProperties();
-                List<string> optionalProperties = (from property in properties where (bool) property.GetValue(OptionalData) select property.Name).ToList();
-                var snakeCaseProperties = new List<string>();
-                foreach (var optionalProperty in optionalProperties)
-                {
-                    snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
-                }
-                if (snakeCaseProperties.Count > 0)
-                {
-                    parameters.Add("fields", snakeCaseProperties);
-                }
-
-                return parameters;
+                parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
             }
+            if (EndDate != DateTime.MinValue)
+            {
+                parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
+            }
+            if (!String.IsNullOrEmpty(Title))
+            {
+                parameters.Add("title", Title);
+            }
+            if (!String.IsNullOrEmpty(RecipientEmail))
+            {
+                parameters.Add("recipient_email", RecipientEmail);
+            }
+            if (OrderAsc.HasValue)
+            {
+                parameters.Add("order_asc", OrderAsc.Value);
+            }
+
+            var properties = typeof (GetSurveyListSettingsOptionalData).GetProperties();
+            List<string> optionalProperties = (from property in properties where (bool) property.GetValue(OptionalData) select property.Name).ToList();
+            var snakeCaseProperties = new List<string>();
+            foreach (var optionalProperty in optionalProperties)
+            {
+                snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
+            }
+            if (snakeCaseProperties.Count > 0)
+            {
+                parameters.Add("fields", snakeCaseProperties);
+            }
+
+            return parameters;
         }
 
         public GetSurveyListSettings()
@@ -103,43 +100,40 @@ namespace SurveyMonkey
         public string Name { get; set; }
         public bool? OrderAsc { get; set; }
         public GetCollectorListSettingsOptionalData OptionalData { get; set; }
-        internal RequestSettings Serialized
+        internal RequestSettings Serialize()
         {
-            get
+            var parameters = new RequestSettings();
+
+            if (StartDate != DateTime.MaxValue)
             {
-                var parameters = new RequestSettings();
-
-                if (StartDate != DateTime.MaxValue)
-                {
-                    parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
-                }
-                if (EndDate != DateTime.MinValue)
-                {
-                    parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
-                }
-                if (!String.IsNullOrEmpty(Name))
-                {
-                    parameters.Add("name", Name);
-                }
-                if (OrderAsc.HasValue)
-                {
-                    parameters.Add("order_asc", OrderAsc.Value);
-                }
-
-                var properties = typeof(GetCollectorListSettingsOptionalData).GetProperties();
-                List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
-                var snakeCaseProperties = new List<string>();
-                foreach (var optionalProperty in optionalProperties)
-                {
-                    snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
-                }
-                if (snakeCaseProperties.Count > 0)
-                {
-                    parameters.Add("fields", snakeCaseProperties);
-                }
-
-                return parameters;
+                parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
             }
+            if (EndDate != DateTime.MinValue)
+            {
+                parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
+            }
+            if (!String.IsNullOrEmpty(Name))
+            {
+                parameters.Add("name", Name);
+            }
+            if (OrderAsc.HasValue)
+            {
+                parameters.Add("order_asc", OrderAsc.Value);
+            }
+
+            var properties = typeof(GetCollectorListSettingsOptionalData).GetProperties();
+            List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
+            var snakeCaseProperties = new List<string>();
+            foreach (var optionalProperty in optionalProperties)
+            {
+                snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
+            }
+            if (snakeCaseProperties.Count > 0)
+            {
+                parameters.Add("fields", snakeCaseProperties);
+            }
+
+            return parameters;
         }
 
         public GetCollectorListSettings()
@@ -193,69 +187,66 @@ namespace SurveyMonkey
         public bool? OrderAsc { get; set; }
         public Order OrderBy { get; set; }
         public GetRespondentListSettingsOptionalData OptionalData { get; set; }
-        internal RequestSettings Serialized
+        internal RequestSettings Serialize()
         {
-            get
+            var parameters = new RequestSettings();
+
+            if (CollectorId != 0)
             {
-                var parameters = new RequestSettings();
-
-                if (CollectorId != 0)
-                {
-                    parameters.Add("collector_id", CollectorId.ToString());
-                }
-                if (StartDate != DateTime.MaxValue)
-                {
-                    parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
-                }
-                if (EndDate != DateTime.MinValue)
-                {
-                    parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
-                }
-                if (StartModifiedDate != DateTime.MaxValue)
-                {
-                    parameters.Add("start_modified_date", StartModifiedDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
-                }
-                if (EndModifiedDate != DateTime.MinValue)
-                {
-                    parameters.Add("end_modified_date", EndModifiedDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
-                }
-                if (OrderAsc.HasValue)
-                {
-                    parameters.Add("order_asc", OrderAsc.Value);
-                }
-
-                if (OrderBy != Order.NotSet)
-                {
-                    string orderByString = "";
-                    if (OrderBy == Order.RespondentId)
-                    {
-                        orderByString = "respondent_id";
-                    }
-                    if (OrderBy == Order.DateStart)
-                    {
-                        orderByString = "date_start";
-                    }
-                    if (OrderBy == Order.DateModified)
-                    {
-                        orderByString = "date_modified";
-                    }
-                    parameters.Add("order_by", orderByString);
-                }
-
-                var properties = typeof(GetRespondentListSettingsOptionalData).GetProperties();
-                List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
-                var snakeCaseProperties = new List<string>();
-                foreach (var optionalProperty in optionalProperties)
-                {
-                    snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
-                }
-                if (snakeCaseProperties.Count > 0)
-                {
-                    parameters.Add("fields", snakeCaseProperties);
-                }
-
-                return parameters;
+                parameters.Add("collector_id", CollectorId.ToString());
             }
+            if (StartDate != DateTime.MaxValue)
+            {
+                parameters.Add("start_date", StartDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
+            }
+            if (EndDate != DateTime.MinValue)
+            {
+                parameters.Add("end_date", EndDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
+            }
+            if (StartModifiedDate != DateTime.MaxValue)
+            {
+                parameters.Add("start_modified_date", StartModifiedDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
+            }
+            if (EndModifiedDate != DateTime.MinValue)
+            {
+                parameters.Add("end_modified_date", EndModifiedDate.ToString("yyyy-MM-dd HH':'mm':'ss"));
+            }
+            if (OrderAsc.HasValue)
+            {
+                parameters.Add("order_asc", OrderAsc.Value);
+            }
+
+            if (OrderBy != Order.NotSet)
+            {
+                string orderByString = "";
+                if (OrderBy == Order.RespondentId)
+                {
+                    orderByString = "respondent_id";
+                }
+                if (OrderBy == Order.DateStart)
+                {
+                    orderByString = "date_start";
+                }
+                if (OrderBy == Order.DateModified)
+                {
+                    orderByString = "date_modified";
+                }
+                parameters.Add("order_by", orderByString);
+            }
+
+            var properties = typeof(GetRespondentListSettingsOptionalData).GetProperties();
+            List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
+            var snakeCaseProperties = new List<string>();
+            foreach (var optionalProperty in optionalProperties)
+            {
+                snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
+            }
+            if (snakeCaseProperties.Count > 0)
+            {
+                parameters.Add("fields", snakeCaseProperties);
+            }
+
+            return parameters;
         }
 
         public GetRespondentListSettings()
