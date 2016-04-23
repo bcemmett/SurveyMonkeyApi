@@ -419,6 +419,36 @@ namespace SurveyMonkey
 
     #endregion
 
+    #region CreateCollector
+
+    public class CreateCollectorSettings
+    {
+        public string Name { get; set; }
+        public string ThankYouMessage { get; set; }
+        public string RedirectUrl { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            if (!String.IsNullOrEmpty(Name))
+            {
+                parameters.Add("name", Name);
+            }
+            if (!String.IsNullOrEmpty(ThankYouMessage))
+            {
+                parameters.Add("thank_you_message", ThankYouMessage);
+            }
+            if (!String.IsNullOrEmpty(RedirectUrl))
+            {
+                parameters.Add("redirect_url", RedirectUrl);
+            }
+            parameters.Add("type", "weblink");
+            return parameters;
+        }
+    }
+
+    #endregion
+
     internal class RequestSettings : Dictionary<string, object>
     {
     }

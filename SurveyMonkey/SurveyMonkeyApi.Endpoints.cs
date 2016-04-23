@@ -527,5 +527,32 @@ namespace SurveyMonkey
         }
 
         #endregion
+
+        #region CreateCollector
+
+        public Collector CreateCollector(long surveyId, CreateCollectorSettings settings)
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("survey_id", surveyId.ToString());
+            parameters.Add("collector", settings.Serialize());
+            try
+            {
+                const string endPoint = "/collectors/create_collector";
+                var o = MakeApiRequest(endPoint, parameters);
+                Collector collector = o["collector"].ToObject<Collector>();
+                return collector;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
+        }
+
+        public Collector CreateCollector(long surveyId)
+        {
+            return CreateCollector(surveyId, new CreateCollectorSettings());
+        }
+
+        #endregion
     }
 }
