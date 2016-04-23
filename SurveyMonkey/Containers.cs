@@ -178,6 +178,7 @@ namespace SurveyMonkey
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string CustomId { get; set; }
+        public long RecipientId { get; set; }
 
         internal RequestSettings Serialize()
         {
@@ -207,7 +208,7 @@ namespace SurveyMonkey
     }
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
-    public class RecipientCreationResponse
+    public class CreateRecipientsResponse
     {
         public Collector Collector { get; set; }
         public RecipientsReport RecipientsReport { get; set; }
@@ -222,6 +223,14 @@ namespace SurveyMonkey
         public List<string> DuplicateEmails { get; set; }
         public List<string> BouncedEmails { get; set; }
         public List<string> OptedOutEmails { get; set; }
+    }
+
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class SendFlowResponse
+    {
+        public Survey Survey { get; set; }
+        public Collector Collector { get; set; }
+        public RecipientsReport RecipientsReport { get; set; }
     }
 
     [Serializable]

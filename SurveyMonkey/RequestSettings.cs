@@ -295,6 +295,83 @@ namespace SurveyMonkey
 
     #endregion
 
+    #region SendFlow
+
+    public class SendFlowSettings
+    {
+        public SendFlowSettingsCollector Collector { get; set; }
+        public SendFlowSettingsEmailMessage EmailMessage { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("collector", Collector.Serialize());
+            parameters.Add("email_message", EmailMessage.Serialize());
+            return parameters;
+        }
+    }
+
+    public class SendFlowSettingsCollector
+    {
+        public SendFlowSettingsCollector()
+        {
+            Recipients = new List<Recipient>();
+        }
+
+        public string Name { get; set; }
+        public string ThankYouMessage { get; set; }
+        public string RedirectUrl { get; set; }
+        public List<Recipient> Recipients { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("type", "email"); //only email collectors are supported
+            if(!String.IsNullOrEmpty(Name))
+            {
+                parameters.Add("name", Name);
+            }
+            if (!String.IsNullOrEmpty(ThankYouMessage))
+            {
+                parameters.Add("thank_you_message", ThankYouMessage);
+            }
+            if (!String.IsNullOrEmpty(RedirectUrl))
+            {
+                parameters.Add("redirect_url", RedirectUrl);
+            }
+            parameters.Add("recipients", Recipients.Select(r => r.Serialize()));
+            parameters.Add("send", true);
+
+            return parameters;
+        }
+    }
+
+    public class SendFlowSettingsEmailMessage
+    {
+        public string ReplyEmail { get; set; }
+        public string Subject { get; set; }
+        public string BodyText { get; set; } //Must contain [SurveyLink], [OptOutLink], and [FooterLink]
+        public bool? DisableFooter { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("reply_email", ReplyEmail);
+            parameters.Add("subject", Subject);
+            if (!String.IsNullOrEmpty(BodyText))
+            {
+                parameters.Add("body_text", BodyText);
+            }
+            if (DisableFooter.HasValue)
+            {
+                parameters.Add("disable_footer", DisableFooter);    
+            }
+            return parameters;
+        }
+    }
+
+    #endregion
+
     internal class RequestSettings : Dictionary<string, object>
     {
     }

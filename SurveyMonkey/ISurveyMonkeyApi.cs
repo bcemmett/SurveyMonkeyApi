@@ -38,8 +38,10 @@ namespace SurveyMonkey
         
         UserDetails GetUserDetails();
 
-        RecipientCreationResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients);
-        
+        CreateRecipientsResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients);
+
+        SendFlowResponse SendFlow(long surveyId, SendFlowSettings settings);
+
         //Data processing
         void FillMissingSurveyInformation(List<Survey> surveys);
         void FillMissingSurveyInformation(Survey survey);

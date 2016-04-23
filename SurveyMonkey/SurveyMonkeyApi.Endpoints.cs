@@ -393,7 +393,7 @@ namespace SurveyMonkey
 
         #region CreateRecipients endpoint
 
-        public RecipientCreationResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients)
+        public CreateRecipientsResponse CreateRecipients(long collectorId, long emailMessageId, List<Recipient> recipients)
         {
             var parameters = new RequestSettings();
             parameters.Add("collector_id", collectorId.ToString());
@@ -405,7 +405,33 @@ namespace SurveyMonkey
                 const string endPoint = "/collectors/create_recipients";
                 var o = MakeApiRequest(endPoint, parameters);
                 
-                var response = new RecipientCreationResponse();
+                var response = new CreateRecipientsResponse();
+                response.Collector = o["collector"].ToObject<Collector>();
+                response.RecipientsReport = o["recipients_report"].ToObject<RecipientsReport>();
+                return response;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
+        }
+
+        #endregion
+
+        #region SendFlow
+
+        public SendFlowResponse SendFlow(long surveyId, SendFlowSettings settings)
+        {
+            var parameters = settings.Serialize();
+            parameters.Add("survey_id", surveyId.ToString());
+            try
+            {
+                const string endPoint = "/batch/send_flow";
+                var o = MakeApiRequest(endPoint, parameters);
+
+                var response = new SendFlowResponse();
+                JsonDeserializeGetSurveyList rawSurvey = o["survey"].ToObject<JsonDeserializeGetSurveyList>();
+                response.Survey = rawSurvey.ToSurvey();
                 response.Collector = o["collector"].ToObject<Collector>();
                 response.RecipientsReport = o["recipients_report"].ToObject<RecipientsReport>();
                 return response;
