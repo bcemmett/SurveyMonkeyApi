@@ -401,7 +401,7 @@ namespace SurveyMonkey
                 throw new ArgumentException("SurveyTitle and SurveyNickname must both be populated.");
             }
             
-            if (TemplateId == FromSurveyId)
+            if ((TemplateId == 0 && FromSurveyId == 0) || (TemplateId > 0 && FromSurveyId > 0))
             {
                 throw new ArgumentException("You must populate either TemplateId or FromSurveyId, and not both.");
             }
