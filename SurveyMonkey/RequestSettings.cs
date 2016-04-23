@@ -295,6 +295,39 @@ namespace SurveyMonkey
 
     #endregion
 
+    #region SendFlow
+
+    public class SendFlowSettings
+    {
+        public SendFlowSettingsCollector Collector { get; set; }
+        public SendFlowSettingsEmailMessage EmailMessage { get; set; }
+    }
+
+    public class SendFlowSettingsCollector
+    {
+        public SendFlowSettingsCollector()
+        {
+            Recipients = new List<Recipient>();
+        }
+
+        public string Type { get; set; }
+        public string Name { get; set; }
+        public string ThankYouMessage { get; set; }
+        public string RedirectUrl { get; set; }
+        public List<Recipient> Recipients { get; set; }
+        public bool Send { get; set; }
+    }
+
+    public class SendFlowSettingsEmailMessage
+    {
+        public string EmailMessage { get; set; }
+        public string Subject { get; set; }
+        public string BodyText { get; set; }
+        public bool DisableFooter { get; set; }
+    }
+
+    #endregion
+
     internal class RequestSettings : Dictionary<string, object>
     {
     }
