@@ -350,7 +350,7 @@ namespace SurveyMonkey
     {
         public string ReplyEmail { get; set; }
         public string Subject { get; set; }
-        public string BodyText { get; set; }
+        public string BodyText { get; set; } //Must contain [SurveyLink], [OptOutLink], and [FooterLink]
         public bool? DisableFooter { get; set; }
 
         internal RequestSettings Serialize()
