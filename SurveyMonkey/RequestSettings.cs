@@ -301,6 +301,11 @@ namespace SurveyMonkey
     {
         public SendFlowSettingsCollector Collector { get; set; }
         public SendFlowSettingsEmailMessage EmailMessage { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class SendFlowSettingsCollector

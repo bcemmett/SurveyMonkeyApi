@@ -417,5 +417,31 @@ namespace SurveyMonkey
         }
 
         #endregion
+
+        #region SendFlow
+
+        public SendFlowResponse SendFlow(long surveyId, SendFlowSettings settings)
+        {
+            var parameters = settings.Serialize();
+            parameters.Add("survey_id", surveyId);
+            try
+            {
+                const string endPoint = "/batch/send_flow";
+                var o = MakeApiRequest(endPoint, parameters);
+
+                var response = new SendFlowResponse();
+                JsonDeserializeGetSurveyList rawSurvey = o["survey"].ToObject<JsonDeserializeGetSurveyList>();
+                response.Survey = rawSurvey.ToSurvey();
+                response.Collector = o["collector"].ToObject<Collector>();
+                response.RecipientsReport = o["recipients_report"].ToObject<RecipientsReport>();
+                return response;
+            }
+            catch (Exception e)
+            {
+                throw new SurveyMonkeyException("Error communicating with endpoint", e);
+            }
+        }
+
+        #endregion
     }
 }
