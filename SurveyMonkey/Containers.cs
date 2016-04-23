@@ -234,6 +234,14 @@ namespace SurveyMonkey
     }
 
     [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class CreateFlowResponse
+    {
+        public Survey Survey { get; set; }
+        public Collector Collector { get; set; }
+        public RecipientsReport RecipientsReport { get; set; }
+    }
+
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
     public class Template
     {
         public long TemplateId { get; set; }
