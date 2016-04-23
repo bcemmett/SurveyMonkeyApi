@@ -304,7 +304,10 @@ namespace SurveyMonkey
 
         internal RequestSettings Serialize()
         {
-            throw new NotImplementedException();
+            var parameters = new RequestSettings();
+            parameters.Add("collector", Collector.Serialize());
+            parameters.Add("email_message", EmailMessage.Serialize());
+            return parameters;
         }
     }
 
@@ -315,20 +318,56 @@ namespace SurveyMonkey
             Recipients = new List<Recipient>();
         }
 
-        public string Type { get; set; }
         public string Name { get; set; }
         public string ThankYouMessage { get; set; }
         public string RedirectUrl { get; set; }
         public List<Recipient> Recipients { get; set; }
-        public bool Send { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("type", "email"); //only email collectors are supported
+            if(!String.IsNullOrEmpty(Name))
+            {
+                parameters.Add("name", Name);
+            }
+            if (!String.IsNullOrEmpty(ThankYouMessage))
+            {
+                parameters.Add("thank_you_message", ThankYouMessage);
+            }
+            if (!String.IsNullOrEmpty(RedirectUrl))
+            {
+                parameters.Add("redirect_url", RedirectUrl);
+            }
+            parameters.Add("recipients", Recipients.Select(r => r.Serialize()));
+            parameters.Add("send", true);
+
+            return parameters;
+        }
     }
 
     public class SendFlowSettingsEmailMessage
     {
-        public string EmailMessage { get; set; }
+        public string ReplyEmail { get; set; }
         public string Subject { get; set; }
         public string BodyText { get; set; }
-        public bool DisableFooter { get; set; }
+        public bool? DisableFooter { get; set; }
+
+        internal RequestSettings Serialize()
+        {
+            var parameters = new RequestSettings();
+            parameters.Add("reply_email", ReplyEmail);
+            parameters.Add("subject", Subject);
+            if (!String.IsNullOrEmpty(BodyText))
+            {
+                parameters.Add("body_text", BodyText);
+            }
+            if (DisableFooter.HasValue)
+            {
+                parameters.Add("disable_footer", DisableFooter);    
+            }
+            return parameters;
+        }
     }
 
     #endregion
