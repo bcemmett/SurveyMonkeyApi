@@ -179,6 +179,24 @@ namespace SurveyMonkey
         public string CustomId { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class RecipientCreationResponse
+    {
+        public Collector Collector { get; set; }
+        public RecipientsReport RecipientsReport { get; set; }
+    }
+
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class RecipientsReport
+    {
+        public List<Recipient>  Recipients { get; set; }
+        public int ValidEmailsCount { get; set; }
+        public List<string> InvalidEmails { get; set; }
+        public List<string> DuplicateEmails { get; set; }
+        public List<string> BouncedEmails { get; set; }
+        public List<string> OptedOutEmails { get; set; }
+    }
+
     [Serializable]
     public class SurveyMonkeyException : Exception
     {
