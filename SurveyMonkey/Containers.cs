@@ -233,6 +233,27 @@ namespace SurveyMonkey
         public RecipientsReport RecipientsReport { get; set; }
     }
 
+    [JsonConverter(typeof(LaxPropertyNameJsonConverter))]
+    public class Template
+    {
+        public long TemplateId { get; set; }
+        public Language LanguageId { get; set; }
+        public string Title { get; set; }
+        public string ShortDescription { get; set; }
+        public string LongDescription { get; set; }
+        public bool IsAvailableToCurrentUser { get; set; }
+        public bool IsFeatured { get; set; }
+        public bool IsCertified { get; set; }
+        public int PageCount { get; set; }
+        public int QuestionCount { get; set; }
+        public string PreviewUrl { get; set; }
+        public long CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string CategoryDescription { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+    }
+
     [Serializable]
     public class SurveyMonkeyException : Exception
     {
