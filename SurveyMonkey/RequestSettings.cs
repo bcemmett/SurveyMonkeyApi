@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace SurveyMonkey
 {
@@ -14,7 +13,7 @@ namespace SurveyMonkey
         public string Title { get; set; }
         public string RecipientEmail { get; set; }
         public bool? OrderAsc { get; set; }
-        public GetSurveyListSettingsOptionalData OptionalData { get; set; }
+
         internal RequestSettings Serialize()
         {
             var parameters = new RequestSettings();
@@ -40,17 +39,17 @@ namespace SurveyMonkey
                 parameters.Add("order_asc", OrderAsc.Value);
             }
 
-            var properties = typeof (GetSurveyListSettingsOptionalData).GetProperties();
-            List<string> optionalProperties = (from property in properties where (bool) property.GetValue(OptionalData) select property.Name).ToList();
-            var snakeCaseProperties = new List<string>();
-            foreach (var optionalProperty in optionalProperties)
+            parameters.Add("fields", new List<string>
             {
-                snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
-            }
-            if (snakeCaseProperties.Count > 0)
-            {
-                parameters.Add("fields", snakeCaseProperties);
-            }
+                "title",
+                "analysis_url",
+                "preview_url",
+                "date_created",
+                "date_modified",
+                "language_id",
+                "question_count",
+                "num_responses"
+            });
 
             return parameters;
         }
@@ -61,31 +60,6 @@ namespace SurveyMonkey
             EndDate = DateTime.MinValue;
             Title = "";
             RecipientEmail = "";
-            OptionalData = new GetSurveyListSettingsOptionalData();    
-        }
-    }
-
-    public class GetSurveyListSettingsOptionalData
-    {
-        public bool Title { get; set; }
-        public bool AnalysisUrl { get; set; }
-        public bool PreviewUrl { get; set; }
-        public bool DateCreated { get; set; }
-        public bool DateModified { get; set; }
-        public bool LanguageId { get; set; }
-        public bool QuestionCount { get; set; }
-        public bool NumResponses { get; set; }
-
-        public GetSurveyListSettingsOptionalData()
-        {
-            Title = true;
-            AnalysisUrl  = true;
-            PreviewUrl  = true;
-            DateCreated  = true;
-            DateModified  = true;
-            LanguageId  = true;
-            QuestionCount  = true;
-            NumResponses  = true;
         }
     }
 
@@ -99,7 +73,7 @@ namespace SurveyMonkey
         public DateTime EndDate { get; set; }
         public string Name { get; set; }
         public bool? OrderAsc { get; set; }
-        public GetCollectorListSettingsOptionalData OptionalData { get; set; }
+
         internal RequestSettings Serialize()
         {
             var parameters = new RequestSettings();
@@ -121,17 +95,15 @@ namespace SurveyMonkey
                 parameters.Add("order_asc", OrderAsc.Value);
             }
 
-            var properties = typeof(GetCollectorListSettingsOptionalData).GetProperties();
-            List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
-            var snakeCaseProperties = new List<string>();
-            foreach (var optionalProperty in optionalProperties)
+            parameters.Add("fields", new List<string>
             {
-                snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
-            }
-            if (snakeCaseProperties.Count > 0)
-            {
-                parameters.Add("fields", snakeCaseProperties);
-            }
+                "url",
+                "open",
+                "type",
+                "name",
+                "date_created",
+                "date_modified"
+            });
 
             return parameters;
         }
@@ -141,27 +113,6 @@ namespace SurveyMonkey
             StartDate = DateTime.MaxValue;
             EndDate = DateTime.MinValue;
             Name = "";
-            OptionalData = new GetCollectorListSettingsOptionalData();
-        }
-    }
-
-    public class GetCollectorListSettingsOptionalData
-    {
-        public bool Url { get; set; }
-        public bool Open { get; set; }
-        public bool Type { get; set; }
-        public bool Name { get; set; }
-        public bool DateCreated { get; set; }
-        public bool DateModified { get; set; }
-
-        public GetCollectorListSettingsOptionalData()
-        {
-            Url = true;
-            Open = true;
-            Type = true;
-            Name = true;
-            DateCreated = true;
-            DateModified = true;
         }
     }
 
@@ -186,7 +137,7 @@ namespace SurveyMonkey
         public DateTime EndModifiedDate { get; set; }
         public bool? OrderAsc { get; set; }
         public Order OrderBy { get; set; }
-        public GetRespondentListSettingsOptionalData OptionalData { get; set; }
+
         internal RequestSettings Serialize()
         {
             var parameters = new RequestSettings();
@@ -234,17 +185,21 @@ namespace SurveyMonkey
                 parameters.Add("order_by", orderByString);
             }
 
-            var properties = typeof(GetRespondentListSettingsOptionalData).GetProperties();
-            List<string> optionalProperties = (from property in properties where (bool)property.GetValue(OptionalData) select property.Name).ToList();
-            var snakeCaseProperties = new List<string>();
-            foreach (var optionalProperty in optionalProperties)
+            parameters.Add("fields", new List<string>
             {
-                snakeCaseProperties.Add(Regex.Replace(optionalProperty, "(?<=.)([A-Z])", "_$0").ToLower());
-            }
-            if (snakeCaseProperties.Count > 0)
-            {
-                parameters.Add("fields", snakeCaseProperties);
-            }
+                "date_start",
+                "date_modified",
+                "collector_id",
+                "collection_mode",
+                "custom_id",
+                "email",
+                "first_name",
+                "last_name",
+                "ip_address",
+                "status",
+                "analysis_url",
+                "recipient_id"
+            });
 
             return parameters;
         }
@@ -257,39 +212,6 @@ namespace SurveyMonkey
             StartModifiedDate = DateTime.MaxValue;
             EndModifiedDate = DateTime.MinValue;
             OrderBy = Order.NotSet;
-            OptionalData = new GetRespondentListSettingsOptionalData();
-        }
-    }
-
-    public class GetRespondentListSettingsOptionalData
-    {
-        public bool DateStart {get; set;}
-        public bool DateModified {get; set;}
-        public bool CollectorId {get; set;}
-        public bool CollectionMode {get; set;}
-        public bool CustomId {get; set;}
-        public bool Email {get; set;}
-        public bool FirstName {get; set;}
-        public bool LastName {get; set;}
-        public bool IpAddress {get; set;}
-        public bool Status {get; set;}
-        public bool AnalysisUrl {get; set;}
-        public bool RecipientId { get; set; }
-
-        public GetRespondentListSettingsOptionalData()
-        {
-            DateStart = true;
-            DateModified = true;
-            CollectorId = true;
-            CollectionMode = true;
-            CustomId = true;
-            Email = true;
-            FirstName = true;
-            LastName = true;
-            IpAddress = true;
-            Status = true;
-            AnalysisUrl = true;
-            RecipientId = true;
         }
     }
 
