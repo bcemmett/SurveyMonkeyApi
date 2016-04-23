@@ -49,6 +49,8 @@ namespace SurveyMonkey
 
         SendFlowResponse SendFlow(long surveyId, SendFlowSettings settings);
 
+        CreateFlowResponse CreateFlow(long surveyId, CreateFlowSettings settings);
+
         Collector CreateCollector(long surveyId);
         Collector CreateCollector(long surveyId, CreateCollectorSettings settings);
 
