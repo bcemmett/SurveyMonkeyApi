@@ -402,7 +402,7 @@ namespace SurveyMonkey
             parameters.Add("recipients", recipients.Select(r => r.Serialize()));
             try
             {
-                const string endPoint = "/surveys/create_recipients";
+                const string endPoint = "/collectors/create_recipients";
                 var o = MakeApiRequest(endPoint, parameters);
                 
                 var response = new RecipientCreationResponse();
